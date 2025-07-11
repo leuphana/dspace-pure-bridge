@@ -52,3 +52,5 @@ rebel.xml
 *.un~
 Dockerfile.build
 .run
+./mvnw release:prepare
+pom.xml.releaseBackup

@@ -15,6 +15,12 @@
         </license>
     </licenses>
 
+    <scm>
+        <connection>scm:git:git@gitlab.leuphana.de:escience/dspace-pure-bridge.git</connection>
+        <url>https://gitlab.leuphana.de/escience/dspace-pure-bridge</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <build>
         <extensions>
             <extension>
@@ -51,6 +57,16 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.1</version> <!-- oder die von dir verwendete Version -->
+                <configuration>
+                    <pushChanges>false</pushChanges>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
+                    <scmCommentPrefix>[release]</scmCommentPrefix>
+                </configuration>
             </plugin>
         </plugins>
     </build>

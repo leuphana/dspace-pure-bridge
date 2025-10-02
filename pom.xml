@@ -97,28 +97,12 @@
             <artifactId>dspace-api</artifactId>
             <version>${dspace-version}</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring-boot.version}</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-to-slf4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <!-- Syncer dependencies -->
         <dependency>
@@ -211,21 +195,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>${junit-version}</version> <!-- aktuelle Version prüfen -->
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>${mockito-inline.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
-            <version>5.2.0</version>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito-junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -236,7 +214,7 @@
         <httpclient5-core-version>5.4.2</httpclient5-core-version>
         <httpclient5-version>5.3.3</httpclient5-version>
         <java.version>17</java.version>
-        <okhttp-version>4.11.0</okhttp-version>
+        <okhttp-version>5.1.0</okhttp-version>
         <gson-version>2.9.0</gson-version>
         <gson-fire-version>1.9.0</gson-fire-version>
         <jackson-databind-nullable-version>0.2.6</jackson-databind-nullable-version>
@@ -245,6 +223,8 @@
         <jsr311-api-version>1.1.1</jsr311-api-version>
         <junit-version>5.10.0</junit-version>
         <junit-platform-runner.version>1.10.0</junit-platform-runner.version>
+        <mockito-inline.version>5.2.0</mockito-inline.version>
+        <mockito-junit.version>5.18.0</mockito-junit.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>

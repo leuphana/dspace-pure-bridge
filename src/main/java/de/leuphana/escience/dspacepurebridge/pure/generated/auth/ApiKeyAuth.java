@@ -17,8 +17,8 @@ import de.leuphana.escience.dspacepurebridge.pure.generated.ApiException;
 import de.leuphana.escience.dspacepurebridge.pure.generated.Pair;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-11-21T15:48:42.574492757+01:00[Europe/Berlin]", comments = "Generator version: 7.10.0")
 public class ApiKeyAuth implements Authentication {

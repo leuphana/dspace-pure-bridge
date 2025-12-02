@@ -1,11 +1,11 @@
 package de.leuphana.escience.dspacepurebridge.pure.export;
 
-import java.sql.SQLException;
-
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultItem;
 import de.leuphana.escience.dspacepurebridge.pure.generated.ApiException;
 import org.dspace.content.Item;
 import org.dspace.core.Context;
+
+import java.sql.SQLException;
 
 public interface DSpaceExporter {
     void init() throws ApiException;

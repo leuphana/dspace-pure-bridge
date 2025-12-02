@@ -1,10 +1,3 @@
-/**
- * The contents of this file are subject to the license and copyright
- * detailed in the LICENSE and NOTICE files at the root of the source
- * tree and available online at
- *
- * http://www.dspace.org/license/
- */
 package de.leuphana.escience.dspacepurebridge.pure.export;
 
 import static de.leuphana.escience.dspacepurebridge.identifiers.Identifiers.DOI_RESOLVER_HTTPS;
@@ -27,8 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import de.leuphana.escience.dspacepurebridge.pure.Constants;
-import de.leuphana.escience.dspacepurebridge.pure.DSpaceServicesContainer;
+import de.leuphana.escience.dspacepurebridge.Constants;
+import de.leuphana.escience.dspacepurebridge.DSpaceServicesContainer;
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.Link;
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultItem;
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultStudentThesisItem;

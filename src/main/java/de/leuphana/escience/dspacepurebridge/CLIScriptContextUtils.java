@@ -1,20 +1,14 @@
-/**
- * The contents of this file are subject to the license and copyright
- * detailed in the LICENSE and NOTICE files at the root of the source
- * tree and available online at
- *
- * http://www.dspace.org/license/
- */
-
 package de.leuphana.escience.dspacepurebridge;
-
-import java.sql.SQLException;
 
 import org.dspace.core.Context;
 import org.dspace.eperson.EPerson;
 import org.dspace.eperson.factory.EPersonServiceFactory;
 
+import java.sql.SQLException;
+
 public class CLIScriptContextUtils {
+
+    public static final String DISPATCHER_SET_NAME = "dspacePureBridge";
 
     public static void setEPerson(Context context) throws SQLException {
         EPerson myEPerson =
@@ -28,16 +22,12 @@ public class CLIScriptContextUtils {
     private CLIScriptContextUtils() {
     }
 
-    public static Context createContext(String dispatcher) throws SQLException {
+    public static Context createReducedContext() throws SQLException {
         Context context = new Context();
         CLIScriptContextUtils.setEPerson(context);
-        context.setDispatcher(dispatcher);
+        context.setDispatcher(DISPATCHER_SET_NAME);
         context.turnOffAuthorisationSystem();
         return context;
-    }
-
-    public static Context createReducedContext() throws SQLException {
-        return createContext("reduced");
     }
 
     public static void closeContext(Context context) {

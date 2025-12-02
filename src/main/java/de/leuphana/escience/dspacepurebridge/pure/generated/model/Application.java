@@ -13,26 +13,15 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated.model;
 
-import java.util.Objects;
-
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
+import de.leuphana.escience.dspacepurebridge.pure.generated.JSON;
+import org.openapitools.jackson.nullable.JsonNullable;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import org.openapitools.jackson.nullable.JsonNullable;
-
-import com.google.gson.JsonElement;
-
-import java.util.HashSet;
-
-import de.leuphana.escience.dspacepurebridge.pure.generated.JSON;
+import java.util.*;
 
 /**
  * Applications exists in two variations depending on the functionality enabled in the Pure installation.

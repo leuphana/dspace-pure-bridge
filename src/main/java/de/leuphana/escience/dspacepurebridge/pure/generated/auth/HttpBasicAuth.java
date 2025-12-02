@@ -13,14 +13,13 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated.auth;
 
-import de.leuphana.escience.dspacepurebridge.pure.generated.Pair;
 import de.leuphana.escience.dspacepurebridge.pure.generated.ApiException;
-
+import de.leuphana.escience.dspacepurebridge.pure.generated.Pair;
 import okhttp3.Credentials;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 public class HttpBasicAuth implements Authentication {
     private String username;

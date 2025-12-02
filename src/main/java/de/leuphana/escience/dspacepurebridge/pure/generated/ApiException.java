@@ -13,8 +13,8 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 
 /**

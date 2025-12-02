@@ -13,17 +13,13 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated.model;
 
-import java.util.Objects;
-
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
+import de.leuphana.escience.dspacepurebridge.pure.generated.JSON;
 
 import java.io.IOException;
-
-import com.google.gson.JsonElement;
-
 import java.util.HashSet;
-
-import de.leuphana.escience.dspacepurebridge.pure.generated.JSON;
+import java.util.Objects;
 
 /**
  * An association between examination and an examinee, which can either be internal or external

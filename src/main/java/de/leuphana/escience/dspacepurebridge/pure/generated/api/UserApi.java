@@ -13,30 +13,16 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated.api;
 
-import de.leuphana.escience.dspacepurebridge.pure.generated.ApiCallback;
-import de.leuphana.escience.dspacepurebridge.pure.generated.ApiClient;
-import de.leuphana.escience.dspacepurebridge.pure.generated.ApiException;
-import de.leuphana.escience.dspacepurebridge.pure.generated.ApiResponse;
-import de.leuphana.escience.dspacepurebridge.pure.generated.Configuration;
-import de.leuphana.escience.dspacepurebridge.pure.generated.Pair;
-
 import com.google.gson.reflect.TypeToken;
-
-
-import java.math.BigDecimal;
-
+import de.leuphana.escience.dspacepurebridge.pure.generated.*;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.OrderingsList;
-
-import java.util.UUID;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.User;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.UserListResult;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.UserRoles;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class UserApi {
     private ApiClient localVarApiClient;

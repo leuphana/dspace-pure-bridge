@@ -1,18 +1,10 @@
-/**
- * The contents of this file are subject to the license and copyright
- * detailed in the LICENSE and NOTICE files at the root of the source
- * tree and available online at
- *
- * http://www.dspace.org/license/
- */
-
 package de.leuphana.escience.dspacepurebridge.identifiers;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import org.dspace.content.Item;
 import org.dspace.content.MetadataValue;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class PrimaryIdentifier {
     private final String url;

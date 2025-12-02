@@ -1,36 +1,12 @@
-/**
- * The contents of this file are subject to the license and copyright
- * detailed in the LICENSE and NOTICE files at the root of the source
- * tree and available online at
- *
- * http://www.dspace.org/license/
- */
 package de.leuphana.escience.dspacepurebridge.pure.export;
 
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import de.leuphana.escience.dspacepurebridge.DSpaceServicesContainer;
 import de.leuphana.escience.dspacepurebridge.identifiers.Identifiers;
-import de.leuphana.escience.dspacepurebridge.pure.DSpaceServicesContainer;
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.AccessType;
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultItem;
 import de.leuphana.escience.dspacepurebridge.pure.generated.ApiException;
 import de.leuphana.escience.dspacepurebridge.pure.generated.api.ResearchOutputApi;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.BookAnthology;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationRef;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.CompoundDate;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.DoiElectronicVersion;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.Organization;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.PublicationStatus;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.ResearchOutput;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.Visibility;
+import de.leuphana.escience.dspacepurebridge.pure.generated.model.*;
 import de.leuphana.escience.dspacepurebridge.pure.imports.DSpaceObjectMappings;
 import org.apache.commons.lang3.StringUtils;
 import org.dspace.authorize.ResourcePolicy;
@@ -44,6 +20,11 @@ import org.dspace.services.ConfigurationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
+
+import java.sql.SQLException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class ResearchOutputExport extends AbstractExport {
 

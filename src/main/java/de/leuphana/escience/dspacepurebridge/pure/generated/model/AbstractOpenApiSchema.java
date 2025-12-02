@@ -13,8 +13,8 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated.model;
 
-import java.util.Objects;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Abstract class for oneOf,anyOf schemas defined in OpenAPI spec

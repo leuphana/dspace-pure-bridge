@@ -22,6 +22,8 @@ import org.dspace.content.service.ItemService;
 import org.dspace.content.service.RelationshipService;
 import org.dspace.content.service.RelationshipTypeService;
 import org.dspace.content.service.WorkspaceItemService;
+import org.dspace.discovery.SearchService;
+import org.dspace.discovery.SearchUtils;
 import org.dspace.handle.factory.HandleServiceFactory;
 import org.dspace.handle.factory.HandleServiceFactoryImpl;
 import org.dspace.handle.service.HandleService;
@@ -66,6 +68,8 @@ class DspacePureBridgeCLITest {
     AuthorizeService authorizeService;
     @Mock
     ResourcePolicyService resourcePolicyService;
+    @Mock
+    SearchService searchService;
 
     @Spy
     @InjectMocks
@@ -107,12 +111,29 @@ class DspacePureBridgeCLITest {
         });
     }
 
+    @Test
+    void setupDSpaceConfigMissing() throws Exception {
+        executeTestInMockedEnvironment(() -> {
+            when(configurationService.getProperty(DspacePureBridgeCLI.PURE_BRIDGE_PURE_WS_APIKEY)).thenReturn("xy1234");
+            when(configurationService.getProperty(DspacePureBridgeCLI.PURE_BRIDGE_PURE_WS_ENDPOINT_BASE)).thenReturn(
+                    "http://localhost:8080/pure/");
+            IllegalStateException illegalStateException = Assertions.assertThrows(IllegalStateException.class, () -> {
+                DspacePureBridgeCLI dspacePureBridgeCLI = new DspacePureBridgeCLI();
+                dspacePureBridgeCLI.setup(commandLine);
+            });
+            assertEquals("Dspace config check failed!",
+                    illegalStateException.getMessage());
+        });
+    }
+
 
     @Test
     void setup() throws Exception {
         executeTestInMockedEnvironment(() -> {
             String endpointBase = "http://localhost:8080/pure";
             String apiKey = "xy1234";
+            when(configurationService.hasProperty("event.dispatcher." + CLIScriptContextUtils.DISPATCHER_SET_NAME + ".class")).thenReturn(true);
+            when(configurationService.hasProperty("event.dispatcher." + CLIScriptContextUtils.DISPATCHER_SET_NAME + ".consumers")).thenReturn(true);
             when(configurationService.getProperty(DspacePureBridgeCLI.PURE_BRIDGE_PURE_WS_ENDPOINT_BASE)).thenReturn(
                 endpointBase);
             when(configurationService.getProperty(DspacePureBridgeCLI.PURE_BRIDGE_PURE_WS_APIKEY)).thenReturn(apiKey);
@@ -130,6 +151,8 @@ class DspacePureBridgeCLITest {
         executeTestInMockedEnvironment(() -> {
             String endpointBase = "http://localhost:8080/pure";
             String apiKey = "xy1234";
+            when(configurationService.hasProperty("event.dispatcher." + CLIScriptContextUtils.DISPATCHER_SET_NAME + ".class")).thenReturn(true);
+            when(configurationService.hasProperty("event.dispatcher." + CLIScriptContextUtils.DISPATCHER_SET_NAME + ".consumers")).thenReturn(true);
             when(configurationService.getProperty(DspacePureBridgeCLI.PURE_BRIDGE_PURE_WS_ENDPOINT_BASE)).thenReturn(
                 endpointBase);
             when(configurationService.getProperty(DspacePureBridgeCLI.PURE_BRIDGE_PURE_WS_APIKEY)).thenReturn(apiKey);
@@ -150,6 +173,8 @@ class DspacePureBridgeCLITest {
         executeTestInMockedEnvironment(() -> {
             String endpointBase = "http://localhost:8080/pure";
             String apiKey = "xy1234";
+            when(configurationService.hasProperty("event.dispatcher." + CLIScriptContextUtils.DISPATCHER_SET_NAME + ".class")).thenReturn(true);
+            when(configurationService.hasProperty("event.dispatcher." + CLIScriptContextUtils.DISPATCHER_SET_NAME + ".consumers")).thenReturn(true);
             when(configurationService.getProperty(DspacePureBridgeCLI.PURE_BRIDGE_PURE_WS_ENDPOINT_BASE)).thenReturn(
                 endpointBase);
             when(configurationService.getProperty(DspacePureBridgeCLI.PURE_BRIDGE_PURE_WS_APIKEY)).thenReturn(apiKey);
@@ -175,6 +200,8 @@ class DspacePureBridgeCLITest {
             int exportLimit = 100;
             boolean checkOnly = true;
 
+            when(configurationService.hasProperty("event.dispatcher." + CLIScriptContextUtils.DISPATCHER_SET_NAME + ".class")).thenReturn(true);
+            when(configurationService.hasProperty("event.dispatcher." + CLIScriptContextUtils.DISPATCHER_SET_NAME + ".consumers")).thenReturn(true);
             when(configurationService.getProperty(DspacePureBridgeCLI.PURE_BRIDGE_PURE_WS_ENDPOINT_BASE)).thenReturn(
                 endpointBase);
             when(configurationService.getProperty(DspacePureBridgeCLI.PURE_BRIDGE_PURE_WS_APIKEY)).thenReturn(apiKey);
@@ -203,7 +230,8 @@ class DspacePureBridgeCLITest {
              MockedStatic<AuthorizeServiceFactory> authorizeServiceFactoryMockedStatic = Mockito.mockStatic(
                  AuthorizeServiceFactory.class);
              MockedStatic<ContentServiceFactory> contentServiceFactoryMockedStatic = Mockito.mockStatic(
-                 ContentServiceFactory.class)) {
+                 ContentServiceFactory.class);
+             MockedStatic<SearchUtils> searchUtilsMockedStatic = Mockito.mockStatic(SearchUtils.class)) {
 
             handleServiceFactoryMockedStatic.when(HandleServiceFactory::getInstance).thenReturn(handleServiceFactory);
             dSpaceServicesFactoryMockedStatic.when(DSpaceServicesFactory::getInstance)
@@ -212,6 +240,7 @@ class DspacePureBridgeCLITest {
                 .thenReturn(authorizeServiceFactory);
             contentServiceFactoryMockedStatic.when(ContentServiceFactory::getInstance)
                 .thenReturn(contentServiceFactory);
+            searchUtilsMockedStatic.when(SearchUtils::getSearchService).thenReturn(searchService);
 
             testMethod.run();
         }

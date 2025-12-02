@@ -1,13 +1,4 @@
-/**
- * The contents of this file are subject to the license and copyright
- * detailed in the LICENSE and NOTICE files at the root of the source
- * tree and available online at
- *
- * http://www.dspace.org/license/
- */
 package de.leuphana.escience.dspacepurebridge.relations;
-
-import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +7,8 @@ import org.dspace.content.MetadataValue;
 import org.dspace.content.service.ItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class EntityUtils {
 
@@ -57,7 +50,7 @@ public class EntityUtils {
                 stringToHash.append(metadataValues.get(0).getValue());
             }
         }
-        log.info("Hashing: {}", stringToHash);
+        log.debug("Hashing: {}", stringToHash);
         return DigestUtils.sha256Hex(stringToHash.toString());
     }
 

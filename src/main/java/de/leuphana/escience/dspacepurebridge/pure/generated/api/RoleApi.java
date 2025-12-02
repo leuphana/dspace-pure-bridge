@@ -13,16 +13,8 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated.api;
 
-import de.leuphana.escience.dspacepurebridge.pure.generated.ApiCallback;
-import de.leuphana.escience.dspacepurebridge.pure.generated.ApiClient;
-import de.leuphana.escience.dspacepurebridge.pure.generated.ApiException;
-import de.leuphana.escience.dspacepurebridge.pure.generated.ApiResponse;
-import de.leuphana.escience.dspacepurebridge.pure.generated.Configuration;
-import de.leuphana.escience.dspacepurebridge.pure.generated.Pair;
-
 import com.google.gson.reflect.TypeToken;
-
-
+import de.leuphana.escience.dspacepurebridge.pure.generated.*;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.AssignableRole;
 
 import java.lang.reflect.Type;

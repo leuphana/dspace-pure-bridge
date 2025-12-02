@@ -13,28 +13,15 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated.model;
 
-import java.util.Objects;
-import com.google.gson.TypeAdapter;
+import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import de.leuphana.escience.dspacepurebridge.pure.generated.JSON;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.TypeAdapterFactory;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import de.leuphana.escience.dspacepurebridge.pure.generated.JSON;
+import java.util.*;
 
 /**
  * List of applications. Can contain a subset of all items along with the full count

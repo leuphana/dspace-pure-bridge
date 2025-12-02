@@ -1,28 +1,11 @@
 package de.leuphana.escience.dspacepurebridge.pure.export;
 
-import static de.leuphana.escience.dspacepurebridge.pure.export.DSpaceToPure.SYNC_MAIL_RECIPIENTS;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import de.leuphana.escience.dspacepurebridge.CLIScriptContextUtils;
 import de.leuphana.escience.MockedEnvironmentTestMethod;
-import de.leuphana.escience.dspacepurebridge.pure.Constants;
-import de.leuphana.escience.dspacepurebridge.pure.DSpaceServicesContainer;
+import de.leuphana.escience.dspacepurebridge.CLIScriptContextUtils;
+import de.leuphana.escience.dspacepurebridge.Constants;
+import de.leuphana.escience.dspacepurebridge.DSpaceServicesContainer;
 import de.leuphana.escience.dspacepurebridge.pure.generated.ApiException;
-import de.leuphana.escience.dspacepurebridge.pure.imports.DSpacePureEntity;
+import de.leuphana.escience.dspacepurebridge.search.ItemFinder;
 import org.dspace.content.Collection;
 import org.dspace.content.Item;
 import org.dspace.content.MetadataValue;
@@ -30,19 +13,28 @@ import org.dspace.content.service.ItemService;
 import org.dspace.core.Context;
 import org.dspace.core.Email;
 import org.dspace.core.I18nUtil;
+import org.dspace.discovery.DiscoverQuery;
+import org.dspace.discovery.DiscoverResult;
+import org.dspace.discovery.SearchService;
+import org.dspace.discovery.indexobject.IndexableItem;
 import org.dspace.handle.service.HandleService;
 import org.dspace.services.ConfigurationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import static de.leuphana.escience.dspacepurebridge.pure.export.DSpaceToPure.SYNC_MAIL_RECIPIENTS;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DSpaceToPureTest {
@@ -58,6 +50,12 @@ class DSpaceToPureTest {
 
     @Mock
     HandleService handleService;
+
+    @Mock
+    SearchService searchService;
+
+    @Spy
+    ItemFinder itemFinder;
 
     @Mock
     DSpaceServicesContainer dSpaceServicesContainer;
@@ -77,6 +75,8 @@ class DSpaceToPureTest {
         lenient().when(dSpaceServicesContainer.getConfigurationService()).thenReturn(configurationService);
         lenient().when(dSpaceServicesContainer.getItemService()).thenReturn(itemService);
         lenient().when(dSpaceServicesContainer.getHandleService()).thenReturn(handleService);
+        lenient().when(dSpaceServicesContainer.getSearchService()).thenReturn(searchService);
+
     }
 
     @Test
@@ -286,57 +286,23 @@ class DSpaceToPureTest {
     }
 
     @Test
-    void prepareOrcidToPureMap() throws Exception {
-        Collection personCollection = Mockito.mock(Collection.class);
-        Item purePerson1 = Mockito.mock(Item.class);
-        Item purePerson2 = Mockito.mock(Item.class);
-        Item purePerson3 = Mockito.mock(Item.class);
-
-        String orcid = "0000-0001-2345-678X";
-
-        MetadataValue pureUUID1MetadataValue = Mockito.mock(MetadataValue.class);
-        MetadataValue pureUUID2MetadataValue = Mockito.mock(MetadataValue.class);
-        MetadataValue pureUUID3MetadataValue = Mockito.mock(MetadataValue.class);
-        MetadataValue orcidMetadataValue = Mockito.mock(MetadataValue.class);
-        when(orcidMetadataValue.getValue()).thenReturn(orcid);
-
-        when(handleService.resolveToObject(context, DSpacePureEntity.PERSON.getDspacePureEntityCollectionHandle(configurationService)))
-            .thenReturn(personCollection);
-        when(itemService.findByCollection(context, personCollection))
-            .thenReturn(List.of(purePerson1, purePerson2, purePerson3).iterator());
-
-        when(itemService
-            .getMetadata(purePerson1, "person", "identifier", "orcid", Item.ANY, false))
-            .thenReturn(Collections.emptyList());
-        when(itemService
-            .getMetadata(purePerson2, "person", "identifier", "orcid", Item.ANY, false))
-            .thenReturn(Collections.singletonList(orcidMetadataValue));
-        when(itemService
-            .getMetadata(purePerson3, "person", "identifier", "orcid", Item.ANY, false))
-            .thenReturn(Collections.emptyList());
-        when(itemService
-            .getMetadata(purePerson1, Constants.SCHEME, Constants.ELEMENT, Constants.UUID_QUALIFIER, Item.ANY, false))
-            .thenReturn(Collections.singletonList(pureUUID1MetadataValue));
-        when(itemService
-            .getMetadata(purePerson2, Constants.SCHEME, Constants.ELEMENT, Constants.UUID_QUALIFIER, Item.ANY, false))
-            .thenReturn(Collections.singletonList(pureUUID2MetadataValue));
-        when(itemService
-            .getMetadata(purePerson3, Constants.SCHEME, Constants.ELEMENT, Constants.UUID_QUALIFIER, Item.ANY, false))
-            .thenReturn(Collections.singletonList(pureUUID3MetadataValue));
-
-
-        classUnderTest.prepareOrcidToPureMap(context);
-
-        Assertions.assertEquals(1, classUnderTest.getdSpaceObjectMappings().getOrcidToPureMap().size());
-        Assertions.assertEquals(purePerson2, classUnderTest.getdSpaceObjectMappings().getOrcidToPureMap().get(orcid));
-    }
-
-    @Test
     void prepareOrganizationNameToPureMap() throws Exception {
-        Collection orgUnitCollection = Mockito.mock(Collection.class);
+        IndexableItem indexableItem1 = Mockito.mock(IndexableItem.class);
+        IndexableItem indexableItem2 = Mockito.mock(IndexableItem.class);
+        IndexableItem indexableItem3 = Mockito.mock(IndexableItem.class);
         Item pureOrgUnit1 = Mockito.mock(Item.class);
         Item pureOrgUnit2 = Mockito.mock(Item.class);
         Item pureOrgUnit3 = Mockito.mock(Item.class);
+        when(indexableItem1.getIndexedObject()).thenReturn(pureOrgUnit1);
+        when(indexableItem2.getIndexedObject()).thenReturn(pureOrgUnit2);
+        when(indexableItem3.getIndexedObject()).thenReturn(pureOrgUnit3);
+
+        DiscoverQuery discoverQuery = Mockito.mock(DiscoverQuery.class);
+        DiscoverResult discoverResult = Mockito.mock(DiscoverResult.class);
+
+        when(discoverResult.getIndexableObjects()).thenReturn(List.of(indexableItem1, indexableItem2, indexableItem3));
+        when(itemFinder.buildDiscoveryQuery(anyString(), anyString(), anyInt(),  anyInt())).thenReturn(discoverQuery);
+        when(searchService.search(context, discoverQuery)).thenReturn(discoverResult);
 
         UUID uuid = UUID.randomUUID();
         String legalName = "0000-0001-2345-678X";
@@ -347,12 +313,6 @@ class DSpaceToPureTest {
         MetadataValue legalNameMetadataValue = Mockito.mock(MetadataValue.class);
         when(pureUUID2MetadataValue.getValue()).thenReturn(uuid.toString());
         when(legalNameMetadataValue.getValue()).thenReturn(legalName);
-
-        when(
-            handleService.resolveToObject(context, DSpacePureEntity.ORGANIZATION.getDspacePureEntityCollectionHandle(configurationService)))
-            .thenReturn(orgUnitCollection);
-        when(itemService.findByCollection(context, orgUnitCollection))
-            .thenReturn(List.of(pureOrgUnit1, pureOrgUnit2, pureOrgUnit3).iterator());
 
         when(itemService
             .getMetadata(pureOrgUnit1, "organization", "legalName", null, Item.ANY, false))
@@ -383,7 +343,6 @@ class DSpaceToPureTest {
 
     @Test
     void syncItemsTest() throws Exception {
-        doNothing().when(classUnderTest).prepareOrcidToPureMap(context);
         doNothing().when(classUnderTest).prepareOrganizationNameToPureMap(context);
         doNothing().when(classUnderTest).sendErrorEmail(context);
         doNothing().when(classUnderTest).syncItemThread(any());
@@ -394,14 +353,25 @@ class DSpaceToPureTest {
         UUID uuid1 = UUID.randomUUID();
         UUID uuid2 = UUID.randomUUID();
         UUID uuid3 = UUID.randomUUID();
+        IndexableItem indexableItem1 = Mockito.mock(IndexableItem.class);
+        IndexableItem indexableItem2 = Mockito.mock(IndexableItem.class);
+        IndexableItem indexableItem3 = Mockito.mock(IndexableItem.class);
         Item item1 = Mockito.mock(Item.class);
         Item item2 = Mockito.mock(Item.class);
         Item item3 = Mockito.mock(Item.class);
+        when(indexableItem1.getIndexedObject()).thenReturn(item1);
+        when(indexableItem2.getIndexedObject()).thenReturn(item2);
+        when(indexableItem3.getIndexedObject()).thenReturn(item3);
         when(item1.getID()).thenReturn(uuid1);
         when(item2.getID()).thenReturn(uuid2);
         when(item3.getID()).thenReturn(uuid3);
-        when(itemService.findArchivedByMetadataField(context, "dspace.entity.type", "Publication")).thenReturn(
-            List.of(item1, item2, item3).iterator());
+
+        DiscoverQuery discoverQuery = Mockito.mock(DiscoverQuery.class);
+        DiscoverResult discoverResult = Mockito.mock(DiscoverResult.class);
+
+        when(discoverResult.getIndexableObjects()).thenReturn(List.of(indexableItem1, indexableItem2, indexableItem3));
+        when(itemFinder.buildDiscoveryQuery(anyString(), anyString(), anyInt(),  anyInt())).thenReturn(discoverQuery);
+        when(searchService.search(context, discoverQuery)).thenReturn(discoverResult);
 
         executeTestInMockedEnvironment(() -> {
             classUnderTest.setupFilters();

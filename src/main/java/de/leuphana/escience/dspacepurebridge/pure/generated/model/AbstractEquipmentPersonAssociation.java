@@ -13,21 +13,13 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated.model;
 
-import java.util.Objects;
-
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import de.leuphana.escience.dspacepurebridge.pure.generated.JSON;
 import org.openapitools.jackson.nullable.JsonNullable;
 
-import com.google.gson.JsonElement;
-
-import java.util.HashSet;
-
-import de.leuphana.escience.dspacepurebridge.pure.generated.JSON;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * An association between equipment and a person

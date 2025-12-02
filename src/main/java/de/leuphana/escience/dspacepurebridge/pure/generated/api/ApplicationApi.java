@@ -13,46 +13,13 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated.api;
 
-import de.leuphana.escience.dspacepurebridge.pure.generated.ApiCallback;
-import de.leuphana.escience.dspacepurebridge.pure.generated.ApiClient;
-import de.leuphana.escience.dspacepurebridge.pure.generated.ApiException;
-import de.leuphana.escience.dspacepurebridge.pure.generated.ApiResponse;
-import de.leuphana.escience.dspacepurebridge.pure.generated.Configuration;
-import de.leuphana.escience.dspacepurebridge.pure.generated.Pair;
-
 import com.google.gson.reflect.TypeToken;
+import de.leuphana.escience.dspacepurebridge.pure.generated.*;
+import de.leuphana.escience.dspacepurebridge.pure.generated.model.*;
 
-
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.AllowedTemplateListResult;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.Application;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationBudget;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationBudgetResult;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationCluster;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationListResult;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationsQuery;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationRefList;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.ContentRefListResult;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.DisciplinesAssociation;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.DisciplinesAssociationListResult;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.DisciplinesAssociationsQuery;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.DisciplinesDisciplineListResult;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.DisciplinesDisciplineSchemeListResult;
 import java.io.File;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.KeywordGroupConfigurationRefList;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.LocalesList;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.Note;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.NoteListResult;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.OrderingsList;
-
-import java.util.UUID;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.UploadedFile;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.WorkflowListResult;
-
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ApplicationApi {
     private ApiClient localVarApiClient;

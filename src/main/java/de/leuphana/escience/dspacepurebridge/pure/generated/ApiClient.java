@@ -13,6 +13,9 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated;
 
+import de.leuphana.escience.dspacepurebridge.pure.generated.auth.ApiKeyAuth;
+import de.leuphana.escience.dspacepurebridge.pure.generated.auth.Authentication;
+import de.leuphana.escience.dspacepurebridge.pure.generated.auth.HttpBasicAuth;
 import okhttp3.*;
 import okhttp3.internal.http.HttpMethod;
 import okhttp3.internal.tls.OkHostnameVerifier;
@@ -48,10 +51,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import de.leuphana.escience.dspacepurebridge.pure.generated.auth.Authentication;
-import de.leuphana.escience.dspacepurebridge.pure.generated.auth.HttpBasicAuth;
-import de.leuphana.escience.dspacepurebridge.pure.generated.auth.ApiKeyAuth;
 
 /**
  * <p>ApiClient class.</p>

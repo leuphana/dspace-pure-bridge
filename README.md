@@ -2,7 +2,7 @@
 
 The `dspace-pure-bridge` is a command-line tool to automate **data synchronization between DSpace and Elsevier Pure**.
 
-Developed at **Leuphana University Lüneburg** to ensure consistent publication metadata, reduce manual curation, and improve visibility of research outputs and student theses.
+Developed at [**Leuphana University Lüneburg**](https://www.leuphana.de/en) to ensure consistent publication metadata, reduce manual curation, and improve visibility of research outputs and student theses.
  
 # Table of Contents
 - [Features](#features)
@@ -239,6 +239,25 @@ Example snippet for the relevant relation enties inside the `relationship-types.
 
 Settings are provided using system properties, analogue to other DSpace config properties.
 
+### Event Consumer configuration
+
+Creating or modifying DSpace Items triggers events that are processed by the event consumers defined in the current context.
+It is recommended to use a reduced set of event consumers instead of the default list. Many of the default consumers are not relevant for the dspace-pure-bridge use case, and some may significantly slow down the import process from Pure.
+In particular, the `discovery` consumer should be excluded, as discovery indexing should be performed separately after the import (see usage).
+
+The dspace-pure-bridge therefore uses a reduced context consumer set which must be named `dspacePureBridge`
+
+**Example** 
+```
+event.dispatcher.dspacePureBridge.class=org.dspace.event.BasicDispatcher
+event.dispatcher.dspacePureBridge.consumers=authority, versioning
+```
+
+**Explanation:**
+The `authority` and `versioning` consumers are notified by events created by the `dspace-pure-bridge`, 
+
+Please refer to the [DSpace documentation](https://wiki.lyrasis.org/display/DSDOC9x/Configuration+Reference#ConfigurationReference-EventSystemConfiguration) for more information about the event system.
+
 ### Pure API configuration
 
 The Pure API connection is configured using the following properties:
@@ -268,7 +287,7 @@ dspace-pure-bridge.pure.ws.apikey=f26a048d-3ed0-48c4-9668-ba2cbc06bca4
 
 ### Entity collections configuration
 
-The collection handles of the existing entity collections (for Person, OrgUnit, and Project as well as PurePerson, PureOrgUnit and PureProject) must be configured in the following properties:
+The collection handles of the existing entity collections (for PurePerson, PureOrgUnit and PureProject) must be configured in the following properties:
 
 **Syntax:**
 ```
@@ -276,19 +295,19 @@ dspace-pure-bridge.entities.<entityType>.collection=<collection_handle>
 ```
 
 **Parameters:**
-- `entityType` – The entityType that the configured collection holds (one of `dspacePerson`, `dspaceOrgUnit`, `dspaceProject`, `purePerson`, `pureOrgUnit`, `pureProject`)
+- `entityType` – The entityType that the configured collection holds (one of `purePerson`, `pureOrgUnit`, `pureProject`)
 - `collection_handle` – The collection handle
 
 
 **Example:**
 ```
-dspace-pure-bridge.entities.dspacePerson.collection=300000000/2
-dspace-pure-bridge.entities.dspaceOrgUnit.collection=300000000/3
+dspace-pure-bridge.entities.purePerson.collection=300000000/2
+dspace-pure-bridge.entities.pureOrgUnit.collection=300000000/3
 ```
 
 **Explanation:**
-- The collection `300000000/2` is used to hold the `Person` entities.
-- The collection `300000000/3` is used to hold the `PurePerson` entities.
+- The collection `300000000/2` is used to hold the `PurePerson` entities.
+- The collection `300000000/3` is used to hold the `PureOrgUnit` entities.
 
 ### Export Filter configuration
 
@@ -544,6 +563,12 @@ To import data from Pure to DSpace, run the following command:
 
 ```bash
 ./bin/dspace dsrun de.leuphana.escience.dspacepurebridge.DspacePureBridgeCLI -i
+```
+
+Update Index after import:
+
+```bash
+./bin/dspace index-discovery
 ```
 
 

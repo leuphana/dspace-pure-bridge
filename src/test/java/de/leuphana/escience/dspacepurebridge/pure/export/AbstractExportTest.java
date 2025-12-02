@@ -1,24 +1,7 @@
-/**
- * The contents of this file are subject to the license and copyright
- * detailed in the LICENSE and NOTICE files at the root of the source
- * tree and available online at
- *
- * http://www.dspace.org/license/
- */
 package de.leuphana.escience.dspacepurebridge.pure.export;
 
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import de.leuphana.escience.dspacepurebridge.pure.Constants;
-import de.leuphana.escience.dspacepurebridge.pure.DSpaceServicesContainer;
+import de.leuphana.escience.dspacepurebridge.Constants;
+import de.leuphana.escience.dspacepurebridge.DSpaceServicesContainer;
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultItem;
 import de.leuphana.escience.dspacepurebridge.pure.generated.ApiException;
 import de.leuphana.escience.dspacepurebridge.pure.imports.DSpaceObjectMappings;
@@ -39,6 +22,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 class AbstractExportTest {
@@ -50,9 +39,6 @@ class AbstractExportTest {
 
     @Mock
     private Item author;
-
-    @Mock
-    private Item authorFromOrcidCache;
 
     @Mock
     private ItemService itemService;
@@ -187,34 +173,6 @@ class AbstractExportTest {
         List<Item> result = classUnderTest.getItemAuthors(context, publicationItem, false);
         Assertions.assertNull(result);
     }
-
-
-
-    @Test
-    void getItemAuthorWithOrcidCache() throws SQLException {
-        String authorId = "TEST_AUTHOR_ID";
-        MetadataValue authorRelation = mock(MetadataValue.class);
-        when(authorRelation.getValue()).thenReturn(authorId);
-
-        String testOrcid = UUID.randomUUID().toString();
-        Map<String, Item> orcidToPureMap = new HashMap<>();
-        orcidToPureMap.put(testOrcid, authorFromOrcidCache);
-
-        when(itemService.getMetadata(publicationItem, MetadataSchemaEnum.RELATION.getName(),
-                                     "isAuthorOfPublication", null, Item.ANY)).thenReturn(List.of(authorRelation));
-        when(itemService.findByIdOrLegacyId(context, authorId)).thenReturn(author);
-        when(itemService.getMetadataFirstValue(author, Constants.SCHEME,
-                                               Constants.ELEMENT,
-                                               Constants.UUID_QUALIFIER,
-                                               Item.ANY)).thenReturn(null);
-        when(itemService.getMetadataFirstValue(author, "person", "identifier", "orcid",
-                                               Item.ANY)).thenReturn(testOrcid);
-        when(dSpaceObjectMappings.getOrcidToPureMap()).thenReturn(orcidToPureMap);
-
-        List<Item> result = classUnderTest.getItemAuthors(context, publicationItem,false);
-        Assertions.assertEquals(authorFromOrcidCache, result.get(0));
-    }
-
 
     @Test
     void createSearchEntityTest() {

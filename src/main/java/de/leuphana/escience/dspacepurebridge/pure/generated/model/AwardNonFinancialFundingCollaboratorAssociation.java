@@ -13,17 +13,13 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated.model;
 
-import java.util.Objects;
-
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
+import de.leuphana.escience.dspacepurebridge.pure.generated.JSON;
 
 import java.io.IOException;
-
-import com.google.gson.JsonElement;
-
 import java.util.HashSet;
-
-import de.leuphana.escience.dspacepurebridge.pure.generated.JSON;
+import java.util.Objects;
 
 /**
  * Non-financial funding collaborator associations exists in two variants, internal or external collaborator.

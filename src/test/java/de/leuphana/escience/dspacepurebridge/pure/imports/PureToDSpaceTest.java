@@ -1,77 +1,38 @@
-/*
- * *
- *  * The contents of this file are subject to the license and copyright
- *  * detailed in the LICENSE and NOTICE files at the root of the source
- *  * tree and available online at
- *  *
- *  * http://www.dspace.org/license/
- *
- */
-
 package de.leuphana.escience.dspacepurebridge.pure.imports;
 
-import static de.leuphana.escience.dspacepurebridge.pure.Constants.LAST_MODIFICATION_DATE;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import de.leuphana.escience.dspacepurebridge.CLIScriptContextUtils;
-import de.leuphana.escience.dspacepurebridge.pure.Constants;
-import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PersonName;
-import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultItem;
-import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultOrganizationItem;
-import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultPersonItem;
-import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultProjectItem;
-import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResults;
-import de.leuphana.escience.dspacepurebridge.pure.apiobjects.Text;
+import de.leuphana.escience.dspacepurebridge.Constants;
+import de.leuphana.escience.dspacepurebridge.DSpaceServicesContainer;
+import de.leuphana.escience.dspacepurebridge.pure.apiobjects.*;
 import de.leuphana.escience.dspacepurebridge.relations.EntityUtils;
+import de.leuphana.escience.dspacepurebridge.search.ItemFinder;
+import de.leuphana.escience.dspacepurebridge.search.SearchQueryType;
 import org.dspace.authorize.AuthorizeException;
+import org.dspace.content.*;
 import org.dspace.content.Collection;
-import org.dspace.content.Item;
-import org.dspace.content.MetadataValue;
-import org.dspace.content.Relationship;
-import org.dspace.content.RelationshipType;
-import org.dspace.content.WorkspaceItem;
-import org.dspace.content.service.CollectionService;
-import org.dspace.content.service.InstallItemService;
-import org.dspace.content.service.ItemService;
-import org.dspace.content.service.RelationshipService;
-import org.dspace.content.service.RelationshipTypeService;
-import org.dspace.content.service.WorkspaceItemService;
+import org.dspace.content.service.*;
 import org.dspace.core.Context;
+import org.dspace.discovery.SearchService;
+import org.dspace.discovery.SearchServiceException;
 import org.dspace.handle.service.HandleService;
 import org.dspace.services.ConfigurationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
+import java.sql.SQLException;
+import java.util.*;
+
+import static de.leuphana.escience.dspacepurebridge.Constants.LAST_MODIFICATION_DATE;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PureToDSpaceTest {
@@ -106,19 +67,40 @@ class PureToDSpaceTest {
     @Mock
     private RelationshipService relationshipService;
 
+    @Mock
+    private SearchService searchService;
+
+    @Spy
+    private ItemFinder itemFinder;
+
+    @Mock
+    DSpaceServicesContainer dSpaceServicesContainer;
+
     @Spy
     @InjectMocks
     private PureToDSpace classUnderTest;
 
     @BeforeEach
-    void setup() {
+    void setup() throws SearchServiceException {
+        lenient().when(dSpaceServicesContainer.getConfigurationService()).thenReturn(configurationService);
+        lenient().when(dSpaceServicesContainer.getItemService()).thenReturn(itemService);
+        lenient().when(dSpaceServicesContainer.getHandleService()).thenReturn(handleService);
+        lenient().when(dSpaceServicesContainer.getSearchService()).thenReturn(searchService);
+        lenient().when(dSpaceServicesContainer.getCollectionService()).thenReturn(collectionService);
+        lenient().when(dSpaceServicesContainer.getInstallItemService()).thenReturn(installItemService);
+        lenient().when(dSpaceServicesContainer.getWorkspaceItemService()).thenReturn(workspaceItemService);
+        lenient().when(dSpaceServicesContainer.getRelationshipTypeService()).thenReturn(relationshipTypeService);
+        lenient().when(dSpaceServicesContainer.getRelationshipService()).thenReturn(relationshipService);
         PureToDSpace.pureEntityCache.clear();
         PureToDSpace.dspaceEntityCache.clear();
+        doReturn(Collections.emptyIterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.PERSON_CACHE_IMPORT), anyInt(), anyInt());
+        doReturn(Collections.emptyIterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.ORGANIZATION_CACHE_IMPORT), anyInt(), anyInt());
+        doReturn(Collections.emptyIterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.PROJECT_CACHE_IMPORT), anyInt(), anyInt());
     }
 
 
     @Test
-    void syncObjectsCreateThreadSafe() throws SQLException, AuthorizeException {
+    void syncObjectsCreateThreadSafe() throws SQLException, AuthorizeException, SearchServiceException {
         try (MockedStatic<CLIScriptContextUtils> mockedUtils = mockStatic(CLIScriptContextUtils.class)) {
             mockedUtils.when(CLIScriptContextUtils::createReducedContext).thenReturn(context);
 
@@ -192,7 +174,7 @@ class PureToDSpaceTest {
     }
 
     @Test
-    void syncPersonsRelate() throws SQLException, AuthorizeException {
+    void syncPersonsRelate() throws SQLException, AuthorizeException, SearchServiceException {
         try (MockedStatic<CLIScriptContextUtils> mockedUtils = mockStatic(CLIScriptContextUtils.class)) {
             mockedUtils.when(CLIScriptContextUtils::createReducedContext).thenReturn(context);
 
@@ -300,7 +282,7 @@ class PureToDSpaceTest {
     }
 
     @Test
-    void syncPersonsNoRelateAlreadyDone() throws SQLException, AuthorizeException {
+    void syncPersonsNoRelateAlreadyDone() throws SQLException, AuthorizeException, SearchServiceException {
         try (MockedStatic<CLIScriptContextUtils> mockedUtils = mockStatic(CLIScriptContextUtils.class)) {
             mockedUtils.when(CLIScriptContextUtils::createReducedContext).thenReturn(context);
 
@@ -407,7 +389,7 @@ class PureToDSpaceTest {
     }
 
     @Test
-    void syncPersonsModify() throws SQLException {
+    void syncPersonsModify() throws SQLException, SearchServiceException {
         try (MockedStatic<CLIScriptContextUtils> mockedUtils = mockStatic(CLIScriptContextUtils.class)) {
             mockedUtils.when(CLIScriptContextUtils::createReducedContext).thenReturn(context);
 
@@ -483,7 +465,7 @@ class PureToDSpaceTest {
     }
 
     @Test
-    void syncPersonsModifyNoChange() throws SQLException {
+    void syncPersonsModifyNoChange() throws SQLException, SearchServiceException {
         try (MockedStatic<CLIScriptContextUtils> mockedUtils = mockStatic(CLIScriptContextUtils.class)) {
             mockedUtils.when(CLIScriptContextUtils::createReducedContext).thenReturn(context);
 
@@ -558,7 +540,7 @@ class PureToDSpaceTest {
     }
 
     @Test
-    void syncOrganizationsModify() throws SQLException {
+    void syncOrganizationsModify() throws SQLException, SearchServiceException {
         try (MockedStatic<CLIScriptContextUtils> mockedUtils = mockStatic(CLIScriptContextUtils.class)) {
             mockedUtils.when(CLIScriptContextUtils::createReducedContext).thenReturn(context);
 
@@ -637,7 +619,7 @@ class PureToDSpaceTest {
     }
 
     @Test
-    void syncOrganizationsModifyNoChange() throws SQLException {
+    void syncOrganizationsModifyNoChange() throws SQLException, SearchServiceException {
         try (MockedStatic<CLIScriptContextUtils> mockedUtils = mockStatic(CLIScriptContextUtils.class)) {
             mockedUtils.when(CLIScriptContextUtils::createReducedContext).thenReturn(context);
 
@@ -715,7 +697,7 @@ class PureToDSpaceTest {
     }
 
     @Test
-    void syncProjectsModify() throws SQLException {
+    void syncProjectsModify() throws SQLException, SearchServiceException {
         try (MockedStatic<CLIScriptContextUtils> mockedUtils = mockStatic(CLIScriptContextUtils.class)) {
             mockedUtils.when(CLIScriptContextUtils::createReducedContext).thenReturn(context);
 
@@ -793,7 +775,7 @@ class PureToDSpaceTest {
     }
 
     @Test
-    void syncProjectsModifyNoChange() throws SQLException {
+    void syncProjectsModifyNoChange() throws SQLException, SearchServiceException {
         try (MockedStatic<CLIScriptContextUtils> mockedUtils = mockStatic(CLIScriptContextUtils.class)) {
             mockedUtils.when(CLIScriptContextUtils::createReducedContext).thenReturn(context);
 
@@ -870,13 +852,12 @@ class PureToDSpaceTest {
     }
 
     @Test
-    void testPrepareCaches() throws SQLException {
+    void testPrepareCaches() throws SQLException, SearchServiceException {
         Collection mockPurePersonEntityCollection = mock(Collection.class);
-        Collection mockDSpacePersonEntityCollection = mock(Collection.class);
         Collection mockPureOrgUnitEntityCollection = mock(Collection.class);
-        Collection mockDSpaceOrgUnitEntityCollection = mock(Collection.class);
         Collection mockPureProjectEntityCollection = mock(Collection.class);
-        Collection mockDSpaceProjectEntityCollection = mock(Collection.class);
+
+        Mockito.reset(itemFinder);
 
         String personEntityHash = "personHash";
         String orgUnitEntityHash = "orgUnitHash";
@@ -912,41 +893,32 @@ class PureToDSpaceTest {
         Item dspacePersonEntityItem = mock(Item.class);
         UUID dspacePersonEntityUuid = UUID.randomUUID();
         when(dspacePersonEntityItem.getID()).thenReturn(dspacePersonEntityUuid);
+        doReturn(List.of(dspacePersonEntityItem).iterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.PERSON_CACHE_IMPORT), anyInt(), anyInt());
 
         Item dspaceOrgUnitEntityItem = mock(Item.class);
         UUID dspaceOrgUnitEntityUuid = UUID.randomUUID();
         when(dspaceOrgUnitEntityItem.getID()).thenReturn(dspaceOrgUnitEntityUuid);
+        doReturn(List.of(dspaceOrgUnitEntityItem).iterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.ORGANIZATION_CACHE_IMPORT), anyInt(), anyInt());
 
         Item dspaceProjectEntityItem = mock(Item.class);
         UUID dspaceProjectEntityUuid = UUID.randomUUID();
         when(dspaceProjectEntityItem.getID()).thenReturn(dspaceProjectEntityUuid);
+        doReturn(List.of(dspaceProjectEntityItem).iterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.PROJECT_CACHE_IMPORT), anyInt(), anyInt());
 
         when(configurationService.getProperty("dspace-pure-bridge.entities.purePerson.collection")).thenReturn("purePersonCollection");
-        when(configurationService.getProperty("dspace-pure-bridge.entities.dspacePerson.collection")).thenReturn("dspacePersonCollection");
         when(configurationService.getProperty("dspace-pure-bridge.entities.pureOrgUnit.collection")).thenReturn("pureOrgUnitCollection");
-        when(configurationService.getProperty("dspace-pure-bridge.entities.dspaceOrgUnit.collection")).thenReturn("dspaceOrgUnitCollection");
         when(configurationService.getProperty("dspace-pure-bridge.entities.pureProject.collection")).thenReturn("pureProjectCollection");
-        when(configurationService.getProperty("dspace-pure-bridge.entities.dspaceProject.collection")).thenReturn("dspaceProjectCollection");
 
-        when(handleService.resolveToObject(context,  DSpacePureEntity.PERSON.getDspaceEntityCollectionHandle(configurationService))).thenReturn(mockDSpacePersonEntityCollection);
         when(handleService.resolveToObject(context,  DSpacePureEntity.PERSON.getDspacePureEntityCollectionHandle(configurationService))).thenReturn(mockPurePersonEntityCollection);
-        when(handleService.resolveToObject(context,  DSpacePureEntity.ORGANIZATION.getDspaceEntityCollectionHandle(configurationService))).thenReturn(mockDSpaceOrgUnitEntityCollection);
         when(handleService.resolveToObject(context,  DSpacePureEntity.ORGANIZATION.getDspacePureEntityCollectionHandle(configurationService))).thenReturn(mockPureOrgUnitEntityCollection);
-        when(handleService.resolveToObject(context,  DSpacePureEntity.PROJECT.getDspaceEntityCollectionHandle(configurationService))).thenReturn(mockDSpaceProjectEntityCollection);
         when(handleService.resolveToObject(context,  DSpacePureEntity.PROJECT.getDspacePureEntityCollectionHandle(configurationService))).thenReturn(mockPureProjectEntityCollection);
 
         when(itemService.findByCollection(context, mockPurePersonEntityCollection))
-            .thenReturn(List.of(mockPurePersonEntityItem).iterator());
+                .thenReturn(List.of(mockPurePersonEntityItem).iterator());
         when(itemService.findByCollection(context, mockPureOrgUnitEntityCollection))
-            .thenReturn(List.of(mockPureOrgUnitEntityItem).iterator());
+                .thenReturn(List.of(mockPureOrgUnitEntityItem).iterator());
         when(itemService.findByCollection(context, mockPureProjectEntityCollection))
-            .thenReturn(List.of(mockPureProjectEntityItem).iterator());
-        when(itemService.findByCollection(context, mockDSpacePersonEntityCollection))
-            .thenReturn(List.of(dspacePersonEntityItem).iterator());
-        when(itemService.findByCollection(context, mockDSpaceOrgUnitEntityCollection))
-            .thenReturn(List.of(dspaceOrgUnitEntityItem).iterator());
-        when(itemService.findByCollection(context, mockDSpaceProjectEntityCollection))
-            .thenReturn(List.of(dspaceProjectEntityItem).iterator());
+                .thenReturn(List.of(mockPureProjectEntityItem).iterator());
 
         // Mock entity hash generation
         try (MockedStatic<EntityUtils> mockedEntityUtils = mockStatic(EntityUtils.class);

@@ -1,47 +1,33 @@
-/**
- * The contents of this file are subject to the license and copyright
- * detailed in the LICENSE and NOTICE files at the root of the source
- * tree and available online at
- *
- * http://www.dspace.org/license/
- */
 package de.leuphana.escience.dspacepurebridge.pure.export;
 
-import java.sql.SQLException;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import de.leuphana.escience.dspacepurebridge.pure.Constants;
-import de.leuphana.escience.dspacepurebridge.pure.DSpaceServicesContainer;
+import de.leuphana.escience.dspacepurebridge.CLIScriptContextUtils;
+import de.leuphana.escience.dspacepurebridge.Constants;
+import de.leuphana.escience.dspacepurebridge.DSpaceServicesContainer;
 import de.leuphana.escience.dspacepurebridge.pure.export.filter.PublicationExportFilter;
 import de.leuphana.escience.dspacepurebridge.pure.generated.ApiException;
-import de.leuphana.escience.dspacepurebridge.CLIScriptContextUtils;
 import de.leuphana.escience.dspacepurebridge.pure.imports.DSpaceObjectMappings;
-import de.leuphana.escience.dspacepurebridge.pure.imports.DSpacePureEntity;
+import de.leuphana.escience.dspacepurebridge.search.ItemFinder;
+import de.leuphana.escience.dspacepurebridge.search.ItemProcessor;
+import de.leuphana.escience.dspacepurebridge.search.SearchQueryType;
 import org.apache.commons.lang3.StringUtils;
-import org.dspace.authorize.AuthorizeException;
-import org.dspace.content.Collection;
 import org.dspace.content.Item;
 import org.dspace.content.MetadataValue;
 import org.dspace.core.Context;
 import org.dspace.core.Email;
 import org.dspace.core.I18nUtil;
+import org.dspace.discovery.SearchServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+
+import java.sql.SQLException;
+import java.time.Duration;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class DSpaceToPure {
 
@@ -56,6 +42,7 @@ public class DSpaceToPure {
     private static final Logger log = LoggerFactory.getLogger(DSpaceToPure.class);
     private ExportStatus exportStatus;
     private DSpaceServicesContainer dSpaceServicesContainer;
+    private ItemFinder itemFinder;
 
     private final DSpaceObjectMappings dSpaceObjectMappings = new DSpaceObjectMappings();
 
@@ -70,8 +57,9 @@ public class DSpaceToPure {
 
     public DSpaceToPure(String leuphanaPureWsEndpointBase, String leuphanaPureWsApiKey, String dspaceBaseUrl,
                         String exportDataHandle, int exportLimit, boolean checkOnly,
-                        DSpaceServicesContainer dSpaceServicesContainer) {
+                        DSpaceServicesContainer dSpaceServicesContainer, ItemFinder itemFinder) {
         this.dSpaceServicesContainer = dSpaceServicesContainer;
+        this.itemFinder = itemFinder;
         this.exportDataHandle = exportDataHandle;
         this.exportLimit = exportLimit;
         this.checkOnly = checkOnly;
@@ -82,18 +70,18 @@ public class DSpaceToPure {
         setupTypeToExportTypeMap();
 
         RestTemplate duplicateCheckRestTemplate = new RestTemplateBuilder()
-            .requestFactory(HttpComponentsClientHttpRequestFactory.class)
-            .connectTimeout(Duration.ofMillis(60000))
-            .readTimeout(Duration.ofMillis(60000))
-            .defaultHeader("api-key", leuphanaPureWsApiKey).build();
+                .requestFactory(HttpComponentsClientHttpRequestFactory.class)
+                .connectTimeout(Duration.ofMillis(60000))
+                .readTimeout(Duration.ofMillis(60000))
+                .defaultHeader("api-key", leuphanaPureWsApiKey).build();
 
         exportStatus = new ExportStatus(dspaceBaseUrl);
         ResearchOutputExport researchOutputExport =
-            new ResearchOutputExport(leuphanaPureWsEndpointBase, leuphanaPureWsApiKey, dSpaceServicesContainer,
-                dSpaceObjectMappings, exportStatus, duplicateCheckRestTemplate);
+                new ResearchOutputExport(leuphanaPureWsEndpointBase, leuphanaPureWsApiKey, dSpaceServicesContainer,
+                        dSpaceObjectMappings, exportStatus, duplicateCheckRestTemplate);
         StudentThesisExport studentThesisExport =
-            new StudentThesisExport(leuphanaPureWsEndpointBase, leuphanaPureWsApiKey, dSpaceServicesContainer,
-                dSpaceObjectMappings, exportStatus, duplicateCheckRestTemplate);
+                new StudentThesisExport(leuphanaPureWsEndpointBase, leuphanaPureWsApiKey, dSpaceServicesContainer,
+                        dSpaceObjectMappings, exportStatus, duplicateCheckRestTemplate);
         try {
             researchOutputExport.init();
             studentThesisExport.init();
@@ -110,18 +98,18 @@ public class DSpaceToPure {
 
     void setupFilters() {
         String[] filterConfigurations =
-            dSpaceServicesContainer.getConfigurationService().getArrayProperty("dspace-pure-bridge.export.filter");
+                dSpaceServicesContainer.getConfigurationService().getArrayProperty("dspace-pure-bridge.export.filter");
         if (filterConfigurations != null) {
             for (String filterConfiguration : filterConfigurations) {
                 filterList.add(
-                    PublicationExportFilter.buildPublicationSyncFilterFromConfiguration(filterConfiguration));
+                        PublicationExportFilter.buildPublicationSyncFilterFromConfiguration(filterConfiguration));
             }
         }
     }
 
     void setupTypeToExportTypeMap() {
         String[] exportTypeConfigurations =
-            dSpaceServicesContainer.getConfigurationService().getArrayProperty("dspace-pure-bridge.export.exportTypeForType");
+                dSpaceServicesContainer.getConfigurationService().getArrayProperty("dspace-pure-bridge.export.exportTypeForType");
         if (exportTypeConfigurations != null) {
             for (String filterConfiguration : exportTypeConfigurations) {
                 String[] parts = filterConfiguration.split(":");
@@ -153,12 +141,12 @@ public class DSpaceToPure {
             }
 
             String itemPureUUID = dSpaceServicesContainer
-                .getItemService()
-                .getMetadataFirstValue(item,
-                    Constants.SCHEME,
-                    Constants.ELEMENT,
-                    Constants.UUID_QUALIFIER,
-                    Item.ANY);
+                    .getItemService()
+                    .getMetadataFirstValue(item,
+                            Constants.SCHEME,
+                            Constants.ELEMENT,
+                            Constants.UUID_QUALIFIER,
+                            Item.ANY);
             if (StringUtils.isNotBlank(itemPureUUID)) {
                 log.info("Item {} already present in pure (pure uuid = {})", item.getHandle(), itemPureUUID);
                 CLIScriptContextUtils.closeContext(context);
@@ -168,7 +156,7 @@ public class DSpaceToPure {
             String typeToSync = null;
             for (PublicationExportFilter publicationExportFilter : filterList) {
                 typeToSync =
-                    publicationExportFilter.itemIsSyncableForType(item, dSpaceServicesContainer.getItemService());
+                        publicationExportFilter.itemIsSyncableForType(item, dSpaceServicesContainer.getItemService());
                 if (StringUtils.isNotEmpty(typeToSync)) {
                     break;
                 }
@@ -224,27 +212,21 @@ public class DSpaceToPure {
         try {
             context = CLIScriptContextUtils.createReducedContext();
 
-            log.info("Prepare Maps for Pure object mapping (Persons, Organizations)");
-            prepareOrcidToPureMap(context);
+            log.info("Prepare Maps for Pure object mapping (Organizations)");
             prepareOrganizationNameToPureMap(context);
 
-
             log.info("Fetching relevant items");
-            Iterator<Item> allItems =
-                dSpaceServicesContainer.getItemService().findArchivedByMetadataField(context, "dspace.entity.type",
-                    "Publication");
             ExecutorService pureSyncerThreadPool =
-                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+                    Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-            while (allItems.hasNext()) {
-                Item item = allItems.next();
-
+            itemFinder.processAllItems(context, dSpaceServicesContainer.getSearchService(), SearchQueryType.PUBLICATION_EXPORT, (ItemProcessor) item -> {
                 pureSyncerThreadPool.execute(() -> syncItemThread(item.getID()));
-            }
+            });
             pureSyncerThreadPool.shutdown();
             pureSyncerThreadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+            log.info("Everything done");
             sendErrorEmail(context);
-        } catch (SQLException | AuthorizeException | InterruptedException e) {
+        } catch (SearchServiceException | SQLException | InterruptedException e) {
             if (context != null) {
                 context.abort();
             }
@@ -260,7 +242,7 @@ public class DSpaceToPure {
     void sendErrorEmail(Context context) {
         if (!exportStatus.getItemSyncInfos().isEmpty() || !exportStatus.getItemSyncErrors().isEmpty()) {
             String[] mailRecipients =
-                dSpaceServicesContainer.getConfigurationService().getArrayProperty(SYNC_MAIL_RECIPIENTS);
+                    dSpaceServicesContainer.getConfigurationService().getArrayProperty(SYNC_MAIL_RECIPIENTS);
             if (mailRecipients != null && mailRecipients.length > 0) {
                 String mailRecipientsAsString = String.join(", ", mailRecipients);
                 log.info("Sending sync status email to: {}", mailRecipientsAsString);
@@ -279,14 +261,14 @@ public class DSpaceToPure {
                 }
             } else {
                 log.warn("Not sending sync status email, no recipients defined using '{}' property",
-                    SYNC_MAIL_RECIPIENTS);
+                        SYNC_MAIL_RECIPIENTS);
             }
         }
     }
 
     void syncDSpaceItemToPure(Context context, Item item,
                               String syncTypeValue, ExportType exportType)
-        throws SQLException {
+            throws SQLException {
 
         AbstractExport exporter = exporterRegistry.get(exportType);
         ExportItem exportItem;
@@ -299,8 +281,8 @@ public class DSpaceToPure {
             exportItem = exporter.createExport(context, item, syncTypeValue);
         } catch (ApiException e) {
             log.error(exportStatus.error(item,
-                "An exception occurred during export creation: Message: " + e.getMessage() + " - HTTP Status: " +
-                    e.getCode() + " - " + e.getResponseBody()));
+                    "An exception occurred during export creation: Message: " + e.getMessage() + " - HTTP Status: " +
+                            e.getCode() + " - " + e.getResponseBody()));
             return;
         }
         if (exportItem != null) {
@@ -313,8 +295,8 @@ public class DSpaceToPure {
                 exportResult = exporter.export(exportItem);
             } catch (ApiException e) {
                 log.error(exportStatus.error(item,
-                    "An exception occurred during export: Message: " + e.getMessage() + " - HTTP Status: " +
-                        e.getCode() + " - " + e.getResponseBody()));
+                        "An exception occurred during export: Message: " + e.getMessage() + " - HTTP Status: " +
+                                e.getCode() + " - " + e.getResponseBody()));
                 return;
             }
             if (exportResult != null && exportResult.getUuid() != null) {
@@ -324,48 +306,15 @@ public class DSpaceToPure {
     }
 
     void markItemAsSynced(Context context, Item item, ExportResult exportResult, boolean isDoublet)
-        throws SQLException {
+            throws SQLException {
         if (exportResult != null && exportResult.getUuid() != null) {
             dSpaceServicesContainer.getItemService()
-                .addMetadata(context, item, Constants.SCHEME,
-                    Constants.ELEMENT,
-                    Constants.UUID_QUALIFIER, null,
-                    String.valueOf(exportResult.getUuid()));
+                    .addMetadata(context, item, Constants.SCHEME,
+                            Constants.ELEMENT,
+                            Constants.UUID_QUALIFIER, null,
+                            String.valueOf(exportResult.getUuid()));
             String successMessage = exportStatus.success(item, exportResult, isDoublet);
             log.info(successMessage);
-        }
-    }
-
-    /**
-     * Prepares a mapping between ORCID identifiers and corresponding Pure Person entities
-     * in the repository. This mapping is used during the export to find Pure Persons in case
-     * no relation was made between Person and PurePerson, but the same Orcid exists in both entities
-     *
-     * @param context The DSpace context used for operations such as resolving objects
-     *                and fetching items within the DSpace repository.
-     * @throws SQLException If a database-related error occurs while fetching metadata
-     *                      or processing the mapping.
-     */
-    void prepareOrcidToPureMap(Context context) throws SQLException {
-        Collection personCollection =
-            (Collection) dSpaceServicesContainer.getHandleService().resolveToObject(
-                context, DSpacePureEntity.PERSON.getDspacePureEntityCollectionHandle(
-                    dSpaceServicesContainer.getConfigurationService()));
-        Iterator<Item> entities = dSpaceServicesContainer.getItemService().findByCollection(context, personCollection);
-        while (entities.hasNext()) {
-            Item item = entities.next();
-            List<MetadataValue> orcidMetadata =
-                dSpaceServicesContainer.getItemService()
-                    .getMetadata(item, "person", "identifier", "orcid", Item.ANY, false);
-            List<MetadataValue> pureUUIDMetadata =
-                dSpaceServicesContainer.getItemService()
-                    .getMetadata(item, Constants.SCHEME,
-                        Constants.ELEMENT,
-                        Constants.UUID_QUALIFIER,
-                        Item.ANY, false);
-            if (!pureUUIDMetadata.isEmpty() && !orcidMetadata.isEmpty()) {
-                dSpaceObjectMappings.getOrcidToPureMap().put(orcidMetadata.get(0).getValue(), item);
-            }
         }
     }
 
@@ -380,31 +329,22 @@ public class DSpaceToPure {
      * @throws SQLException If a database-related error occurs while fetching metadata
      *                      or processing the mapping.
      */
-    void prepareOrganizationNameToPureMap(Context context) throws SQLException {
-        Collection orgUnitCollection =
-            (Collection) dSpaceServicesContainer
-                .getHandleService()
-                .resolveToObject(context,
-                    DSpacePureEntity.ORGANIZATION.getDspacePureEntityCollectionHandle(
-                        dSpaceServicesContainer.getConfigurationService()));
-        Iterator<Item> entities = dSpaceServicesContainer.getItemService().findByCollection(context, orgUnitCollection);
-        while (entities.hasNext()) {
-            Item item = entities.next();
+    void prepareOrganizationNameToPureMap(Context context) throws SQLException, SearchServiceException {
+        itemFinder.processAllItems(context, dSpaceServicesContainer.getSearchService(), SearchQueryType.ORGANIZATION_CACHE_EXPORT, (ItemProcessor) item -> {
             List<MetadataValue> orgUnitNameMetadata =
-                dSpaceServicesContainer.getItemService()
-                    .getMetadata(item, "organization", "legalName", null, Item.ANY, false);
+                    dSpaceServicesContainer.getItemService()
+                            .getMetadata(item, "organization", "legalName", null, Item.ANY, false);
             List<MetadataValue> pureUUIDMetadata =
-                dSpaceServicesContainer.getItemService()
-                    .getMetadata(item, Constants.SCHEME,
-                        Constants.ELEMENT,
-                        Constants.UUID_QUALIFIER,
-                        Item.ANY, false);
+                    dSpaceServicesContainer.getItemService()
+                            .getMetadata(item, Constants.SCHEME,
+                                    Constants.ELEMENT,
+                                    Constants.UUID_QUALIFIER,
+                                    Item.ANY, false);
             if (!pureUUIDMetadata.isEmpty() && !orgUnitNameMetadata.isEmpty()) {
                 dSpaceObjectMappings.getOrganizationNameToPureMap().put(orgUnitNameMetadata.get(0).getValue(),
-                    UUID.fromString(
-                        pureUUIDMetadata.get(0).getValue()));
+                        UUID.fromString(pureUUIDMetadata.get(0).getValue()));
             }
-        }
+        });
     }
 
     List<PublicationExportFilter> getUnmodifiableFilterList() {

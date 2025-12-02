@@ -1,51 +1,22 @@
-/**
- * The contents of this file are subject to the license and copyright
- * detailed in the LICENSE and NOTICE files at the root of the source
- * tree and available online at
- *
- * http://www.dspace.org/license/
- */
 package de.leuphana.escience.dspacepurebridge.pure.export;
 
-import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import de.leuphana.escience.dspacepurebridge.pure.Constants;
+import de.leuphana.escience.dspacepurebridge.Constants;
+import de.leuphana.escience.dspacepurebridge.DSpaceServicesContainer;
+import de.leuphana.escience.dspacepurebridge.identifiers.PrimaryIdentifier;
+import de.leuphana.escience.dspacepurebridge.identifiers.PrimaryIdentifierHelper;
+import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultItem;
+import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResults;
 import de.leuphana.escience.dspacepurebridge.pure.generated.ApiClient;
 import de.leuphana.escience.dspacepurebridge.pure.generated.ApiException;
 import de.leuphana.escience.dspacepurebridge.pure.generated.Configuration;
 import de.leuphana.escience.dspacepurebridge.pure.generated.ServerConfiguration;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.AbstractContributorAssociation;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationRef;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.FormattedString;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalContributorAssociation;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.Name;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.Person;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.ResearchOutput;
-import de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentThesis;
-import de.leuphana.escience.dspacepurebridge.identifiers.PrimaryIdentifier;
-import de.leuphana.escience.dspacepurebridge.identifiers.PrimaryIdentifierHelper;
-import de.leuphana.escience.dspacepurebridge.pure.apiobjects.AccessType;
+import de.leuphana.escience.dspacepurebridge.pure.generated.model.*;
 import de.leuphana.escience.dspacepurebridge.pure.imports.DSpaceObjectMappings;
-import de.leuphana.escience.dspacepurebridge.pure.DSpaceServicesContainer;
-import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultItem;
-import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResults;
 import org.apache.commons.lang3.StringUtils;
-import org.dspace.authorize.ResourcePolicy;
-import org.dspace.content.Bitstream;
-import org.dspace.content.Bundle;
 import org.dspace.content.Item;
 import org.dspace.content.MetadataSchemaEnum;
 import org.dspace.content.MetadataValue;
 import org.dspace.core.Context;
-import org.dspace.eperson.Group;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +25,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
+import java.sql.SQLException;
+import java.util.*;
+
+import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
 
 abstract class AbstractExport implements DSpaceExporter {
     protected String leuphanaPureWsEndpointBase;
@@ -111,18 +87,7 @@ abstract class AbstractExport implements DSpaceExporter {
                     if (personPureUUID != null) {
                         itemPersons.add(person);
                     } else {
-                        String personOrcid = dSpaceServicesContainer
-                            .getItemService()
-                            .getMetadataFirstValue(person,
-                                "person",
-                                "identifier",
-                                "orcid"
-                                , Item.ANY);
-                        if (personOrcid != null && dSpaceObjectMappings.getOrcidToPureMap().containsKey(personOrcid)) {
-                            itemPersons.add(dSpaceObjectMappings.getOrcidToPureMap().get(personOrcid));
-                        } else {
-                            personsWithoutPureId.add(person);
-                        }
+                        personsWithoutPureId.add(person);
                     }
                 }
             }
@@ -215,36 +180,6 @@ abstract class AbstractExport implements DSpaceExporter {
             , null, null, null, null, "Person");
     }
 
-    void addContributors(Object exportObject, List<Item> authors, ClassificationRef authorRole) {
-        validateExportObject(exportObject);
-        List<AbstractContributorAssociation> authorAssociations = new ArrayList<>();
-        if (authors.isEmpty()) {
-            InternalContributorAssociation contributorAssociation = new InternalContributorAssociation();
-            contributorAssociation.setPerson(
-                new Person(null, defaultAuthorUUID, null, null, null
-                    , null, null, null, null, "Person")
-            );
-            contributorAssociation.setName(
-                new Name().firstName(defaultAuthorFirstName).lastName(defaultAuthorLastName));
-            contributorAssociation.setRole(authorRole);
-            authorAssociations.add(contributorAssociation);
-        } else {
-            for (Item author : authors) {
-                InternalContributorAssociation contributorAssociation = new InternalContributorAssociation();
-                contributorAssociation.setPerson(getAPIPersonFromDSpacePerson(author));
-                contributorAssociation.setName(getPersonNameFromDSpacePerson(author));
-                contributorAssociation.setRole(authorRole);
-                authorAssociations.add(contributorAssociation);
-            }
-        }
-        if (exportObject instanceof StudentThesis) {
-            ((StudentThesis) exportObject).setContributors(authorAssociations);
-        }
-        if (exportObject instanceof ResearchOutput) {
-            ((ResearchOutput) exportObject).setContributors(authorAssociations);
-        }
-    }
-
     void addTitles(Object exportObject, String publicationLanguage, List<MetadataValue> titleMetadataValues,
                    List<MetadataValue> subTitleMetadataValues, List<MetadataValue> abstractMetadataValues) {
         validateExportObject(exportObject);
@@ -306,6 +241,36 @@ abstract class AbstractExport implements DSpaceExporter {
         }
         if (exportObject instanceof ResearchOutput researchOutput) {
             researchOutput.setAbstract(abstracts);
+        }
+    }
+
+    void addContributors(Object exportObject, List<Item> authors, ClassificationRef authorRole) {
+        validateExportObject(exportObject);
+        List<AbstractContributorAssociation> authorAssociations = new ArrayList<>();
+        if (authors.isEmpty()) {
+            InternalContributorAssociation contributorAssociation = new InternalContributorAssociation();
+            contributorAssociation.setPerson(
+                    new Person(null, defaultAuthorUUID, null, null, null
+                            , null, null, null, null, "Person")
+            );
+            contributorAssociation.setName(
+                    new Name().firstName(defaultAuthorFirstName).lastName(defaultAuthorLastName));
+            contributorAssociation.setRole(authorRole);
+            authorAssociations.add(contributorAssociation);
+        } else {
+            for (Item author : authors) {
+                InternalContributorAssociation contributorAssociation = new InternalContributorAssociation();
+                contributorAssociation.setPerson(getAPIPersonFromDSpacePerson(author));
+                contributorAssociation.setName(getPersonNameFromDSpacePerson(author));
+                contributorAssociation.setRole(authorRole);
+                authorAssociations.add(contributorAssociation);
+            }
+        }
+        if (exportObject instanceof StudentThesis) {
+            ((StudentThesis) exportObject).setContributors(authorAssociations);
+        }
+        if (exportObject instanceof ResearchOutput) {
+            ((ResearchOutput) exportObject).setContributors(authorAssociations);
         }
     }
 

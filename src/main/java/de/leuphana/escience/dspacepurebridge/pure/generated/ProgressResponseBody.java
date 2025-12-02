@@ -15,14 +15,9 @@ package de.leuphana.escience.dspacepurebridge.pure.generated;
 
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
+import okio.*;
 
 import java.io.IOException;
-
-import okio.Buffer;
-import okio.BufferedSource;
-import okio.ForwardingSource;
-import okio.Okio;
-import okio.Source;
 
 public class ProgressResponseBody extends ResponseBody {
 

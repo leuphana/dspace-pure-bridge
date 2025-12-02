@@ -13,27 +13,15 @@
 
 package de.leuphana.escience.dspacepurebridge.pure.generated.model;
 
-import java.util.Objects;
-
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
-
-import java.io.IOException;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import de.leuphana.escience.dspacepurebridge.pure.generated.JSON;
 import org.openapitools.jackson.nullable.JsonNullable;
 
-import com.google.gson.JsonElement;
-
-import java.util.HashSet;
-
 import javax.annotation.Nullable;
-
-import de.leuphana.escience.dspacepurebridge.pure.generated.JSON;
+import java.io.IOException;
+import java.time.OffsetDateTime;
+import java.util.*;
 
 /**
  * Research output exists in many variations, from written to non-textual form. Templates are available for a range of these variations.

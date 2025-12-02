@@ -1,19 +1,9 @@
-/**
- * The contents of this file are subject to the license and copyright
- * detailed in the LICENSE and NOTICE files at the root of the source
- * tree and available online at
- *
- * http://www.dspace.org/license/
- */
-
 package de.leuphana.escience.dspacepurebridge;
-
-import java.sql.SQLException;
-import java.util.Arrays;
 
 import de.leuphana.escience.dspacepurebridge.pure.export.DSpaceToPure;
 import de.leuphana.escience.dspacepurebridge.pure.imports.DSpacePureEntity;
 import de.leuphana.escience.dspacepurebridge.pure.imports.PureToDSpace;
+import de.leuphana.escience.dspacepurebridge.search.ItemFinder;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -22,19 +12,19 @@ import org.dspace.authorize.factory.AuthorizeServiceFactory;
 import org.dspace.authorize.service.AuthorizeService;
 import org.dspace.authorize.service.ResourcePolicyService;
 import org.dspace.content.factory.ContentServiceFactory;
-import org.dspace.content.service.BitstreamService;
-import org.dspace.content.service.CollectionService;
-import org.dspace.content.service.InstallItemService;
-import org.dspace.content.service.ItemService;
-import org.dspace.content.service.RelationshipService;
-import org.dspace.content.service.RelationshipTypeService;
-import org.dspace.content.service.WorkspaceItemService;
+import org.dspace.content.service.*;
+import org.dspace.core.Context;
+import org.dspace.discovery.*;
 import org.dspace.handle.factory.HandleServiceFactory;
 import org.dspace.handle.service.HandleService;
 import org.dspace.services.ConfigurationService;
 import org.dspace.services.factory.DSpaceServicesFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class DspacePureBridgeCLI {
@@ -47,17 +37,19 @@ public class DspacePureBridgeCLI {
     private final BitstreamService bitstreamService = ContentServiceFactory.getInstance().getBitstreamService();
     private final InstallItemService installItemService = ContentServiceFactory.getInstance().getInstallItemService();
     private final RelationshipTypeService relationshipTypeService =
-        ContentServiceFactory.getInstance().getRelationshipTypeService();
+            ContentServiceFactory.getInstance().getRelationshipTypeService();
     private final RelationshipService relationshipService =
-        ContentServiceFactory.getInstance().getRelationshipService();
+            ContentServiceFactory.getInstance().getRelationshipService();
     private final CollectionService collectionService = ContentServiceFactory.getInstance().getCollectionService();
     private final WorkspaceItemService workspaceItemService =
-        ContentServiceFactory.getInstance().getWorkspaceItemService();
+            ContentServiceFactory.getInstance().getWorkspaceItemService();
     private final ConfigurationService configurationService =
-        DSpaceServicesFactory.getInstance().getConfigurationService();
+            DSpaceServicesFactory.getInstance().getConfigurationService();
     private final AuthorizeService authorizeService = AuthorizeServiceFactory.getInstance().getAuthorizeService();
     private final ResourcePolicyService resourcePolicyService = AuthorizeServiceFactory.getInstance()
-        .getResourcePolicyService();
+            .getResourcePolicyService();
+    private final SearchService searchService = SearchUtils.getSearchService();
+    private final ItemFinder itemFinder = new ItemFinder();
 
     private String pureWsEndpointBase;
     private String pureWsApiKey;
@@ -73,7 +65,7 @@ public class DspacePureBridgeCLI {
         DspacePureBridgeCLI dspacePureBridgeCLI = new DspacePureBridgeCLI();
         try {
             CommandLine commandLine = (new DefaultParser()).parse(
-                de.leuphana.escience.dspacepurebridge.PureSyncCLIConfiguration.getOptions(), args);
+                    de.leuphana.escience.dspacepurebridge.PureSyncCLIConfiguration.getOptions(), args);
             dspacePureBridgeCLI.setup(commandLine);
             dspacePureBridgeCLI.run();
         } catch (Exception e) {
@@ -84,7 +76,7 @@ public class DspacePureBridgeCLI {
     void setup(CommandLine commandLine) {
         this.importData = commandLine.hasOption('i');
         this.exportData = commandLine.hasOption('e');
-        this.help = commandLine.hasOption('h') || (! this.importData && ! this.exportData);
+        this.help = commandLine.hasOption('h') || (!this.importData && !this.exportData);
         this.exportLimit = commandLine.hasOption('l') ? Integer.parseInt(commandLine.getOptionValue('l')) : 0;
         this.checkOnly = commandLine.hasOption('c');
         this.exportHandle = commandLine.getOptionValue('x');
@@ -99,6 +91,10 @@ public class DspacePureBridgeCLI {
         pureWsApiKey = configurationService.getProperty(PURE_BRIDGE_PURE_WS_APIKEY);
         if (StringUtils.isEmpty(pureWsApiKey)) {
             throw new IllegalStateException(PURE_BRIDGE_PURE_WS_APIKEY + " Property must be set!");
+        }
+
+        if (!checkDSpaceConfig()) {
+            throw new IllegalStateException("Dspace config check failed!");
         }
     }
 
@@ -120,30 +116,57 @@ public class DspacePureBridgeCLI {
         }
     }
 
-    void syncPureToDSpace() throws SQLException {
-        PureToDSpace pureToDSpace = new PureToDSpace(pureWsEndpointBase, pureWsApiKey, handleService,
-            itemService, collectionService, workspaceItemService, installItemService, relationshipTypeService,
-            relationshipService,
-            configurationService);
+    private boolean checkDSpaceConfig() {
+        boolean validConfig = true;
+
+        for (String requiredProperty : List.of(
+                "event.dispatcher." + CLIScriptContextUtils.DISPATCHER_SET_NAME + ".class",
+                "event.dispatcher." + CLIScriptContextUtils.DISPATCHER_SET_NAME + ".consumers")) {
+            if (!configurationService.hasProperty(requiredProperty)) {
+                log.error("DSpace configuration is missing required property: {}", requiredProperty);
+                validConfig = false;
+            }
+        }
+        return validConfig;
+    }
+
+    void syncPureToDSpace() throws SQLException, SearchServiceException {
+
+        DSpaceServicesContainer.Builder builder = new DSpaceServicesContainer.Builder();
+        builder.itemService(itemService)
+                .configurationService(configurationService)
+                .collectionService(collectionService)
+                .workspaceItemService(workspaceItemService)
+                .installItemService(installItemService)
+                .relationshipTypeService(relationshipTypeService)
+                .relationshipService(relationshipService)
+                .handleService(handleService)
+                .searchService(searchService);
+
+        DSpaceServicesContainer
+                dSpaceServicesContainer = new DSpaceServicesContainer(builder);
+
+        PureToDSpace pureToDSpace = new PureToDSpace(pureWsEndpointBase, pureWsApiKey, dSpaceServicesContainer, itemFinder);
         pureToDSpace.syncObjects();
     }
 
     void syncDSpaceToPure(String exportDataHandle, int exportLimit, boolean checkOnly) {
         String dspaceBaseUrl = configurationService.getProperty("dspace.ui.url");
 
-        de.leuphana.escience.dspacepurebridge.pure.DSpaceServicesContainer.Builder builder = new de.leuphana.escience.dspacepurebridge.pure.DSpaceServicesContainer.Builder();
+        DSpaceServicesContainer.Builder builder = new DSpaceServicesContainer.Builder();
         builder.itemService(itemService)
-            .authorizeService(authorizeService)
-            .bitstreamService(bitstreamService)
-            .configurationService(configurationService)
-            .resourcePolicyService(resourcePolicyService)
-            .handleService(handleService);
+                .authorizeService(authorizeService)
+                .bitstreamService(bitstreamService)
+                .configurationService(configurationService)
+                .resourcePolicyService(resourcePolicyService)
+                .handleService(handleService)
+                .searchService(searchService);
 
-        de.leuphana.escience.dspacepurebridge.pure.DSpaceServicesContainer
-            dSpaceServicesContainer = new de.leuphana.escience.dspacepurebridge.pure.DSpaceServicesContainer(builder);
+        DSpaceServicesContainer
+                dSpaceServicesContainer = new DSpaceServicesContainer(builder);
 
         DSpaceToPure dSpaceToPure = new DSpaceToPure(pureWsEndpointBase, pureWsApiKey, dspaceBaseUrl,
-            exportDataHandle, exportLimit, checkOnly, dSpaceServicesContainer);
+                exportDataHandle, exportLimit, checkOnly, dSpaceServicesContainer, itemFinder);
         dSpaceToPure.syncItems();
     }
 

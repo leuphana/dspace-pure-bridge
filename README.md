@@ -36,6 +36,8 @@ Developed at [**Leuphana University Lüneburg**](https://www.leuphana.de/en) to 
     - [ResearchOutput Export Type](#researchoutput-export-type)
         - [Author export data](#author-export-data)
         - [License export data](#license-export-data)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
@@ -602,3 +604,18 @@ If other classification endpoints need to be used, the source code must be modif
 
 License information is currently retrieved from the bitstream metadata.
 If license information is stored in the publication metadata instead, the source code must be adapted to make the license source configurable.
+
+## Contributing
+
+Contributions are welcome and appreciated!
+
+If you find a bug, have a question, or want to suggest an improvement, please feel free to open an issue.
+
+If you would like to contribute code, documentation, or tests, you are welcome to submit a pull request. Please ensure your changes are well documented and, if applicable, covered by tests.
+
+## License
+
+This project is licensed under the BSD 3-Clause License.
+
+Commercial use is permitted, provided that the copyright notice and license
+text are retained in accordance with the license terms.

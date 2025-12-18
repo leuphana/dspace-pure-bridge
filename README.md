@@ -17,6 +17,7 @@ Developed at [**Leuphana University Lüneburg**](https://www.leuphana.de/en) to 
       - [Metadata](#metadata)
       - [Entities](#entities)
       - [Relations](#relations)
+      - [Admin EPerson](#admin-eperson)
       - [Export result email](#export-result-email)
 - [DSpace-Pure-Bridge Configuration](#dspace-pure-bridge-configuration)
     - [Pure API configuration](#pure-api-configuration)
@@ -246,6 +247,15 @@ Example snippet for the relevant relation enties inside the `relationship-types.
         </rightCardinality>
         <copyToLeft>true</copyToLeft>
     </type>
+```
+
+#### Admin EPerson
+
+To create a DSpace context object, an `EPerson` is required. The `dspace-pure-bridge` uses the environment variable `ADMIN_EMAIL`, which must be set to the email address of a valid DSpace `EPerson`.
+
+**Example**
+```
+ADMIN_EMAIL=dspace@example.org
 ```
 
 #### Export result email

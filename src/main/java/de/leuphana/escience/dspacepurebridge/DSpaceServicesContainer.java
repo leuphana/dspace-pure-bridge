@@ -3,6 +3,7 @@ package de.leuphana.escience.dspacepurebridge;
 import org.dspace.authorize.service.AuthorizeService;
 import org.dspace.authorize.service.ResourcePolicyService;
 import org.dspace.content.service.*;
+import org.dspace.discovery.IndexingService;
 import org.dspace.discovery.SearchService;
 import org.dspace.handle.service.HandleService;
 import org.dspace.services.ConfigurationService;
@@ -14,6 +15,7 @@ public class DSpaceServicesContainer {
     private final AuthorizeService authorizeService;
     private final ItemService itemService;
     private final HandleService handleService;
+    private final IndexingService indexingService;
     private final SearchService searchService;
     private final CollectionService collectionService;
     private final WorkspaceItemService workspaceItemService;
@@ -28,6 +30,7 @@ public class DSpaceServicesContainer {
         this.authorizeService = builder.authorizeService;
         this.itemService = builder.itemService;
         this.handleService = builder.handleService;
+        this.indexingService = builder.indexingService;
         this.searchService = builder.searchService;
         this.collectionService = builder.collectionService;
         this.workspaceItemService = builder.workspaceItemService;
@@ -84,15 +87,20 @@ public class DSpaceServicesContainer {
         return relationshipService;
     }
 
+    public IndexingService getIndexingService() {
+        return indexingService;
+    }
+
 
     public static class Builder {
-        public SearchService searchService;
         private ConfigurationService configurationService;
         private ResourcePolicyService resourcePolicyService;
         private BitstreamService bitstreamService;
         private AuthorizeService authorizeService;
         private ItemService itemService;
         private HandleService handleService;
+        private IndexingService indexingService;
+        private SearchService searchService;
         private CollectionService collectionService;
         private WorkspaceItemService workspaceItemService;
         private InstallItemService installItemService;
@@ -126,6 +134,11 @@ public class DSpaceServicesContainer {
 
         public Builder handleService(HandleService handleService) {
             this.handleService = handleService;
+            return this;
+        }
+
+        public Builder indexingService(IndexingService indexingService) {
+            this.indexingService = indexingService;
             return this;
         }
 

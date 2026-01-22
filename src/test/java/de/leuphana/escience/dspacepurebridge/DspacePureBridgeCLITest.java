@@ -22,11 +22,13 @@ import org.dspace.content.service.ItemService;
 import org.dspace.content.service.RelationshipService;
 import org.dspace.content.service.RelationshipTypeService;
 import org.dspace.content.service.WorkspaceItemService;
+import org.dspace.discovery.IndexingService;
 import org.dspace.discovery.SearchService;
 import org.dspace.discovery.SearchUtils;
 import org.dspace.handle.factory.HandleServiceFactory;
 import org.dspace.handle.factory.HandleServiceFactoryImpl;
 import org.dspace.handle.service.HandleService;
+import org.dspace.kernel.ServiceManager;
 import org.dspace.services.ConfigurationService;
 import org.dspace.services.factory.DSpaceServicesFactory;
 import org.dspace.services.factory.DSpaceServicesFactoryImpl;
@@ -70,6 +72,10 @@ class DspacePureBridgeCLITest {
     ResourcePolicyService resourcePolicyService;
     @Mock
     SearchService searchService;
+    @Mock
+    IndexingService indexingService;
+    @Mock
+    ServiceManager serviceManager;
 
     @Spy
     @InjectMocks
@@ -241,7 +247,7 @@ class DspacePureBridgeCLITest {
             contentServiceFactoryMockedStatic.when(ContentServiceFactory::getInstance)
                 .thenReturn(contentServiceFactory);
             searchUtilsMockedStatic.when(SearchUtils::getSearchService).thenReturn(searchService);
-
+            when(serviceManager.getServiceByName(IndexingService.class.getName(), IndexingService.class)).thenReturn(indexingService);
             testMethod.run();
         }
     }

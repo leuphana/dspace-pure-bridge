@@ -48,6 +48,9 @@ public class DspacePureBridgeCLI {
     private final AuthorizeService authorizeService = AuthorizeServiceFactory.getInstance().getAuthorizeService();
     private final ResourcePolicyService resourcePolicyService = AuthorizeServiceFactory.getInstance()
             .getResourcePolicyService();
+    private final IndexingService indexingService = DSpaceServicesFactory.getInstance().getServiceManager()
+            .getServiceByName(IndexingService.class.getName(),
+                    IndexingService.class);
     private final SearchService searchService = SearchUtils.getSearchService();
     private final ItemFinder itemFinder = new ItemFinder();
 
@@ -160,6 +163,7 @@ public class DspacePureBridgeCLI {
                 .configurationService(configurationService)
                 .resourcePolicyService(resourcePolicyService)
                 .handleService(handleService)
+                .indexingService(indexingService)
                 .searchService(searchService);
 
         DSpaceServicesContainer

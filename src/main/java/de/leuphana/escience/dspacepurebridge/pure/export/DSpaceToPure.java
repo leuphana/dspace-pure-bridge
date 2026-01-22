@@ -16,6 +16,8 @@ import org.dspace.core.Context;
 import org.dspace.core.Email;
 import org.dspace.core.I18nUtil;
 import org.dspace.discovery.SearchServiceException;
+import org.dspace.discovery.indexobject.IndexableItem;
+import org.dspace.handle.service.HandleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -313,6 +315,12 @@ public class DSpaceToPure {
                             Constants.ELEMENT,
                             Constants.UUID_QUALIFIER, null,
                             String.valueOf(exportResult.getUuid()));
+            try {
+                dSpaceServicesContainer.getIndexingService().indexContent(context, new IndexableItem(item), true, true);
+            } catch (SearchServiceException e) {
+                log.error("Error indexing item with UUID: {}", item.getID(), e);
+                throw new RuntimeException(e);
+            }
             String successMessage = exportStatus.success(item, exportResult, isDoublet);
             log.info(successMessage);
         }

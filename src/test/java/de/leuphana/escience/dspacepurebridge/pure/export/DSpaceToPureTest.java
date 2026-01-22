@@ -15,6 +15,7 @@ import org.dspace.core.Email;
 import org.dspace.core.I18nUtil;
 import org.dspace.discovery.DiscoverQuery;
 import org.dspace.discovery.DiscoverResult;
+import org.dspace.discovery.IndexingService;
 import org.dspace.discovery.SearchService;
 import org.dspace.discovery.indexobject.IndexableItem;
 import org.dspace.handle.service.HandleService;
@@ -58,6 +59,9 @@ class DSpaceToPureTest {
     ItemFinder itemFinder;
 
     @Mock
+    IndexingService indexingService;
+
+    @Mock
     DSpaceServicesContainer dSpaceServicesContainer;
 
     @Mock(answer = org.mockito.Answers.RETURNS_DEEP_STUBS)
@@ -76,6 +80,7 @@ class DSpaceToPureTest {
         lenient().when(dSpaceServicesContainer.getItemService()).thenReturn(itemService);
         lenient().when(dSpaceServicesContainer.getHandleService()).thenReturn(handleService);
         lenient().when(dSpaceServicesContainer.getSearchService()).thenReturn(searchService);
+        lenient().when(dSpaceServicesContainer.getIndexingService()).thenReturn(indexingService);
 
     }
 

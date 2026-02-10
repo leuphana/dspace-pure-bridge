@@ -137,7 +137,7 @@ Please refer to the section [Configuration of DSpace metadata fields considered 
 
 The `dspace-pure-bridge` was developed and tested using the following software versions:
 
-- Dspace running using version 8.x
+- Dspace running using version 9.x
 - Pure running with API version 5.31.x
 
 ### Installation of the dspace-pure-bridge

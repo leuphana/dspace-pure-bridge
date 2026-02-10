@@ -223,8 +223,8 @@
     </dependencies>
 
     <properties>
-        <dspace-version>8.1</dspace-version>
-        <spring-boot.version>3.4.2</spring-boot.version>
+        <dspace-version>9.2</dspace-version>
+        <spring-boot.version>3.5.8</spring-boot.version>
         <httpclient5-core-version>5.4.2</httpclient5-core-version>
         <httpclient5-version>5.3.3</httpclient5-version>
         <java.version>17</java.version>

@@ -11,6 +11,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -101,31 +103,31 @@ public class ResearchOutputExportTest {
         lenient().when(dSpaceServicesContainer.getBitstreamService()).thenReturn(bitstreamService);
 
         lenient().doAnswer(invocation -> invocation.getArgument(1)).when(configurationService)
-            .getProperty(anyString(), anyString());
+                .getProperty(anyString(), anyString());
     }
 
     @Test
     public void setupMappingFromConfiguration() {
         Map<String, String> mapping = new HashMap<>();
         mapping.put(ResearchOutputExport.MAPPING_PROPERTIES_PREFIX + "." +
-                ResearchOutputMappingType.ACCESS_TYPE + "." + AccessType.EMBARGO,
-            "/dk/atira/pure/core/openaccesspermission/embargoed");
+                        ResearchOutputMappingType.ACCESS_TYPE + "." + AccessType.EMBARGO,
+                "/dk/atira/pure/core/openaccesspermission/embargoed");
         mapping.put(
-            ResearchOutputExport.MAPPING_PROPERTIES_PREFIX + "." +
-                ResearchOutputMappingType.LICENSE + ".Nutzung nach Urheberrecht",
-            "/dk/atira/pure/core/document/licenses/unspecified");
+                ResearchOutputExport.MAPPING_PROPERTIES_PREFIX + "." +
+                        ResearchOutputMappingType.LICENSE + ".Nutzung nach Urheberrecht",
+                "/dk/atira/pure/core/document/licenses/unspecified");
         mapping.put(
-            ResearchOutputExport.MAPPING_PROPERTIES_PREFIX + "." +
-                ResearchOutputMappingType.LICENSE + ".CC-BY-ND",
-            "/dk/atira/pure/core/document/licenses/cc_by_nd");
+                ResearchOutputExport.MAPPING_PROPERTIES_PREFIX + "." +
+                        ResearchOutputMappingType.LICENSE + ".CC-BY-ND",
+                "/dk/atira/pure/core/document/licenses/cc_by_nd");
         mapping.put(
-            ResearchOutputExport.MAPPING_PROPERTIES_PREFIX + "." +
-                ResearchOutputMappingType.ROLE + ".Dissertation-Author",
-            "/dk/atira/pure/researchoutput/roles/bookanthology/author");
+                ResearchOutputExport.MAPPING_PROPERTIES_PREFIX + "." +
+                        ResearchOutputMappingType.ROLE + ".Dissertation-Author",
+                "/dk/atira/pure/researchoutput/roles/bookanthology/author");
 
 
         when(configurationService.getPropertyKeys(ResearchOutputExport.MAPPING_PROPERTIES_PREFIX)).thenReturn(
-            new ArrayList<>(mapping.keySet()));
+                new ArrayList<>(mapping.keySet()));
         for (String key : mapping.keySet()) {
             when(configurationService.getProperty(key)).thenReturn(mapping.get(key));
         }
@@ -133,14 +135,14 @@ public class ResearchOutputExportTest {
 
         Assertions.assertNotEquals(0, classUnderTest.mapping.size());
         Assertions.assertEquals("/dk/atira/pure/core/document/licenses/cc_by_nd",
-            classUnderTest.mapping.get(ResearchOutputMappingType.LICENSE).get("CC-BY-ND"));
+                classUnderTest.mapping.get(ResearchOutputMappingType.LICENSE).get("CC-BY-ND"));
         Assertions.assertEquals("/dk/atira/pure/core/document/licenses/unspecified",
-            classUnderTest.mapping.get(ResearchOutputMappingType.LICENSE).get("Nutzung nach Urheberrecht"));
+                classUnderTest.mapping.get(ResearchOutputMappingType.LICENSE).get("Nutzung nach Urheberrecht"));
         Assertions.assertEquals("/dk/atira/pure/core/openaccesspermission/embargoed", classUnderTest.mapping.get(
-                ResearchOutputMappingType.ACCESS_TYPE)
-            .get(AccessType.EMBARGO.toString()));
+                        ResearchOutputMappingType.ACCESS_TYPE)
+                .get(AccessType.EMBARGO.toString()));
         Assertions.assertEquals("/dk/atira/pure/researchoutput/roles/bookanthology/author",
-            classUnderTest.mapping.get(ResearchOutputMappingType.ROLE).get("Dissertation-Author"));
+                classUnderTest.mapping.get(ResearchOutputMappingType.ROLE).get("Dissertation-Author"));
     }
 
     @Test
@@ -148,11 +150,11 @@ public class ResearchOutputExportTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             Map<String, String> mapping = new HashMap<>();
             mapping.put(
-                ResearchOutputExport.MAPPING_PROPERTIES_PREFIX + ".UNKNOWN.MappingValueXY",
-                "/dk/atira/pure/core/document/xy/12");
+                    ResearchOutputExport.MAPPING_PROPERTIES_PREFIX + ".UNKNOWN.MappingValueXY",
+                    "/dk/atira/pure/core/document/xy/12");
 
             when(configurationService.getPropertyKeys(ResearchOutputExport.MAPPING_PROPERTIES_PREFIX)).thenReturn(
-                new ArrayList<>(mapping.keySet()));
+                    new ArrayList<>(mapping.keySet()));
             classUnderTest.setupMappingFromConfiguration();
         });
     }
@@ -162,11 +164,11 @@ public class ResearchOutputExportTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             Map<String, String> mapping = new HashMap<>();
             mapping.put(
-                ResearchOutputExport.MAPPING_PROPERTIES_PREFIX + ".MappingValueXY",
-                "/dk/atira/pure/core/document/xy/12");
+                    ResearchOutputExport.MAPPING_PROPERTIES_PREFIX + ".MappingValueXY",
+                    "/dk/atira/pure/core/document/xy/12");
 
             when(configurationService.getPropertyKeys(ResearchOutputExport.MAPPING_PROPERTIES_PREFIX)).thenReturn(
-                new ArrayList<>(mapping.keySet()));
+                    new ArrayList<>(mapping.keySet()));
             classUnderTest.setupMappingFromConfiguration();
         });
     }
@@ -214,13 +216,13 @@ public class ResearchOutputExportTest {
         final String defaultAuthorLastName = "author";
 
         when(configurationService.getProperty("dspace-pure-bridge.export.defaultOrganizationUUID"))
-            .thenReturn(defaultOrganizationUUID.toString());
+                .thenReturn(defaultOrganizationUUID.toString());
         when(configurationService.getProperty("dspace-pure-bridge.export.defaultAuthorUUID")).thenReturn(
-            defaultAuthorUUID.toString());
+                defaultAuthorUUID.toString());
         when(configurationService.getProperty("dspace-pure-bridge.export.defaultAuthorFirstName")).thenReturn(
-            defaultAuthorFirstName);
+                defaultAuthorFirstName);
         when(configurationService.getProperty("dspace-pure-bridge.export.defaultAuthorLastName")).thenReturn(
-            defaultAuthorLastName);
+                defaultAuthorLastName);
 
         Map<ResearchOutputMappingType, Map<String, String>> mapping = classUnderTest.mapping;
         for (ResearchOutputMappingType mappingType : ResearchOutputMappingType.values()) {
@@ -233,46 +235,46 @@ public class ResearchOutputExportTest {
         mapping.get(ResearchOutputMappingType.LANGUAGE).put(DSpaceLanguage.ENGLISH.getIso3Letter(), englishUrl);
         mapping.get(ResearchOutputMappingType.ACCESS_TYPE).put(String.valueOf(AccessType.OPEN_ACCESS), openAccessUrl);
         mapping.get(ResearchOutputMappingType.ELECTRONIC_VERSION_TYPE)
-            .put(DSpaceToPure.DEFAULT_METADATA_VALUE, versionTypeUrl);
+                .put(DSpaceToPure.DEFAULT_METADATA_VALUE, versionTypeUrl);
         mapping.get(ResearchOutputMappingType.LICENSE).put(testLicense, licenseUrl);
         mapping.get(ResearchOutputMappingType.ROLE)
-            .put(DSpaceToPure.PURE_AUTHOR_ROLE, authorUrl);
+                .put(DSpaceToPure.PURE_AUTHOR_ROLE, authorUrl);
 
         when(creationContextMetadataValue.getValue()).thenReturn(researchValue);
         when(itemService.getMetadataByMetadataString(publicationItem, "local.CreationContext")).thenReturn(
-            Collections.singletonList(creationContextMetadataValue));
+                Collections.singletonList(creationContextMetadataValue));
 
         when(publicationLanguageMetadataValue.getValue()).thenReturn(publicationLanguage);
         when(itemService.getMetadataByMetadataString(publicationItem, "DataCite.Language")).thenReturn(
-            List.of(publicationLanguageMetadataValue));
+                List.of(publicationLanguageMetadataValue));
 
         when(publicationYearMetadataValue.getValue()).thenReturn(publicationYear);
         when(itemService.getMetadataByMetadataString(publicationItem, "DataCite.PublicationYear")).thenReturn(
-            Collections.singletonList(publicationYearMetadataValue));
+                Collections.singletonList(publicationYearMetadataValue));
         when(titleDeuMetadataValue.getValue()).thenReturn(titleGerman);
         when(titleEngMetadataValue.getValue()).thenReturn(titleEnglish);
         when(titleEngMetadataValue.getLanguage()).thenReturn(DSpaceLanguage.ENGLISH.getIso2Letter());
         when(itemService.getMetadataByMetadataString(publicationItem, "dc.title")).thenReturn(
-            List.of(titleDeuMetadataValue, titleEngMetadataValue));
+                List.of(titleDeuMetadataValue, titleEngMetadataValue));
         when(subTitleDeuMetadataValue.getValue()).thenReturn(subTitleGerman);
         when(subTitleDeuMetadataValue.getLanguage()).thenReturn(DSpaceLanguage.GERMAN.getIso2Letter());
         when(subTitleEngMetadataValue.getValue()).thenReturn(subTitleEnglish);
         when(subTitleEngMetadataValue.getLanguage()).thenReturn(DSpaceLanguage.ENGLISH.getIso2Letter());
         when(itemService.getMetadataByMetadataString(publicationItem, "DataCite.Title.Subtitle")).thenReturn(
-            List.of(subTitleDeuMetadataValue, subTitleEngMetadataValue));
+                List.of(subTitleDeuMetadataValue, subTitleEngMetadataValue));
         when(abstractDeuMetadataValue.getValue()).thenReturn(abstractGerman);
         when(abstractDeuMetadataValue.getLanguage()).thenReturn(DSpaceLanguage.GERMAN.getIso2Letter());
         when(abstractEngMetadataValue.getValue()).thenReturn(abstractEnglish);
         when(abstractEngMetadataValue.getLanguage()).thenReturn(DSpaceLanguage.ENGLISH.getIso2Letter());
         when(itemService.getMetadataByMetadataString(
-            publicationItem, "DataCite.Description.Abstract")).thenReturn(
-            List.of(abstractDeuMetadataValue, abstractEngMetadataValue));
+                publicationItem, "DataCite.Description.Abstract")).thenReturn(
+                List.of(abstractDeuMetadataValue, abstractEngMetadataValue));
         when(identifierMetadataValue.getValue()).thenReturn(doiValue);
         when(itemService.getMetadataByMetadataString(publicationItem, "dc.identifier.uri")).thenReturn(
-            Collections.singletonList(identifierMetadataValue));
+                Collections.singletonList(identifierMetadataValue));
         when(affiliationMetadataValue.getValue()).thenReturn(orgUnit);
         when(itemService.getMetadataByMetadataString(publicationItem, "local.Affiliation")).thenReturn(
-            Collections.singletonList(affiliationMetadataValue));
+                Collections.singletonList(affiliationMetadataValue));
 
 
         ClassificationRef research = new ClassificationRef();
@@ -330,22 +332,22 @@ public class ResearchOutputExportTest {
         electronicVersionAccessDetail.setAccessType(AccessType.OPEN_ACCESS);
         electronicVersionAccessDetail.setLicense(testLicense);
         doReturn(electronicVersionAccessDetail).when(classUnderTest).getElectronicVersionAccessDetail(context,
-            publicationItem);
+                publicationItem);
 
         UUID authorPureUUID = UUID.randomUUID();
         Item author = mock(Item.class);
         when(itemService.getMetadataFirstValue(
-            author, "person", "givenName", null, Item.ANY))
-            .thenReturn(firstName);
+                author, "person", "givenName", null, Item.ANY))
+                .thenReturn(firstName);
         when(itemService.getMetadataFirstValue(
-            author, "person", "familyName", null, Item.ANY))
-            .thenReturn(lastName);
+                author, "person", "familyName", null, Item.ANY))
+                .thenReturn(lastName);
         when(itemService.getMetadataFirstValue(
-            author, Constants.SCHEME,
-            Constants.ELEMENT,
-            Constants.UUID_QUALIFIER,
-            Item.ANY))
-            .thenReturn(authorPureUUID.toString());
+                author, Constants.SCHEME,
+                Constants.ELEMENT,
+                Constants.UUID_QUALIFIER,
+                Item.ANY))
+                .thenReturn(authorPureUUID.toString());
 
 
         doReturn(List.of(author)).when(classUnderTest).getItemAuthors(context, publicationItem, false);
@@ -358,30 +360,30 @@ public class ResearchOutputExportTest {
 
         Assertions.assertEquals(titleGerman, researchOutput.getTitle().getValue());
         Assertions.assertEquals(titleEnglish,
-            researchOutput.getTranslatedTitle().get(DSpaceLanguage.ENGLISH.getLocale()));
+                researchOutput.getTranslatedTitle().get(DSpaceLanguage.ENGLISH.getLocale()));
         Assertions.assertEquals(doiValue,
-            ((DoiElectronicVersion) researchOutput.getElectronicVersions().get(0)).getDoi());
+                ((DoiElectronicVersion) researchOutput.getElectronicVersions().get(0)).getDoi());
         Assertions.assertEquals(openAccessUrl, researchOutput.getElectronicVersions().get(0).getAccessType().getUri());
         Assertions.assertEquals(licenseUrl, researchOutput.getElectronicVersions().get(0).getLicenseType().getUri());
         Assertions.assertEquals(subTitleGerman, researchOutput.getSubTitle().getValue());
         Assertions.assertEquals(subTitleEnglish,
-            researchOutput.getTranslatedSubTitle().get(DSpaceLanguage.ENGLISH.getLocale()));
+                researchOutput.getTranslatedSubTitle().get(DSpaceLanguage.ENGLISH.getLocale()));
         Assertions.assertEquals(abstractGerman, researchOutput.getAbstract().get(DSpaceLanguage.GERMAN.getLocale()));
         Assertions.assertEquals(abstractEnglish, researchOutput.getAbstract().get(DSpaceLanguage.ENGLISH.getLocale()));
         Assertions.assertEquals(publicationYear,
-            String.valueOf(researchOutput.getPublicationStatuses().get(0).getPublicationDate().getYear()));
+                String.valueOf(researchOutput.getPublicationStatuses().get(0).getPublicationDate().getYear()));
         Assertions.assertEquals(researchValueUrl, researchOutput.getCategory().getUri());
         Assertions.assertEquals(dissertationUrl, researchOutput.getType().getUri());
         Assertions.assertEquals(authorPureUUID,
-            ((InternalContributorAssociation) researchOutput.getContributors().get(0)).getPerson().getUuid());
+                ((InternalContributorAssociation) researchOutput.getContributors().get(0)).getPerson().getUuid());
         Assertions.assertEquals(firstName,
-            ((InternalContributorAssociation) researchOutput.getContributors().get(0)).getName()
-                .getFirstName());
+                ((InternalContributorAssociation) researchOutput.getContributors().get(0)).getName()
+                        .getFirstName());
         Assertions.assertEquals(lastName,
-            ((InternalContributorAssociation) researchOutput.getContributors().get(0)).getName()
-                .getLastName());
+                ((InternalContributorAssociation) researchOutput.getContributors().get(0)).getName()
+                        .getLastName());
         Assertions.assertEquals(authorUrl,
-            ((InternalContributorAssociation) researchOutput.getContributors().get(0)).getRole().getUri());
+                ((InternalContributorAssociation) researchOutput.getContributors().get(0)).getRole().getUri());
         Assertions.assertEquals(defaultOrganizationUUID, researchOutput.getOrganizations().get(0).getUuid());
     }
 
@@ -398,17 +400,17 @@ public class ResearchOutputExportTest {
         when(licenseRestrictedMetadataValue.getValue()).thenReturn("LICENSE EMBARGO");
 
         when(itemService.getBundles(publicationItem, org.dspace.core.Constants.DEFAULT_BUNDLE_NAME)).thenReturn(
-            bundles);
+                bundles);
         when(bundle.getPrimaryBitstream()).thenReturn(null);
         when(bundle.getBitstreams()).thenReturn(List.of(bitstreamOpenAccess, bitstreamEmbargo));
         when(classUnderTest.getAccessRightsValueForPolicies(eq(context), any(List.class))).thenReturn(
-            AccessType.OPEN_ACCESS, AccessType.EMBARGO);
+                AccessType.OPEN_ACCESS, AccessType.EMBARGO);
 
         when(bitstreamService.getMetadataByMetadataString(bitstreamOpenAccess, "local.BitstreamLicense")).thenReturn(List.of(licenseOpenMetadataValue));
         when(bitstreamService.getMetadataByMetadataString(bitstreamEmbargo, "local.BitstreamLicense")).thenReturn(List.of(licenseRestrictedMetadataValue));
 
         ElectronicVersionAccessDetail electronicVersionAccessDetail =
-            classUnderTest.getElectronicVersionAccessDetail(context, publicationItem);
+                classUnderTest.getElectronicVersionAccessDetail(context, publicationItem);
         Assertions.assertEquals(AccessType.EMBARGO, electronicVersionAccessDetail.getAccessType());
         Assertions.assertEquals("LICENSE EMBARGO", electronicVersionAccessDetail.getLicense());
     }
@@ -423,15 +425,15 @@ public class ResearchOutputExportTest {
         MetadataValue licenseMetadataValue = mock(MetadataValue.class);
         when(licenseMetadataValue.getValue()).thenReturn("LICENSE EMBARGO");
         when(itemService.getBundles(publicationItem, org.dspace.core.Constants.DEFAULT_BUNDLE_NAME)).thenReturn(
-            bundles);
+                bundles);
         when(bundle.getPrimaryBitstream()).thenReturn(null);
         when(bundle.getBitstreams()).thenReturn(List.of(bitstreamOpenAccess, bitstreamEmbargo));
         when(classUnderTest.getAccessRightsValueForPolicies(eq(context), any(List.class))).thenReturn(
-            AccessType.EMBARGO);
+                AccessType.EMBARGO);
         when(bitstreamService.getMetadataByMetadataString(bitstreamOpenAccess, "local.BitstreamLicense")).thenReturn(List.of(licenseMetadataValue));
 
         ElectronicVersionAccessDetail electronicVersionAccessDetail =
-            classUnderTest.getElectronicVersionAccessDetail(context, publicationItem);
+                classUnderTest.getElectronicVersionAccessDetail(context, publicationItem);
         Assertions.assertEquals(AccessType.EMBARGO, electronicVersionAccessDetail.getAccessType());
         Assertions.assertEquals("LICENSE EMBARGO", electronicVersionAccessDetail.getLicense());
     }
@@ -448,17 +450,17 @@ public class ResearchOutputExportTest {
         MetadataValue licenseRestrictedMetadataValue = mock(MetadataValue.class);
         when(licenseRestrictedMetadataValue.getValue()).thenReturn("LICENSE RESTRICTED");
         when(itemService.getBundles(publicationItem, org.dspace.core.Constants.DEFAULT_BUNDLE_NAME)).thenReturn(
-            bundles);
+                bundles);
         when(bundle.getPrimaryBitstream()).thenReturn(null);
         when(bundle.getBitstreams()).thenReturn(List.of(bitstreamOpenAccess, bitstreamEmbargo));
         when(classUnderTest.getAccessRightsValueForPolicies(eq(context), any(List.class))).thenReturn(
-            AccessType.OPEN_ACCESS, AccessType.RESTRICTED);
+                AccessType.OPEN_ACCESS, AccessType.RESTRICTED);
         when(bitstreamService.getMetadataByMetadataString(bitstreamOpenAccess, "local.BitstreamLicense")).thenReturn(List.of(licenseOpenMetadataValue));
         when(bitstreamService.getMetadataByMetadataString(bitstreamEmbargo, "local.BitstreamLicense")).thenReturn(List.of(licenseRestrictedMetadataValue));
 
         //First non embargo access is used
         ElectronicVersionAccessDetail electronicVersionAccessDetail =
-            classUnderTest.getElectronicVersionAccessDetail(context, publicationItem);
+                classUnderTest.getElectronicVersionAccessDetail(context, publicationItem);
         Assertions.assertEquals(AccessType.OPEN_ACCESS, electronicVersionAccessDetail.getAccessType());
         Assertions.assertEquals("LICENSE OA", electronicVersionAccessDetail.getLicense());
     }
@@ -473,14 +475,14 @@ public class ResearchOutputExportTest {
         when(licenseMetadataValue.getValue()).thenReturn("LICENSE");
 
         when(itemService.getBundles(publicationItem, org.dspace.core.Constants.DEFAULT_BUNDLE_NAME)).thenReturn(
-            bundles);
+                bundles);
         when(bundle.getPrimaryBitstream()).thenReturn(bitstream);
         when(classUnderTest.getAccessRightsValueForPolicies(eq(context), any(List.class))).thenReturn(
-            AccessType.OPEN_ACCESS);
+                AccessType.OPEN_ACCESS);
         when(bitstreamService.getMetadataByMetadataString(bitstream, "local.BitstreamLicense")).thenReturn(List.of(licenseMetadataValue));
 
         ElectronicVersionAccessDetail electronicVersionAccessDetail =
-            classUnderTest.getElectronicVersionAccessDetail(context, publicationItem);
+                classUnderTest.getElectronicVersionAccessDetail(context, publicationItem);
         Assertions.assertEquals(AccessType.OPEN_ACCESS, electronicVersionAccessDetail.getAccessType());
         Assertions.assertEquals("LICENSE", electronicVersionAccessDetail.getLicense());
     }
@@ -505,9 +507,8 @@ public class ResearchOutputExportTest {
         Group group = mock(Group.class);
 
         Calendar c = Calendar.getInstance();
-        c.setTime(new Date()); // Now use today date.
         c.add(Calendar.DATE, 15);
-        Date startDate = c.getTime();
+        LocalDate startDate = c.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         when(group.getName()).thenReturn(Group.ANONYMOUS);
         when(resourcePolicy.getGroup()).thenReturn(group);
@@ -539,7 +540,7 @@ public class ResearchOutputExportTest {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date()); // Now use today date.
         c.add(Calendar.DATE, 15);
-        Date startDate = c.getTime();
+        LocalDate startDate = c.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         when(group.getName()).thenReturn("CUSTOM_GROUP");
         when(resourcePolicy.getGroup()).thenReturn(group);

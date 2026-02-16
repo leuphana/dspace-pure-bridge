@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -369,20 +370,20 @@ class ResearchOutputExport extends AbstractExport {
     AccessType getAccessRightsValueForPolicies(Context context, List<ResourcePolicy> rps) throws SQLException {
 
         AccessType accessType = null;
-        Date now = new Date();
+        LocalDate now = LocalDate.now();
 
         if (rps != null) {
             for (ResourcePolicy rp : rps) {
                 if (rp.getGroup() != null && Group.ANONYMOUS.equals(rp.getGroup().getName())) {
                     if (dSpaceServicesContainer.getResourcePolicyService().isDateValid(rp) && accessType == null) {
                         accessType = AccessType.OPEN_ACCESS;
-                    } else if (rp.getStartDate() != null && rp.getStartDate().after(now)) {
+                    } else if (rp.getStartDate() != null && rp.getStartDate().isAfter(now)) {
                         accessType = AccessType.EMBARGO;
                     }
                 } else if (rp.getGroup() != null && !Group.ADMIN.equals(rp.getGroup().getName())) {
                     if (dSpaceServicesContainer.getResourcePolicyService().isDateValid(rp) && accessType == null) {
                         accessType = AccessType.RESTRICTED;
-                    } else if (rp.getStartDate() == null || rp.getStartDate().after(now)) {
+                    } else if (rp.getStartDate() == null || rp.getStartDate().isAfter(now)) {
                         accessType = AccessType.EMBARGO;
                     }
                 }

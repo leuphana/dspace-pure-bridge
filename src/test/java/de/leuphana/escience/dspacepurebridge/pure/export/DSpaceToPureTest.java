@@ -306,7 +306,7 @@ class DSpaceToPureTest {
         DiscoverResult discoverResult = Mockito.mock(DiscoverResult.class);
 
         when(discoverResult.getIndexableObjects()).thenReturn(List.of(indexableItem1, indexableItem2, indexableItem3));
-        when(itemFinder.buildDiscoveryQuery(anyString(), anyString(), anyInt(),  anyInt())).thenReturn(discoverQuery);
+        when(itemFinder.buildDiscoveryQuery(anyString(), anyList(), anyInt(),  anyInt())).thenReturn(discoverQuery);
         when(searchService.search(context, discoverQuery)).thenReturn(discoverResult);
 
         UUID uuid = UUID.randomUUID();
@@ -354,6 +354,8 @@ class DSpaceToPureTest {
 
         String[] filterConfigurations = new String[] {"type:Dissertation;collection:collection_handle"};
         when(configurationService.getArrayProperty("dspace-pure-bridge.export.filter")).thenReturn(filterConfigurations);
+        Collection collection = Mockito.mock(Collection.class);
+        when(handleService.resolveToObject(context, "collection_handle")).thenReturn(collection);
 
         UUID uuid1 = UUID.randomUUID();
         UUID uuid2 = UUID.randomUUID();
@@ -375,7 +377,7 @@ class DSpaceToPureTest {
         DiscoverResult discoverResult = Mockito.mock(DiscoverResult.class);
 
         when(discoverResult.getIndexableObjects()).thenReturn(List.of(indexableItem1, indexableItem2, indexableItem3));
-        when(itemFinder.buildDiscoveryQuery(anyString(), anyString(), anyInt(),  anyInt())).thenReturn(discoverQuery);
+        when(itemFinder.buildDiscoveryQuery(anyString(), anyList(), anyInt(),  anyInt())).thenReturn(discoverQuery);
         when(searchService.search(context, discoverQuery)).thenReturn(discoverResult);
 
         executeTestInMockedEnvironment(() -> {

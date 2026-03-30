@@ -48,9 +48,6 @@ public class PublicationExportFilter {
     }
 
     public String itemIsSyncableForType(Item item, ItemService itemService) {
-        if (collectionHandle != null && ! collectionHandle.equals(item.getOwningCollection().getHandle())) {
-            return null;
-        }
         List<MetadataValue> typeMetadataValues = itemService.getMetadataByMetadataString(item, "dc.type");
         return checkForTypesToSync(typeMetadataValues, types);
     }

@@ -93,9 +93,9 @@ class PureToDSpaceTest {
         lenient().when(dSpaceServicesContainer.getRelationshipService()).thenReturn(relationshipService);
         PureToDSpace.pureEntityCache.clear();
         PureToDSpace.dspaceEntityCache.clear();
-        doReturn(Collections.emptyIterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.PERSON_CACHE_IMPORT), anyInt(), anyInt());
-        doReturn(Collections.emptyIterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.ORGANIZATION_CACHE_IMPORT), anyInt(), anyInt());
-        doReturn(Collections.emptyIterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.PROJECT_CACHE_IMPORT), anyInt(), anyInt());
+        doReturn(Collections.emptyIterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.PERSON_CACHE_IMPORT), any(), anyInt(), anyInt());
+        doReturn(Collections.emptyIterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.ORGANIZATION_CACHE_IMPORT), any(), anyInt(), anyInt());
+        doReturn(Collections.emptyIterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.PROJECT_CACHE_IMPORT), any(), anyInt(), anyInt());
     }
 
 
@@ -893,17 +893,17 @@ class PureToDSpaceTest {
         Item dspacePersonEntityItem = mock(Item.class);
         UUID dspacePersonEntityUuid = UUID.randomUUID();
         when(dspacePersonEntityItem.getID()).thenReturn(dspacePersonEntityUuid);
-        doReturn(List.of(dspacePersonEntityItem).iterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.PERSON_CACHE_IMPORT), anyInt(), anyInt());
+        doReturn(List.of(dspacePersonEntityItem).iterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.PERSON_CACHE_IMPORT), any(), anyInt(), anyInt());
 
         Item dspaceOrgUnitEntityItem = mock(Item.class);
         UUID dspaceOrgUnitEntityUuid = UUID.randomUUID();
         when(dspaceOrgUnitEntityItem.getID()).thenReturn(dspaceOrgUnitEntityUuid);
-        doReturn(List.of(dspaceOrgUnitEntityItem).iterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.ORGANIZATION_CACHE_IMPORT), anyInt(), anyInt());
+        doReturn(List.of(dspaceOrgUnitEntityItem).iterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.ORGANIZATION_CACHE_IMPORT), any(), anyInt(), anyInt());
 
         Item dspaceProjectEntityItem = mock(Item.class);
         UUID dspaceProjectEntityUuid = UUID.randomUUID();
         when(dspaceProjectEntityItem.getID()).thenReturn(dspaceProjectEntityUuid);
-        doReturn(List.of(dspaceProjectEntityItem).iterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.PROJECT_CACHE_IMPORT), anyInt(), anyInt());
+        doReturn(List.of(dspaceProjectEntityItem).iterator()).when(itemFinder).findItems(eq(context), eq(searchService), eq(SearchQueryType.PROJECT_CACHE_IMPORT), any(), anyInt(), anyInt());
 
         when(configurationService.getProperty("dspace-pure-bridge.entities.purePerson.collection")).thenReturn("purePersonCollection");
         when(configurationService.getProperty("dspace-pure-bridge.entities.pureOrgUnit.collection")).thenReturn("pureOrgUnitCollection");

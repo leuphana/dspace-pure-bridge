@@ -162,8 +162,6 @@ class DSpaceToPureTest {
         Item item = Mockito.mock(Item.class);
         MetadataValue itemType = Mockito.mock(MetadataValue.class);
         when(itemType.getValue()).thenReturn("Dissertation");
-        when(item.getOwningCollection()).thenReturn(collection);
-        when(collection.getHandle()).thenReturn("collection_handle");
         when(itemService.find(context, uuid)).thenReturn(item);
         when(itemService.getMetadataByMetadataString(item, "dc.type")).thenReturn(List.of(itemType));
 
@@ -188,11 +186,7 @@ class DSpaceToPureTest {
     void syncItemThreadItemCollectionNotValidForSync() throws Exception {
         UUID uuid = UUID.randomUUID();
 
-        Collection collection = Mockito.mock(Collection.class);
         Item item = Mockito.mock(Item.class);
-        MetadataValue itemType = Mockito.mock(MetadataValue.class);
-        when(item.getOwningCollection()).thenReturn(collection);
-        when(collection.getHandle()).thenReturn("collection_handle");
         when(itemService.find(context, uuid)).thenReturn(item);
 
         String[] filterConfigurations = new String[] {"type:Dissertation;collection:collection_handle2"};
@@ -219,8 +213,6 @@ class DSpaceToPureTest {
         Item item = Mockito.mock(Item.class);
         MetadataValue itemType = Mockito.mock(MetadataValue.class);
         when(itemType.getValue()).thenReturn("Dissertation");
-        when(item.getOwningCollection()).thenReturn(collection);
-        when(collection.getHandle()).thenReturn("collection_handle");
         when(itemService.find(context, uuid)).thenReturn(item);
         when(itemService.getMetadataByMetadataString(item, "dc.type")).thenReturn(List.of(itemType));
 
@@ -247,12 +239,9 @@ class DSpaceToPureTest {
     void syncItemThreadItem() throws Exception {
         UUID uuid = UUID.randomUUID();
 
-        Collection collection = Mockito.mock(Collection.class);
         Item item = Mockito.mock(Item.class);
         MetadataValue itemType = Mockito.mock(MetadataValue.class);
         when(itemType.getValue()).thenReturn("Dissertation");
-        when(item.getOwningCollection()).thenReturn(collection);
-        when(collection.getHandle()).thenReturn("collection_handle");
         when(itemService.find(context, uuid)).thenReturn(item);
         when(itemService.getMetadataByMetadataString(item, "dc.type")).thenReturn(List.of(itemType));
 
@@ -306,7 +295,7 @@ class DSpaceToPureTest {
         DiscoverResult discoverResult = Mockito.mock(DiscoverResult.class);
 
         when(discoverResult.getIndexableObjects()).thenReturn(List.of(indexableItem1, indexableItem2, indexableItem3));
-        when(itemFinder.buildDiscoveryQuery(anyString(), anyString(), anyInt(),  anyInt())).thenReturn(discoverQuery);
+        when(itemFinder.buildDiscoveryQuery(anyString(), anyList(), anyInt(),  anyInt())).thenReturn(discoverQuery);
         when(searchService.search(context, discoverQuery)).thenReturn(discoverResult);
 
         UUID uuid = UUID.randomUUID();
@@ -354,6 +343,8 @@ class DSpaceToPureTest {
 
         String[] filterConfigurations = new String[] {"type:Dissertation;collection:collection_handle"};
         when(configurationService.getArrayProperty("dspace-pure-bridge.export.filter")).thenReturn(filterConfigurations);
+        Collection collection = Mockito.mock(Collection.class);
+        when(handleService.resolveToObject(context, "collection_handle")).thenReturn(collection);
 
         UUID uuid1 = UUID.randomUUID();
         UUID uuid2 = UUID.randomUUID();
@@ -375,7 +366,7 @@ class DSpaceToPureTest {
         DiscoverResult discoverResult = Mockito.mock(DiscoverResult.class);
 
         when(discoverResult.getIndexableObjects()).thenReturn(List.of(indexableItem1, indexableItem2, indexableItem3));
-        when(itemFinder.buildDiscoveryQuery(anyString(), anyString(), anyInt(),  anyInt())).thenReturn(discoverQuery);
+        when(itemFinder.buildDiscoveryQuery(anyString(), anyList(), anyInt(),  anyInt())).thenReturn(discoverQuery);
         when(searchService.search(context, discoverQuery)).thenReturn(discoverResult);
 
         executeTestInMockedEnvironment(() -> {

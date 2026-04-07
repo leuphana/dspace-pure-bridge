@@ -1,11 +1,15 @@
 package de.leuphana.escience.dspacepurebridge.pure.export.filter;
 
+import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
 import org.dspace.content.MetadataValue;
 import org.dspace.content.service.ItemService;
+import org.dspace.core.Context;
+import org.dspace.handle.service.HandleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,9 +48,6 @@ public class PublicationExportFilter {
     }
 
     public String itemIsSyncableForType(Item item, ItemService itemService) {
-        if (collectionHandle != null && ! collectionHandle.equals(item.getOwningCollection().getHandle())) {
-            return null;
-        }
         List<MetadataValue> typeMetadataValues = itemService.getMetadataByMetadataString(item, "dc.type");
         return checkForTypesToSync(typeMetadataValues, types);
     }
@@ -73,5 +74,17 @@ public class PublicationExportFilter {
 
     List<String> getTypes() {
         return types;
+    }
+
+    public List<String> getFilterQueries(Context context, HandleService handleService) throws SQLException {
+        List<String> filterQueries = new ArrayList<>();
+        if (collectionHandle != null) {
+            DSpaceObject collection = handleService.resolveToObject(context, collectionHandle);
+            filterQueries.add("location.coll:" + collection.getID());
+        }
+        if (!types.isEmpty()) {
+            filterQueries.add("itemtype_keyword:(" + String.join(" OR ", types) + ")");
+        }
+        return filterQueries;
     }
 }

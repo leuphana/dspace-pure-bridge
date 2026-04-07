@@ -221,9 +221,13 @@ public class DSpaceToPure {
             ExecutorService pureSyncerThreadPool =
                     Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-            itemFinder.processAllItems(context, dSpaceServicesContainer.getSearchService(), SearchQueryType.PUBLICATION_EXPORT, (ItemProcessor) item -> {
-                pureSyncerThreadPool.execute(() -> syncItemThread(item.getID()));
-            });
+            for (PublicationExportFilter publicationExportFilter : filterList) {
+                List<String> filterQueries = publicationExportFilter.getFilterQueries(context, dSpaceServicesContainer.getHandleService());
+                itemFinder.processAllItems(context, dSpaceServicesContainer.getSearchService(), SearchQueryType.PUBLICATION_EXPORT, filterQueries, (ItemProcessor) item -> {
+                    pureSyncerThreadPool.execute(() -> syncItemThread(item.getID()));
+                });
+            }
+
             pureSyncerThreadPool.shutdown();
             pureSyncerThreadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
             log.info("Everything done");

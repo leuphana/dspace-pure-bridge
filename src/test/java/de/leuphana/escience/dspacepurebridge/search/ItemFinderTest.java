@@ -40,7 +40,7 @@ class ItemFinderTest {
         Set<Item> itemSet = new HashSet<>();
         SearchQueryType queryType = mock(SearchQueryType.class);
         ItemProcessor processor = itemSet::add;
-        doReturn(List.of(item1, item2).iterator()).when(itemFinder).findItems(context, searchService, queryType, 0 , 100);
+        doReturn(List.of(item1, item2).iterator()).when(itemFinder).findItems(context, searchService, queryType, null, 0 , 100);
 
         itemFinder.processAllItems(context, searchService, queryType, processor);
 
@@ -54,9 +54,9 @@ class ItemFinderTest {
         Set<Item> itemSet = new HashSet<>();
         SearchQueryType queryType = mock(SearchQueryType.class);
         ItemProcessor processor = itemSet::add;
-        doReturn(List.of(item1).iterator()).when(itemFinder).findItems(context, searchService, queryType, 0 , 1);
-        doReturn(List.of(item2).iterator()).when(itemFinder).findItems(context, searchService, queryType, 1 , 1);
-        doReturn(Collections.emptyIterator()).when(itemFinder).findItems(context, searchService, queryType, 2 , 1);
+        doReturn(List.of(item1).iterator()).when(itemFinder).findItems(context, searchService, queryType, null, 0 , 1);
+        doReturn(List.of(item2).iterator()).when(itemFinder).findItems(context, searchService, queryType, null, 1 , 1);
+        doReturn(Collections.emptyIterator()).when(itemFinder).findItems(context, searchService, queryType, null, 2 , 1);
 
         itemFinder.processAllItems(context, searchService, queryType, processor, 0 , 1);
 
@@ -65,7 +65,7 @@ class ItemFinderTest {
 
     @Test
     void buildDiscoveryQueryWithFilter() {
-        DiscoverQuery discoverQuery = itemFinder.buildDiscoveryQuery("field:value", "filter:xy", 1, 2);
+        DiscoverQuery discoverQuery = itemFinder.buildDiscoveryQuery("field:value", Collections.singletonList("filter:xy"), 1, 2);
         assertEquals("field:value", discoverQuery.getQuery());
         assertEquals(List.of("filter:xy"), discoverQuery.getFilterQueries());
         assertEquals(1,discoverQuery.getStart());

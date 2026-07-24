@@ -177,7 +177,7 @@ abstract class AbstractExport implements DSpaceExporter {
                 Constants.UUID_QUALIFIER,
                 Item.ANY);
         return new Person(null, UUID.fromString(authorUUID), null, null, null
-            , null, null, null, null, "Person");
+            , null, null, null, null, null, "Person");
     }
 
     void addTitles(Object exportObject, String publicationLanguage, List<MetadataValue> titleMetadataValues,
@@ -251,7 +251,7 @@ abstract class AbstractExport implements DSpaceExporter {
             InternalContributorAssociation contributorAssociation = new InternalContributorAssociation();
             contributorAssociation.setPerson(
                     new Person(null, defaultAuthorUUID, null, null, null
-                            , null, null, null, null, "Person")
+                            , null, null, null, null, null, "Person")
             );
             contributorAssociation.setName(
                     new Name().firstName(defaultAuthorFirstName).lastName(defaultAuthorLastName));

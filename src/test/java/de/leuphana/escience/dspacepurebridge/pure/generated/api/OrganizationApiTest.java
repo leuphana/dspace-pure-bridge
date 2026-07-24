@@ -33,6 +33,7 @@ import de.leuphana.escience.dspacepurebridge.pure.generated.model.OrganizationsQ
 
 import java.util.UUID;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.UploadedFile;
+import de.leuphana.escience.dspacepurebridge.pure.generated.model.AllowedKeywordGroupConfigurationList;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -288,7 +289,7 @@ public class OrganizationApiTest {
      */
     @Test
     public void organizationGetAllowedKeywordGroupConfigurationsTest() throws ApiException {
-        KeywordGroupConfigurationRefList response = api.organizationGetAllowedKeywordGroupConfigurations();
+        AllowedKeywordGroupConfigurationList response = api.organizationGetAllowedKeywordGroupConfigurations();
         // TODO: test validations
     }
 

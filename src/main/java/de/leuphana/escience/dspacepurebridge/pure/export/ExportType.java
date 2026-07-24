@@ -5,6 +5,7 @@ import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultStudent
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResults;
 
 public enum ExportType {
+    //TODO: PRESS_MEDIA hinzufügen
     RESEARCH_OUTPUT("researchOutput", "research-outputs", null), STUDENT_THESIS("studentThesis", "student-theses",
         PureWSStudentThesisResults.class);
 

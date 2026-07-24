@@ -31,6 +31,7 @@ import de.leuphana.escience.dspacepurebridge.pure.generated.model.PublisherListR
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.PublishersQuery;
 import java.util.UUID;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.WorkflowListResult;
+import de.leuphana.escience.dspacepurebridge.pure.generated.model.AllowedKeywordGroupConfigurationList;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -166,7 +167,7 @@ public class PublisherApiTest {
      */
     @Test
     public void publisherGetAllowedKeywordGroupConfigurationsTest() throws ApiException {
-        KeywordGroupConfigurationRefList response = api.publisherGetAllowedKeywordGroupConfigurations();
+        AllowedKeywordGroupConfigurationList response = api.publisherGetAllowedKeywordGroupConfigurations();
         // TODO: test validations
     }
 

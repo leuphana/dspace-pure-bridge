@@ -125,6 +125,7 @@ public class KeywordGroupConfigurationRefList {
         if (!KeywordGroupConfigurationRefList.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
           throw new IllegalArgumentException(String.format("The required field(s) %s in KeywordGroupConfigurationRefList is not found in the empty JSON string", KeywordGroupConfigurationRefList.openapiRequiredFields.toString()));
         }
+        return;
       }
 
       Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();

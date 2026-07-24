@@ -7,6 +7,7 @@ import de.leuphana.escience.dspacepurebridge.pure.generated.model.Classification
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO: PressMediaOutputMappingType
 public enum ResearchOutputMappingType  {
     TYPE(api -> api.researchOutputGetAllowedTypes().getClassifications()),
     CATEGORY(api -> api.researchoutputGetAllowedCategories().getClassifications()),

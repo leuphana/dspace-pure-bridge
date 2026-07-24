@@ -33,6 +33,7 @@ import de.leuphana.escience.dspacepurebridge.pure.generated.model.PrizesQuery;
 import java.util.UUID;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.UploadedFile;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.WorkflowListResult;
+import de.leuphana.escience.dspacepurebridge.pure.generated.model.AllowedKeywordGroupConfigurationList;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -273,7 +274,7 @@ public class PrizeApiTest {
      */
     @Test
     public void prizeGetAllowedKeywordGroupConfigurationsTest() throws ApiException {
-        KeywordGroupConfigurationRefList response = api.prizeGetAllowedKeywordGroupConfigurations();
+        AllowedKeywordGroupConfigurationList response = api.prizeGetAllowedKeywordGroupConfigurations();
         // TODO: test validations
     }
 

@@ -38,6 +38,7 @@ import de.leuphana.escience.dspacepurebridge.pure.generated.model.OrderingsList;
 import java.util.UUID;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.UploadedFile;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.WorkflowListResult;
+import de.leuphana.escience.dspacepurebridge.pure.generated.model.AllowedKeywordGroupConfigurationList;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -306,7 +307,7 @@ public class AwardApiTest {
      */
     @Test
     public void awardGetAllowedKeywordGroupConfigurationsTest() throws ApiException {
-        KeywordGroupConfigurationRefList response = api.awardGetAllowedKeywordGroupConfigurations();
+        AllowedKeywordGroupConfigurationList response = api.awardGetAllowedKeywordGroupConfigurations();
         // TODO: test validations
     }
 
@@ -606,7 +607,7 @@ public class AwardApiTest {
         UUID uuid = null;
         Long id = null;
         AwardBudget awardBudget = null;
-        Award response = api.awardUpdateBudget(uuid, id, awardBudget);
+        AwardBudget response = api.awardUpdateBudget(uuid, id, awardBudget);
         // TODO: test validations
     }
 

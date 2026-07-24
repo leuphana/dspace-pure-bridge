@@ -34,6 +34,7 @@ import de.leuphana.escience.dspacepurebridge.pure.generated.model.OrderingsList;
 
 import java.util.UUID;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.WorkflowListResult;
+import de.leuphana.escience.dspacepurebridge.pure.generated.model.AllowedKeywordGroupConfigurationList;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -195,7 +196,7 @@ public class JournalApiTest {
      */
     @Test
     public void journalGetAllowedKeywordGroupConfigurationsTest() throws ApiException {
-        KeywordGroupConfigurationRefList response = api.journalGetAllowedKeywordGroupConfigurations();
+        AllowedKeywordGroupConfigurationList response = api.journalGetAllowedKeywordGroupConfigurations();
         // TODO: test validations
     }
 

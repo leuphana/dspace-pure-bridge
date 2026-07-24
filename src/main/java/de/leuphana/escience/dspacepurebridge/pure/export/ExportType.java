@@ -5,9 +5,10 @@ import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultStudent
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResults;
 
 public enum ExportType {
-    //TODO: PRESS_MEDIA hinzufügen
     RESEARCH_OUTPUT("researchOutput", "research-outputs", null), STUDENT_THESIS("studentThesis", "student-theses",
-        PureWSStudentThesisResults.class);
+        PureWSStudentThesisResults.class),
+    // No dedicated PureWSResults search class yet -> duplicate check is stubbed (see PressMediaExport)
+    PRESS_MEDIA("pressMedia", "press-media", null);
 
     private final String mappingSuffix;
     private final String pureEndpoint;

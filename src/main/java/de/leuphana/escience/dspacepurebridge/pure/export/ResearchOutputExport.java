@@ -269,7 +269,6 @@ class ResearchOutputExport extends AbstractExport {
         return exportResult;
     }
 
-    //TODO: Dupletten Check erstmal für PressMedia auch so implementieren
     @Override
     public DuplicateCheckResult concreteDuplicateCheck(PureWSResultItem pureWSResultItem, String doi, String title) {
         log.warn("Duplicate check not yet implemented!");

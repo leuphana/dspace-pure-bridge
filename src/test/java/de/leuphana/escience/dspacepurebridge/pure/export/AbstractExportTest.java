@@ -28,8 +28,6 @@ import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
-//TODO: neue KLasse für PressMedia
-
 @ExtendWith(MockitoExtension.class)
 class AbstractExportTest {
     @Mock

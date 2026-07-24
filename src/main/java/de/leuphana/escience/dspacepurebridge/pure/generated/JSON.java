@@ -243,10 +243,7 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AccessDefinitionRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AccessDefinitionRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AccessDefinitionRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AccessDefinitionRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.AccessDefinitionRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AccessDefinitionRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Activity.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Activity>() {
@@ -282,37 +279,25 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityEventAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityEventAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityEventAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ActivityEventAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityEventAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityEventAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityExternalOrganizationAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityExternalOrganizationAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityExternalOrganizationAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ActivityExternalOrganizationAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityExternalOrganizationAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityExternalOrganizationAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityOrganizationAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityOrganizationAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityOrganizationAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ActivityOrganizationAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityOrganizationAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityOrganizationAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ActivityRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ActivityRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AdditionalISSN.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AdditionalISSN>() {
@@ -329,46 +314,31 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AlternativeISSN.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AlternativeISSN>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AlternativeISSN> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AlternativeISSN", de.leuphana.escience.dspacepurebridge.pure.generated.model.AlternativeISSN.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AlternativeISSN.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2008FieldOfResearchRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2008FieldOfResearchRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2008FieldOfResearchRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Anzsrc2008FieldOfResearchRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2008FieldOfResearchRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2008FieldOfResearchRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020FieldOfResearchRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020FieldOfResearchRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020FieldOfResearchRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Anzsrc2020FieldOfResearchRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020FieldOfResearchRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020FieldOfResearchRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020SocioEconomicObjectiveRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020SocioEconomicObjectiveRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020SocioEconomicObjectiveRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Anzsrc2020SocioEconomicObjectiveRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020SocioEconomicObjectiveRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020SocioEconomicObjectiveRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020TypeOfActivityRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020TypeOfActivityRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020TypeOfActivityRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Anzsrc2020TypeOfActivityRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020TypeOfActivityRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Anzsrc2020TypeOfActivityRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Application.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Application>() {
@@ -385,37 +355,25 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationClusterRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationClusterRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationClusterRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ApplicationClusterRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationClusterRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationClusterRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationExternalFinancialFundingCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationExternalFinancialFundingCollaboratorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationExternalFinancialFundingCollaboratorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ApplicationExternalFinancialFundingCollaboratorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationExternalFinancialFundingCollaboratorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationExternalFinancialFundingCollaboratorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationExternalNonFinancialFundingCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationExternalNonFinancialFundingCollaboratorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationExternalNonFinancialFundingCollaboratorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ApplicationExternalNonFinancialFundingCollaboratorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationExternalNonFinancialFundingCollaboratorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationExternalNonFinancialFundingCollaboratorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationFinancialFundingAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationFinancialFundingAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationFinancialFundingAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ApplicationFinancialFundingAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationFinancialFundingAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationFinancialFundingAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationFinancialFundingCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationFinancialFundingCollaboratorAssociation>() {
@@ -443,28 +401,19 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationInternalFinancialFundingCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationInternalFinancialFundingCollaboratorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationInternalFinancialFundingCollaboratorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ApplicationInternalFinancialFundingCollaboratorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationInternalFinancialFundingCollaboratorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationInternalFinancialFundingCollaboratorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationInternalNonFinancialFundingCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationInternalNonFinancialFundingCollaboratorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationInternalNonFinancialFundingCollaboratorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ApplicationInternalNonFinancialFundingCollaboratorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationInternalNonFinancialFundingCollaboratorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationInternalNonFinancialFundingCollaboratorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationNonFinancialFundingAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationNonFinancialFundingAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationNonFinancialFundingAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ApplicationNonFinancialFundingAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationNonFinancialFundingAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationNonFinancialFundingAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationNonFinancialFundingCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationNonFinancialFundingCollaboratorAssociation>() {
@@ -481,37 +430,25 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ApplicationRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ApplicationRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Attendance.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Attendance>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Attendance> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Attendance", de.leuphana.escience.dspacepurebridge.pure.generated.model.Attendance.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Attendance.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AuthorCollaborationContributorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AuthorCollaborationContributorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AuthorCollaborationContributorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AuthorCollaborationContributorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.AuthorCollaborationContributorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AuthorCollaborationContributorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AuthorCollaborationRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AuthorCollaborationRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AuthorCollaborationRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AuthorCollaborationRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.AuthorCollaborationRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AuthorCollaborationRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Award.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Award>() {
@@ -528,37 +465,25 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardClusterRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardClusterRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardClusterRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AwardClusterRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardClusterRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardClusterRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardExternalFinancialFundingCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardExternalFinancialFundingCollaboratorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardExternalFinancialFundingCollaboratorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AwardExternalFinancialFundingCollaboratorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardExternalFinancialFundingCollaboratorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardExternalFinancialFundingCollaboratorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardExternalNonFinancialFundingCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardExternalNonFinancialFundingCollaboratorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardExternalNonFinancialFundingCollaboratorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AwardExternalNonFinancialFundingCollaboratorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardExternalNonFinancialFundingCollaboratorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardExternalNonFinancialFundingCollaboratorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardFinancialFundingAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardFinancialFundingAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardFinancialFundingAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AwardFinancialFundingAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardFinancialFundingAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardFinancialFundingAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardFinancialFundingCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardFinancialFundingCollaboratorAssociation>() {
@@ -586,55 +511,37 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardInternalFinancialFundingCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardInternalFinancialFundingCollaboratorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardInternalFinancialFundingCollaboratorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AwardInternalFinancialFundingCollaboratorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardInternalFinancialFundingCollaboratorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardInternalFinancialFundingCollaboratorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardInternalNonFinancialFundingCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardInternalNonFinancialFundingCollaboratorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardInternalNonFinancialFundingCollaboratorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AwardInternalNonFinancialFundingCollaboratorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardInternalNonFinancialFundingCollaboratorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardInternalNonFinancialFundingCollaboratorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementApplication.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementApplication>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementApplication> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AwardManagementApplication", de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementApplication.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementApplication.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementAward.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementAward>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementAward> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AwardManagementAward", de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementAward.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementAward.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementProject.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementProject>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementProject> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AwardManagementProject", de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementProject.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardManagementProject.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardNonFinancialFundingAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardNonFinancialFundingAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardNonFinancialFundingAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AwardNonFinancialFundingAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardNonFinancialFundingAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardNonFinancialFundingAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardNonFinancialFundingCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardNonFinancialFundingCollaboratorAssociation>() {
@@ -651,10 +558,7 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("AwardRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardStatus.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.AwardStatus>() {
@@ -675,64 +579,43 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicApplication.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicApplication>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicApplication> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("BasicApplication", de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicApplication.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicApplication.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicAward.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicAward>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicAward> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("BasicAward", de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicAward.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicAward.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicProject.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicProject>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicProject> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("BasicProject", de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicProject.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.BasicProject.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.BookAnthology.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.BookAnthology>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.BookAnthology> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("BookAnthology", de.leuphana.escience.dspacepurebridge.pure.generated.model.BookAnthology.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.BookAnthology.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationSchemeRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationSchemeRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationSchemeRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ClassificationSchemeRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationSchemeRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationSchemeRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationsKeywordGroup.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationsKeywordGroup>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationsKeywordGroup> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ClassificationsKeywordGroup", de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationsKeywordGroup.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassificationsKeywordGroup.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassifiedId.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassifiedId>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassifiedId> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ClassifiedId", de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassifiedId.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ClassifiedId.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.CollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.CollaboratorAssociation>() {
@@ -749,28 +632,19 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ConceptRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ConceptRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ConceptRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ConceptRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ConceptRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ConceptRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ConferenceSeriesRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ConferenceSeriesRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ConferenceSeriesRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ConferenceSeriesRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ConferenceSeriesRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ConferenceSeriesRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Consultancy.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Consultancy>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Consultancy> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Consultancy", de.leuphana.escience.dspacepurebridge.pure.generated.model.Consultancy.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Consultancy.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ContentRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ContentRef>() {
@@ -835,91 +709,61 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ContractNegotiationAwardStatus.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ContractNegotiationAwardStatus>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ContractNegotiationAwardStatus> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ContractNegotiationAwardStatus", de.leuphana.escience.dspacepurebridge.pure.generated.model.ContractNegotiationAwardStatus.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ContractNegotiationAwardStatus.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ContractRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ContractRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ContractRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ContractRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ContractRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ContractRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToBookAnthology.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToBookAnthology>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToBookAnthology> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ContributionToBookAnthology", de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToBookAnthology.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToBookAnthology.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToConference.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToConference>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToConference> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ContributionToConference", de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToConference.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToConference.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToJournal.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToJournal>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToJournal> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ContributionToJournal", de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToJournal.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToJournal.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToMemorandum.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToMemorandum>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToMemorandum> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ContributionToMemorandum", de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToMemorandum.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToMemorandum.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToPeriodical.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToPeriodical>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToPeriodical> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ContributionToPeriodical", de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToPeriodical.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ContributionToPeriodical.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.CourseRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.CourseRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.CourseRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("CourseRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.CourseRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.CourseRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.CurriculumVitaeRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.CurriculumVitaeRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.CurriculumVitaeRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("CurriculumVitaeRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.CurriculumVitaeRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.CurriculumVitaeRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.CurtailedAwardStatus.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.CurtailedAwardStatus>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.CurtailedAwardStatus> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("CurtailedAwardStatus", de.leuphana.escience.dspacepurebridge.pure.generated.model.CurtailedAwardStatus.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.CurtailedAwardStatus.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedField.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedField>() {
@@ -940,154 +784,103 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldBoolean.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldBoolean>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldBoolean> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("CustomDefinedFieldBoolean", de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldBoolean.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldBoolean.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldClassification.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldClassification>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldClassification> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("CustomDefinedFieldClassification", de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldClassification.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldClassification.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldConfigurationRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldConfigurationRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldConfigurationRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("CustomDefinedFieldConfigurationRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldConfigurationRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldConfigurationRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldDate.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldDate>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldDate> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("CustomDefinedFieldDate", de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldDate.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldDate.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldDecimal.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldDecimal>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldDecimal> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("CustomDefinedFieldDecimal", de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldDecimal.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldDecimal.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldInteger.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldInteger>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldInteger> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("CustomDefinedFieldInteger", de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldInteger.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldInteger.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldString.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldString>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldString> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("CustomDefinedFieldString", de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldString.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.CustomDefinedFieldString.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetAuthorCollaborationContributorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetAuthorCollaborationContributorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetAuthorCollaborationContributorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("DataSetAuthorCollaborationContributorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetAuthorCollaborationContributorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetAuthorCollaborationContributorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetExternalContributorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetExternalContributorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetExternalContributorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("DataSetExternalContributorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetExternalContributorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetExternalContributorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetInternalContributorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetInternalContributorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetInternalContributorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("DataSetInternalContributorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetInternalContributorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetInternalContributorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("DataSetRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.DataSetRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.DeclinedAwardStatus.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.DeclinedAwardStatus>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.DeclinedAwardStatus> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("DeclinedAwardStatus", de.leuphana.escience.dspacepurebridge.pure.generated.model.DeclinedAwardStatus.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.DeclinedAwardStatus.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.DependencyViolationProblemDetails.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.DependencyViolationProblemDetails>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.DependencyViolationProblemDetails> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("DependencyViolationProblemDetails", de.leuphana.escience.dspacepurebridge.pure.generated.model.DependencyViolationProblemDetails.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.DependencyViolationProblemDetails.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.DoiElectronicVersion.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.DoiElectronicVersion>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.DoiElectronicVersion> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("DoiElectronicVersion", de.leuphana.escience.dspacepurebridge.pure.generated.model.DoiElectronicVersion.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.DoiElectronicVersion.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.EditorialWork.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.EditorialWork>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.EditorialWork> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("EditorialWork", de.leuphana.escience.dspacepurebridge.pure.generated.model.EditorialWork.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.EditorialWork.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.EducationRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.EducationRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.EducationRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("EducationRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.EducationRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.EducationRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ElectronicISSN.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ElectronicISSN>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ElectronicISSN> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ElectronicISSN", de.leuphana.escience.dspacepurebridge.pure.generated.model.ElectronicISSN.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ElectronicISSN.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ElectronicVersion.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ElectronicVersion>() {
@@ -1105,253 +898,169 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.EquipmentRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.EquipmentRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.EquipmentRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("EquipmentRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.EquipmentRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.EquipmentRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.EthicalReviewRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.EthicalReviewRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.EthicalReviewRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("EthicalReviewRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.EthicalReviewRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.EthicalReviewRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.EventMembershipAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.EventMembershipAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.EventMembershipAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("EventMembershipAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.EventMembershipAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.EventMembershipAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.EventRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.EventRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.EventRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("EventRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.EventRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.EventRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Examination.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Examination>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Examination> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Examination", de.leuphana.escience.dspacepurebridge.pure.generated.model.Examination.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Examination.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExtendedAwardStatus.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExtendedAwardStatus>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExtendedAwardStatus> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExtendedAwardStatus", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExtendedAwardStatus.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExtendedAwardStatus.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalActivityPersonAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalActivityPersonAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalActivityPersonAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalActivityPersonAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalActivityPersonAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalActivityPersonAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalApplicantAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalApplicantAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalApplicantAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalApplicantAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalApplicantAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalApplicantAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalAwardHolderAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalAwardHolderAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalAwardHolderAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalAwardHolderAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalAwardHolderAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalAwardHolderAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalClassifiedCourseLecturerAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalClassifiedCourseLecturerAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalClassifiedCourseLecturerAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalClassifiedCourseLecturerAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalClassifiedCourseLecturerAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalClassifiedCourseLecturerAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalClassifiedEthicalReviewPersonAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalClassifiedEthicalReviewPersonAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalClassifiedEthicalReviewPersonAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalClassifiedEthicalReviewPersonAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalClassifiedEthicalReviewPersonAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalClassifiedEthicalReviewPersonAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalCollaboratorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalCollaboratorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalCollaboratorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalCollaboratorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalCollaboratorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalContributorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalContributorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalContributorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalContributorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalContributorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalContributorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalDataSetPersonAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalDataSetPersonAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalDataSetPersonAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalDataSetPersonAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalDataSetPersonAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalDataSetPersonAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalEquipmentPersonAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalEquipmentPersonAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalEquipmentPersonAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalEquipmentPersonAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalEquipmentPersonAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalEquipmentPersonAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalExamineeAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalExamineeAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalExamineeAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalExamineeAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalExamineeAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalExamineeAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalFundingOpportunity.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalFundingOpportunity>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalFundingOpportunity> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalFundingOpportunity", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalFundingOpportunity.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalFundingOpportunity.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalImpactClassifiedParticipantAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalImpactClassifiedParticipantAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalImpactClassifiedParticipantAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalImpactClassifiedParticipantAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalImpactClassifiedParticipantAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalImpactClassifiedParticipantAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalOrganizationRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalOrganizationRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalOrganizationRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalOrganizationRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalOrganizationRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalOrganizationRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalParticipantAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalParticipantAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalParticipantAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalParticipantAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalParticipantAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalParticipantAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPersonRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPersonRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPersonRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalPersonRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPersonRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPersonRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPressMediaPersonAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPressMediaPersonAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPressMediaPersonAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalPressMediaPersonAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPressMediaPersonAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPressMediaPersonAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPrizeReceiverAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPrizeReceiverAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPrizeReceiverAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalPrizeReceiverAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPrizeReceiverAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalPrizeReceiverAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalStudentThesisContributorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalStudentThesisContributorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalStudentThesisContributorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ExternalStudentThesisContributorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalStudentThesisContributorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ExternalStudentThesisContributorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.FileElectronicVersion.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.FileElectronicVersion>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.FileElectronicVersion> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("FileElectronicVersion", de.leuphana.escience.dspacepurebridge.pure.generated.model.FileElectronicVersion.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.FileElectronicVersion.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.FingerprintRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.FingerprintRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.FingerprintRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("FingerprintRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.FingerprintRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.FingerprintRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.FreeKeywordsKeywordGroup.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.FreeKeywordsKeywordGroup>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.FreeKeywordsKeywordGroup> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("FreeKeywordsKeywordGroup", de.leuphana.escience.dspacepurebridge.pure.generated.model.FreeKeywordsKeywordGroup.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.FreeKeywordsKeywordGroup.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.FullKeywordGroup.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.FullKeywordGroup>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.FullKeywordGroup> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("FullKeywordGroup", de.leuphana.escience.dspacepurebridge.pure.generated.model.FullKeywordGroup.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.FullKeywordGroup.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.FundingOpportunity.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.FundingOpportunity>() {
@@ -1368,55 +1077,37 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.FundingOpportunityRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.FundingOpportunityRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.FundingOpportunityRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("FundingOpportunityRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.FundingOpportunityRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.FundingOpportunityRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.GenericContentRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.GenericContentRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.GenericContentRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("GenericContentRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.GenericContentRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.GenericContentRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.GenericProblemDetails.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.GenericProblemDetails>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.GenericProblemDetails> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("GenericProblemDetails", de.leuphana.escience.dspacepurebridge.pure.generated.model.GenericProblemDetails.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.GenericProblemDetails.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.HonoraryStaffOrganizationAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.HonoraryStaffOrganizationAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.HonoraryStaffOrganizationAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("HonoraryStaffOrganizationAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.HonoraryStaffOrganizationAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.HonoraryStaffOrganizationAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.HostVisitor.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.HostVisitor>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.HostVisitor> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("HostVisitor", de.leuphana.escience.dspacepurebridge.pure.generated.model.HostVisitor.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.HostVisitor.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Id.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Id>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Id> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Id", de.leuphana.escience.dspacepurebridge.pure.generated.model.Id.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Id.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Identifier.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Identifier>() {
@@ -1434,181 +1125,121 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ImpactRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ImpactRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ImpactRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ImpactRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ImpactRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ImpactRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalActivityPersonAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalActivityPersonAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalActivityPersonAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalActivityPersonAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalActivityPersonAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalActivityPersonAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalApplicantAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalApplicantAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalApplicantAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalApplicantAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalApplicantAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalApplicantAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalAwardHolderAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalAwardHolderAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalAwardHolderAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalAwardHolderAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalAwardHolderAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalAwardHolderAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalClassifiedCourseLecturerAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalClassifiedCourseLecturerAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalClassifiedCourseLecturerAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalClassifiedCourseLecturerAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalClassifiedCourseLecturerAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalClassifiedCourseLecturerAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalClassifiedEthicalReviewPersonAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalClassifiedEthicalReviewPersonAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalClassifiedEthicalReviewPersonAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalClassifiedEthicalReviewPersonAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalClassifiedEthicalReviewPersonAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalClassifiedEthicalReviewPersonAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalCollaboratorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalCollaboratorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalCollaboratorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalCollaboratorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalCollaboratorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalCollaboratorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalContributorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalContributorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalContributorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalContributorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalContributorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalContributorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalDataSetPersonAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalDataSetPersonAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalDataSetPersonAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalDataSetPersonAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalDataSetPersonAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalDataSetPersonAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalEquipmentPersonAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalEquipmentPersonAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalEquipmentPersonAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalEquipmentPersonAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalEquipmentPersonAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalEquipmentPersonAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalExamineeAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalExamineeAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalExamineeAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalExamineeAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalExamineeAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalExamineeAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalFundingOpportunity.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalFundingOpportunity>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalFundingOpportunity> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalFundingOpportunity", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalFundingOpportunity.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalFundingOpportunity.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalImpactClassifiedParticipantAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalImpactClassifiedParticipantAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalImpactClassifiedParticipantAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalImpactClassifiedParticipantAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalImpactClassifiedParticipantAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalImpactClassifiedParticipantAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalParticipantAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalParticipantAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalParticipantAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalParticipantAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalParticipantAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalParticipantAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalPressMediaPersonAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalPressMediaPersonAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalPressMediaPersonAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalPressMediaPersonAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalPressMediaPersonAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalPressMediaPersonAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalPrizeReceiverAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalPrizeReceiverAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalPrizeReceiverAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalPrizeReceiverAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalPrizeReceiverAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalPrizeReceiverAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalStudentThesisContributorAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalStudentThesisContributorAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalStudentThesisContributorAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternalStudentThesisContributorAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalStudentThesisContributorAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternalStudentThesisContributorAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.InternallyApprovedAwardStatus.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.InternallyApprovedAwardStatus>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.InternallyApprovedAwardStatus> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("InternallyApprovedAwardStatus", de.leuphana.escience.dspacepurebridge.pure.generated.model.InternallyApprovedAwardStatus.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.InternallyApprovedAwardStatus.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.JournalEditorialWorkAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.JournalEditorialWorkAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.JournalEditorialWorkAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("JournalEditorialWorkAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.JournalEditorialWorkAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.JournalEditorialWorkAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.JournalRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.JournalRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.JournalRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("JournalRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.JournalRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.JournalRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.KeywordGroup.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.KeywordGroup>() {
@@ -1626,100 +1257,67 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.KeywordGroupConfigurationRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.KeywordGroupConfigurationRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.KeywordGroupConfigurationRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("KeywordGroupConfigurationRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.KeywordGroupConfigurationRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.KeywordGroupConfigurationRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.LinkElectronicVersion.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.LinkElectronicVersion>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.LinkElectronicVersion> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("LinkElectronicVersion", de.leuphana.escience.dspacepurebridge.pure.generated.model.LinkElectronicVersion.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.LinkElectronicVersion.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Membership.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Membership>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Membership> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Membership", de.leuphana.escience.dspacepurebridge.pure.generated.model.Membership.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Membership.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Memorandum.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Memorandum>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Memorandum> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Memorandum", de.leuphana.escience.dspacepurebridge.pure.generated.model.Memorandum.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Memorandum.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.MilestoneRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.MilestoneRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.MilestoneRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("MilestoneRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.MilestoneRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.MilestoneRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.NonTextual.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.NonTextual>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.NonTextual> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("NonTextual", de.leuphana.escience.dspacepurebridge.pure.generated.model.NonTextual.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.NonTextual.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.OrganizationRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.OrganizationRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.OrganizationRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("OrganizationRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.OrganizationRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.OrganizationRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.OtherActivity.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.OtherActivity>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.OtherActivity> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("OtherActivity", de.leuphana.escience.dspacepurebridge.pure.generated.model.OtherActivity.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.OtherActivity.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.OtherContribution.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.OtherContribution>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.OtherContribution> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("OtherContribution", de.leuphana.escience.dspacepurebridge.pure.generated.model.OtherContribution.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.OtherContribution.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Patent.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Patent>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Patent> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Patent", de.leuphana.escience.dspacepurebridge.pure.generated.model.Patent.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Patent.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonExpertiseRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonExpertiseRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonExpertiseRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("PersonExpertiseRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonExpertiseRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonExpertiseRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonOrganizationAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonOrganizationAssociation>() {
@@ -1738,37 +1336,25 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("PersonRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.PressMediaRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.PressMediaRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.PressMediaRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("PressMediaRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.PressMediaRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.PressMediaRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.PrimaryId.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.PrimaryId>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.PrimaryId> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("PrimaryId", de.leuphana.escience.dspacepurebridge.pure.generated.model.PrimaryId.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.PrimaryId.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.PrizeRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.PrizeRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.PrizeRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("PrizeRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.PrizeRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.PrizeRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ProblemDetails.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ProblemDetails>() {
@@ -1797,46 +1383,31 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ProjectRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ProjectRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ProjectRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ProjectRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ProjectRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ProjectRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.PublisherEditorialWorkAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.PublisherEditorialWorkAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.PublisherEditorialWorkAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("PublisherEditorialWorkAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.PublisherEditorialWorkAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.PublisherEditorialWorkAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.PublisherRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.PublisherRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.PublisherRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("PublisherRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.PublisherRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.PublisherRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Ref2014UnitOfAssessmentRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Ref2014UnitOfAssessmentRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Ref2014UnitOfAssessmentRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Ref2014UnitOfAssessmentRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.Ref2014UnitOfAssessmentRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Ref2014UnitOfAssessmentRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Ref2020UnitOfAssessmentRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Ref2020UnitOfAssessmentRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Ref2020UnitOfAssessmentRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Ref2020UnitOfAssessmentRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.Ref2020UnitOfAssessmentRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Ref2020UnitOfAssessmentRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ResearchOutput.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ResearchOutput>() {
@@ -1863,163 +1434,109 @@ public class JSON {
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ResearchOutputRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ResearchOutputRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ResearchOutputRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ResearchOutputRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ResearchOutputRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ResearchOutputRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ReviewRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ReviewRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ReviewRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ReviewRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ReviewRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ReviewRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.SemesterRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.SemesterRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.SemesterRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("SemesterRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.SemesterRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.SemesterRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.SpecializationRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.SpecializationRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.SpecializationRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("SpecializationRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.SpecializationRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.SpecializationRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.StaffOrganizationAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.StaffOrganizationAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.StaffOrganizationAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("StaffOrganizationAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.StaffOrganizationAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.StaffOrganizationAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentOrganizationAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentOrganizationAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentOrganizationAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("StudentOrganizationAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentOrganizationAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentOrganizationAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentProjectRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentProjectRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentProjectRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("StudentProjectRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentProjectRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentProjectRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentThesisRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentThesisRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentThesisRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("StudentThesisRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentThesisRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentThesisRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Talk.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Talk>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Talk> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Talk", de.leuphana.escience.dspacepurebridge.pure.generated.model.Talk.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Talk.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.TerminatedAwardStatus.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.TerminatedAwardStatus>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.TerminatedAwardStatus> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("TerminatedAwardStatus", de.leuphana.escience.dspacepurebridge.pure.generated.model.TerminatedAwardStatus.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.TerminatedAwardStatus.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ThesaurusRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ThesaurusRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ThesaurusRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ThesaurusRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.ThesaurusRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ThesaurusRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.Thesis.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.Thesis>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.Thesis> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Thesis", de.leuphana.escience.dspacepurebridge.pure.generated.model.Thesis.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.Thesis.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.UserProfileRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.UserProfileRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.UserProfileRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("UserProfileRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.UserProfileRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.UserProfileRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.UserRef.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.UserRef>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.UserRef> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("UserRef", de.leuphana.escience.dspacepurebridge.pure.generated.model.UserRef.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "systemName"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.UserRef.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.ValidationProblemDetails.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.ValidationProblemDetails>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.ValidationProblemDetails> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ValidationProblemDetails", de.leuphana.escience.dspacepurebridge.pure.generated.model.ValidationProblemDetails.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.ValidationProblemDetails.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.VisitOther.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.VisitOther>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.VisitOther> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("VisitOther", de.leuphana.escience.dspacepurebridge.pure.generated.model.VisitOther.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.VisitOther.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.VisitingScholarOrganizationAssociation.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.VisitingScholarOrganizationAssociation>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.VisitingScholarOrganizationAssociation> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("VisitingScholarOrganizationAssociation", de.leuphana.escience.dspacepurebridge.pure.generated.model.VisitingScholarOrganizationAssociation.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.VisitingScholarOrganizationAssociation.class;
                     }
           })
                 .registerTypeSelector(de.leuphana.escience.dspacepurebridge.pure.generated.model.WorkingPaper.class, new TypeSelector<de.leuphana.escience.dspacepurebridge.pure.generated.model.WorkingPaper>() {
                     @Override
                     public Class<? extends de.leuphana.escience.dspacepurebridge.pure.generated.model.WorkingPaper> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("WorkingPaper", de.leuphana.escience.dspacepurebridge.pure.generated.model.WorkingPaper.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "typeDiscriminator"));
+                        return de.leuphana.escience.dspacepurebridge.pure.generated.model.WorkingPaper.class;
                     }
           })
         ;

@@ -351,7 +351,7 @@ public class DSpaceToPure {
                             .getMetadata(item, Constants.SCHEME,
                                     Constants.ELEMENT,
                                     Constants.UUID_QUALIFIER,
-                                    Item.ANY, false);
+                                    Item.ANY, true);
             if (!pureUUIDMetadata.isEmpty() && !orgUnitNameMetadata.isEmpty()) {
                 dSpaceObjectMappings.getOrganizationNameToPureMap().put(orgUnitNameMetadata.get(0).getValue(),
                         UUID.fromString(pureUUIDMetadata.get(0).getValue()));

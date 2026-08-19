@@ -169,19 +169,8 @@ class StudentThesisExport extends AbstractExport {
             studentThesis.setAwardDate(compoundDate);
         }
 
-        UUID affiliationOrgId = defaultOrganizationUUID;
-        UUID grantorOrgId = defaultOrganizationUUID;
-        if (!managingOrganizationMetadataValues.isEmpty() &&
-            dSpaceObjectMappings.getOrganizationNameToPureMap()
-                .containsKey(managingOrganizationMetadataValues.get(0).getValue())) {
-            affiliationOrgId =
-                dSpaceObjectMappings.getOrganizationNameToPureMap().get(managingOrganizationMetadataValues.get(0).getValue());
-        }
-        if (!awardingInstitutionMetadataValues.isEmpty() &&
-            dSpaceObjectMappings.getOrganizationNameToPureMap().containsKey(awardingInstitutionMetadataValues.get(0).getValue())) {
-            grantorOrgId =
-                dSpaceObjectMappings.getOrganizationNameToPureMap().get(awardingInstitutionMetadataValues.get(0).getValue());
-        }
+        UUID affiliationOrgId = resolveOrganizationUUID(managingOrganizationMetadataValues);
+        UUID grantorOrgId = resolveOrganizationUUID(awardingInstitutionMetadataValues);
 
         Organization awardingOrganization = new Organization(null, grantorOrgId, null, null, null, null,
             null, null, null, "Organization");
@@ -197,6 +186,17 @@ class StudentThesisExport extends AbstractExport {
         studentThesis.setManagingOrganization(affiliationOrganization);
 
         return new ExportItem(studentThesis);
+    }
+
+    UUID resolveOrganizationUUID(List<MetadataValue> organizationMetadataValues) {
+        if (!organizationMetadataValues.isEmpty()) {
+            UUID mappedOrganizationUUID =
+                dSpaceObjectMappings.getOrganizationNameToPureMap().get(organizationMetadataValues.get(0).getValue());
+            if (mappedOrganizationUUID != null) {
+                return mappedOrganizationUUID;
+            }
+        }
+        return defaultOrganizationUUID;
     }
 
     void addSupervisors(StudentThesis studentThesis, List<Item> supervisors, ClassificationRef supervisorRole) {

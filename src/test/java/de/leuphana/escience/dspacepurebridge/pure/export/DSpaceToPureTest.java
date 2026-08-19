@@ -318,13 +318,13 @@ class DSpaceToPureTest {
             .getMetadata(pureOrgUnit3, "organization", "legalName", null, Item.ANY, false))
             .thenReturn(Collections.emptyList());
         when(itemService
-            .getMetadata(pureOrgUnit1, Constants.SCHEME, Constants.ELEMENT, Constants.UUID_QUALIFIER, Item.ANY, false))
+            .getMetadata(pureOrgUnit1, Constants.SCHEME, Constants.ELEMENT, Constants.UUID_QUALIFIER, Item.ANY, true))
             .thenReturn(Collections.singletonList(pureUUID1MetadataValue));
         when(itemService
-            .getMetadata(pureOrgUnit2, Constants.SCHEME, Constants.ELEMENT, Constants.UUID_QUALIFIER, Item.ANY, false))
+            .getMetadata(pureOrgUnit2, Constants.SCHEME, Constants.ELEMENT, Constants.UUID_QUALIFIER, Item.ANY, true))
             .thenReturn(Collections.singletonList(pureUUID2MetadataValue));
         when(itemService
-            .getMetadata(pureOrgUnit3, Constants.SCHEME, Constants.ELEMENT, Constants.UUID_QUALIFIER, Item.ANY, false))
+            .getMetadata(pureOrgUnit3, Constants.SCHEME, Constants.ELEMENT, Constants.UUID_QUALIFIER, Item.ANY, true))
             .thenReturn(Collections.singletonList(pureUUID3MetadataValue));
 
 

@@ -92,6 +92,9 @@ public class StudentThesisExportTest {
 
         lenient().doAnswer(invocation -> invocation.getArgument(1)).when(configurationService)
             .getProperty(anyString(), anyString());
+
+        // organizationNameToPureMap is backed by a static field, clear it so tests don't leak state into each other
+        dSpaceObjectMappings.getOrganizationNameToPureMap().clear();
     }
 
     @Test
@@ -295,6 +298,61 @@ public class StudentThesisExportTest {
         assertEquals(dateAccepted, String.valueOf(studentThesis.getAwardDate().getYear()));
     }
 
+    @Test
+    public void resolveOrganizationUUIDReturnsDefaultWhenMetadataValuesEmpty() {
+        UUID defaultOrganizationUUID = UUID.randomUUID();
+        classUnderTest.defaultOrganizationUUID = defaultOrganizationUUID;
+
+        UUID result = classUnderTest.resolveOrganizationUUID(Collections.emptyList());
+
+        assertEquals(defaultOrganizationUUID, result);
+    }
+
+    @Test
+    public void resolveOrganizationUUIDReturnsDefaultWhenValueNotInMap() {
+        UUID defaultOrganizationUUID = UUID.randomUUID();
+        classUnderTest.defaultOrganizationUUID = defaultOrganizationUUID;
+        dSpaceObjectMappings.getOrganizationNameToPureMap().put("Some other OrgUnit", UUID.randomUUID());
+
+        MetadataValue organizationMetadataValue = mock(MetadataValue.class);
+        when(organizationMetadataValue.getValue()).thenReturn("ORGUNIT A");
+
+        UUID result = classUnderTest.resolveOrganizationUUID(List.of(organizationMetadataValue));
+
+        assertEquals(defaultOrganizationUUID, result);
+    }
+
+    @Test
+    public void resolveOrganizationUUIDReturnsMappedUUIDWhenValueInMap() {
+        UUID defaultOrganizationUUID = UUID.randomUUID();
+        UUID mappedOrganizationUUID = UUID.randomUUID();
+        classUnderTest.defaultOrganizationUUID = defaultOrganizationUUID;
+        dSpaceObjectMappings.getOrganizationNameToPureMap().put("ORGUNIT A", mappedOrganizationUUID);
+
+        MetadataValue organizationMetadataValue = mock(MetadataValue.class);
+        when(organizationMetadataValue.getValue()).thenReturn("ORGUNIT A");
+
+        UUID result = classUnderTest.resolveOrganizationUUID(List.of(organizationMetadataValue));
+
+        assertEquals(mappedOrganizationUUID, result);
+    }
+
+    @Test
+    public void resolveOrganizationUUIDOnlyConsidersFirstMetadataValue() {
+        UUID defaultOrganizationUUID = UUID.randomUUID();
+        UUID mappedOrganizationUUID = UUID.randomUUID();
+        classUnderTest.defaultOrganizationUUID = defaultOrganizationUUID;
+        dSpaceObjectMappings.getOrganizationNameToPureMap().put("ORGUNIT B", mappedOrganizationUUID);
+
+        MetadataValue firstOrganizationMetadataValue = mock(MetadataValue.class);
+        when(firstOrganizationMetadataValue.getValue()).thenReturn("ORGUNIT A");
+        MetadataValue secondOrganizationMetadataValue = mock(MetadataValue.class);
+
+        UUID result = classUnderTest.resolveOrganizationUUID(
+            List.of(firstOrganizationMetadataValue, secondOrganizationMetadataValue));
+
+        assertEquals(defaultOrganizationUUID, result);
+    }
 
     @Test
     public void checkForDoubletWithNoTitle() {

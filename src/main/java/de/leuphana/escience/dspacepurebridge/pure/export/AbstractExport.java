@@ -47,6 +47,7 @@ abstract class AbstractExport implements DSpaceExporter {
     static final String AUTHOR_RELATION = "isAuthorOfPublication";
     static final String ADVISOR_RELATION = "isAdvisorOfPublication";
     static final String REFEREE_RELATION = "isRefereeOfPublication";
+    static final String PERSON_ENTITY_TYPE = "Person";
     private static final Logger log = LoggerFactory.getLogger(AbstractExport.class);
     private final RestTemplate duplicateCheckRestTemplate;
 
@@ -76,6 +77,14 @@ abstract class AbstractExport implements DSpaceExporter {
                 Item person = dSpaceServicesContainer.getItemService().findByIdOrLegacyId(context,
                     personRelation.getValue());
                 if (person != null) {
+                    String entityType = dSpaceServicesContainer.getItemService()
+                        .getMetadataFirstValue(person, "dspace", "entity", "type", Item.ANY);
+                    if (!PERSON_ENTITY_TYPE.equals(entityType)) {
+                        log.warn("Item {}: skipping {} relation to {} entity {}, only {} entities are exported",
+                            publicationItem.getID(), personToItemRelation, entityType, person.getID(),
+                            PERSON_ENTITY_TYPE);
+                        continue;
+                    }
                     String personPureUUID =
                         dSpaceServicesContainer
                             .getItemService()

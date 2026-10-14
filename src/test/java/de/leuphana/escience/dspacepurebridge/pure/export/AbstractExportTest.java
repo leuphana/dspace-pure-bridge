@@ -40,6 +40,9 @@ class AbstractExportTest {
     private Item author;
 
     @Mock
+    private Item orgUnitAuthor;
+
+    @Mock
     private ItemService itemService;
 
     @Spy
@@ -99,6 +102,10 @@ class AbstractExportTest {
     @BeforeEach
     void setUp() {
         lenient().when(dSpaceServicesContainer.getItemService()).thenReturn(itemService);
+        lenient().when(itemService.getMetadataFirstValue(author, "dspace", "entity", "type", Item.ANY))
+            .thenReturn("Person");
+        lenient().when(itemService.getMetadataFirstValue(orgUnitAuthor, "dspace", "entity", "type", Item.ANY))
+            .thenReturn("OrgUnit");
     }
 
     @Test
@@ -171,6 +178,50 @@ class AbstractExportTest {
 
         List<Item> result = classUnderTest.getItemAuthors(context, publicationItem, false);
         Assertions.assertNull(result);
+    }
+
+    @Test
+    void getItemAuthorsSkipsOrgUnitWithInheritedPureUUID() throws SQLException {
+        String authorId = "TEST_AUTHOR_ID";
+        String orgUnitAuthorId = "TEST_ORGUNIT_AUTHOR_ID";
+        MetadataValue authorRelation = mock(MetadataValue.class);
+        when(authorRelation.getValue()).thenReturn(authorId);
+        MetadataValue orgUnitAuthorRelation = mock(MetadataValue.class);
+        when(orgUnitAuthorRelation.getValue()).thenReturn(orgUnitAuthorId);
+
+        when(itemService.getMetadata(publicationItem, MetadataSchemaEnum.RELATION.getName(),
+            "isAuthorOfPublication", null, Item.ANY)).thenReturn(List.of(authorRelation, orgUnitAuthorRelation));
+        when(itemService.findByIdOrLegacyId(context, authorId)).thenReturn(author);
+        when(itemService.findByIdOrLegacyId(context, orgUnitAuthorId)).thenReturn(orgUnitAuthor);
+        when(itemService.getMetadataFirstValue(author, Constants.SCHEME,
+            Constants.ELEMENT,
+            Constants.UUID_QUALIFIER,
+            Item.ANY)).thenReturn("UUID");
+        lenient().when(itemService.getMetadataFirstValue(orgUnitAuthor, Constants.SCHEME,
+            Constants.ELEMENT,
+            Constants.UUID_QUALIFIER,
+            Item.ANY)).thenReturn("ORGUNIT_UUID");
+
+        List<Item> result = classUnderTest.getItemAuthors(context, publicationItem, false);
+        Assertions.assertEquals(List.of(author), result);
+        verify(itemService, never()).getMetadataFirstValue(orgUnitAuthor, Constants.SCHEME,
+            Constants.ELEMENT,
+            Constants.UUID_QUALIFIER,
+            Item.ANY);
+    }
+
+    @Test
+    void getItemAuthorsWithOnlyOrgUnitAuthor() throws SQLException {
+        String orgUnitAuthorId = "TEST_ORGUNIT_AUTHOR_ID";
+        MetadataValue orgUnitAuthorRelation = mock(MetadataValue.class);
+        when(orgUnitAuthorRelation.getValue()).thenReturn(orgUnitAuthorId);
+
+        when(itemService.getMetadata(publicationItem, MetadataSchemaEnum.RELATION.getName(),
+            "isAuthorOfPublication", null, Item.ANY)).thenReturn(List.of(orgUnitAuthorRelation));
+        when(itemService.findByIdOrLegacyId(context, orgUnitAuthorId)).thenReturn(orgUnitAuthor);
+
+        Assertions.assertNull(classUnderTest.getItemAuthors(context, publicationItem, false));
+        Assertions.assertEquals(List.of(), classUnderTest.getItemAuthors(context, publicationItem, true));
     }
 
     @Test

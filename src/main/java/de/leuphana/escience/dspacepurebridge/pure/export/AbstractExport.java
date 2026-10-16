@@ -331,7 +331,7 @@ abstract class AbstractExport implements DSpaceExporter {
 
                 boolean doublet = false;
                 for (PureWSResultItem pureWSResultItem : pureWSResults.getItems()) {
-                    DuplicateCheckResult duplicateCheck = concreteDuplicateCheck(pureWSResultItem, doi, title);
+                    DuplicateCheckResult duplicateCheck = concreteDuplicateCheck(item, pureWSResultItem, doi, title);
                     if (DuplicateCheckResult.DOI_DUPLICATE.equals(duplicateCheck)) {
                         log.info("Doublet detected for item {} and doi {}", item.getHandle(), doi);
                         doublet = true;
@@ -349,6 +349,11 @@ abstract class AbstractExport implements DSpaceExporter {
             } while (itemsLeft);
         }
         return null;
+    }
+
+    DuplicateCheckResult concreteDuplicateCheck(Item item, PureWSResultItem pureWSResultItem, String doi,
+                                                String title) {
+        return concreteDuplicateCheck(pureWSResultItem, doi, title);
     }
 
     public void init() throws ApiException {

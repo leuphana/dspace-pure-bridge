@@ -1,14 +1,14 @@
 package de.leuphana.escience.dspacepurebridge.pure.export;
 
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultItem;
+import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultPressMediaItem;
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultStudentThesisItem;
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResults;
 
 public enum ExportType {
     RESEARCH_OUTPUT("researchOutput", "research-outputs", null), STUDENT_THESIS("studentThesis", "student-theses",
         PureWSStudentThesisResults.class),
-    // No dedicated PureWSResults search class yet -> duplicate check is stubbed (see PressMediaExport)
-    PRESS_MEDIA("pressMedia", "press-media", null);
+    PRESS_MEDIA("pressMedia", "pressmedia", PureWSPressMediaResults.class);
 
     private final String mappingSuffix;
     private final String pureEndpoint;
@@ -34,6 +34,9 @@ public enum ExportType {
     }
 
     static class PureWSStudentThesisResults extends PureWSResults<PureWSResultStudentThesisItem> {
+    }
+
+    static class PureWSPressMediaResults extends PureWSResults<PureWSResultPressMediaItem> {
     }
 
 }

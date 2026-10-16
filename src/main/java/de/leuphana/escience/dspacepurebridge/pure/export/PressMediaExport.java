@@ -2,12 +2,15 @@ package de.leuphana.escience.dspacepurebridge.pure.export;
 
 import de.leuphana.escience.dspacepurebridge.Constants;
 import de.leuphana.escience.dspacepurebridge.DSpaceServicesContainer;
+import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PressMediaCoverage;
 import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultItem;
+import de.leuphana.escience.dspacepurebridge.pure.apiobjects.PureWSResultPressMediaItem;
 import de.leuphana.escience.dspacepurebridge.pure.generated.ApiException;
 import de.leuphana.escience.dspacepurebridge.pure.generated.api.PressMediaApi;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.*;
 import de.leuphana.escience.dspacepurebridge.pure.imports.DSpaceObjectMappings;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.dspace.content.Item;
 import org.dspace.content.MetadataValue;
 import org.dspace.core.Context;
@@ -19,11 +22,13 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
+import static org.apache.commons.text.StringEscapeUtils.unescapeHtml4;
 
 class PressMediaExport extends AbstractExport {
 
@@ -236,12 +241,75 @@ class PressMediaExport extends AbstractExport {
         return exportResult;
     }
 
-    // Duplicate check is stubbed for now (analogue to ResearchOutputExport); PRESS_MEDIA has no search result class,
-    // therefore AbstractExport.checkForDuplicate skips and this method is not reached during a regular export.
     @Override
     public DuplicateCheckResult concreteDuplicateCheck(PureWSResultItem pureWSResultItem, String doi, String title) {
-        log.warn("Duplicate check not yet implemented!");
+        return concreteDuplicateCheck(null, pureWSResultItem, doi, title);
+    }
+
+    @Override
+    DuplicateCheckResult concreteDuplicateCheck(Item item, PureWSResultItem pureWSResultItem, String doi,
+                                                String title) {
+        PureWSResultPressMediaItem pressMediaItem = (PureWSResultPressMediaItem) pureWSResultItem;
+        List<PressMediaCoverage> mediaCoverages =
+            pressMediaItem.getMediaCoverages() != null ? pressMediaItem.getMediaCoverages() : List.of();
+
+        if (doi != null) {
+            for (PressMediaCoverage mediaCoverage : mediaCoverages) {
+                if (doi.equalsIgnoreCase(StringUtils.trim(mediaCoverage.getUrl()))) {
+                    return DuplicateCheckResult.DOI_DUPLICATE;
+                }
+            }
+        }
+
+        if (title == null || pressMediaItem.getTitle() == null ||
+            pressMediaItem.getTitle().values().stream().noneMatch(pureTitle -> titlesMatch(title, pureTitle))) {
+            return DuplicateCheckResult.NO_DUPLICATE;
+        }
+
+        LocalDate coverageDate = getDuplicateCheckCoverageDate(item);
+        List<LocalDate> pureCoverageDates = mediaCoverages.stream()
+            .map(mediaCoverage -> parsePureDate(mediaCoverage.getDate()))
+            .filter(Objects::nonNull)
+            .toList();
+        if (coverageDate == null || pureCoverageDates.isEmpty() || pureCoverageDates.contains(coverageDate)) {
+            return DuplicateCheckResult.TITLE_DUPLICATE;
+        }
         return DuplicateCheckResult.NO_DUPLICATE;
+    }
+
+    boolean titlesMatch(String title, String pureTitle) {
+        if (pureTitle == null) {
+            return false;
+        }
+        return Strings.CI.equals(StringUtils.normalizeSpace(unescapeHtml4(title)),
+            StringUtils.normalizeSpace(unescapeHtml4(pureTitle)));
+    }
+
+    LocalDate getDuplicateCheckCoverageDate(Item item) {
+        if (item == null) {
+            return null;
+        }
+        List<MetadataValue> coverageDateMetadataValues =
+            dSpaceServicesContainer.getItemService().getMetadataByMetadataString(item,
+                dSpaceServicesContainer.getConfigurationService()
+                    .getProperty(METADATA_PROPERTY_PREFIX + "coverageDate", "dc.date.issued"));
+        try {
+            return getCoverageDate(coverageDateMetadataValues);
+        } catch (DateTimeParseException e) {
+            log.warn("Could not parse coverage date of item {} for duplicate check", item.getHandle());
+            return null;
+        }
+    }
+
+    LocalDate parsePureDate(String date) {
+        if (StringUtils.length(date) < 10) {
+            return null;
+        }
+        try {
+            return LocalDate.parse(date.substring(0, 10));
+        } catch (DateTimeParseException e) {
+            return null;
+        }
     }
 
     @Override

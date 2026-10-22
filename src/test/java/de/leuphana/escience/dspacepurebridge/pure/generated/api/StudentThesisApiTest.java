@@ -28,6 +28,7 @@ import de.leuphana.escience.dspacepurebridge.pure.generated.model.StudentThesisL
 import java.util.UUID;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.UploadedFile;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.WorkflowListResult;
+import de.leuphana.escience.dspacepurebridge.pure.generated.model.AllowedKeywordGroupConfigurationList;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -228,7 +229,7 @@ public class StudentThesisApiTest {
      */
     @Test
     public void studentThesisGetAllowedKeywordGroupConfigurationsTest() throws ApiException {
-        KeywordGroupConfigurationRefList response = api.studentThesisGetAllowedKeywordGroupConfigurations();
+        AllowedKeywordGroupConfigurationList response = api.studentThesisGetAllowedKeywordGroupConfigurations();
         // TODO: test validations
     }
 

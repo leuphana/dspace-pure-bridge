@@ -84,11 +84,16 @@ public class DSpaceToPure {
         StudentThesisExport studentThesisExport =
                 new StudentThesisExport(leuphanaPureWsEndpointBase, leuphanaPureWsApiKey, dSpaceServicesContainer,
                         dSpaceObjectMappings, exportStatus, duplicateCheckRestTemplate);
+        PressMediaExport pressMediaExport =
+                new PressMediaExport(leuphanaPureWsEndpointBase, leuphanaPureWsApiKey, dSpaceServicesContainer,
+                        dSpaceObjectMappings, exportStatus, duplicateCheckRestTemplate);
         try {
             researchOutputExport.init();
             studentThesisExport.init();
+            pressMediaExport.init();
             exporterRegistry.put(ExportType.STUDENT_THESIS, studentThesisExport);
             exporterRegistry.put(ExportType.RESEARCH_OUTPUT, researchOutputExport);
+            exporterRegistry.put(ExportType.PRESS_MEDIA, pressMediaExport);
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }

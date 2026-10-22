@@ -9,8 +9,10 @@ Developed at [**Leuphana University Lüneburg**](https://www.leuphana.de/en) to 
 - [Concept](#concept)
     - [Import of Person, Organization, and Project Data from Pure into DSpace](#import-of-person-organization-and-project-data-from-pure-into-dspace)
     - [Export of Publications from DSpace to Pure](#export-of-publications-from-dspace-to-pure)
+        - [Duplicate check](#duplicate-check)
         - [STUDENT_THESIS: Exported metadata](#student_thesis-exported-metadata)
         - [RESEARCH_OUTPUT: Exported metadata](#research_output-exported-metadata)
+        - [PRESS_MEDIA: Exported metadata](#press_media-exported-metadata)
 - [Prerequisites](#prerequisites)
     - [Installation of the dspace-pure-bridge](#installation-of-the-dspace-pure-bridge)
     - [DSpace Configuration](#dspace-configuration)
@@ -28,9 +30,11 @@ Developed at [**Leuphana University Lüneburg**](https://www.leuphana.de/en) to 
         - [Configuration of DSpace metadata fields considered for export](#configuration-of-dspace-metadata-fields-considered-for-export)
             - [Configuration of DSpace metadata fields considered for STUDENT_THESIS export](#configuration-of-dspace-metadata-fields-considered-for-student_thesis-export)
             - [Configuration of DSpace metadata fields considered for RESEARCH_OUTPUT export](#configuration-of-dspace-metadata-fields-considered-for-research_output-export)
+            - [Configuration of DSpace metadata fields considered for PRESS_MEDIA export](#configuration-of-dspace-metadata-fields-considered-for-press_media-export)
         - [Configuration of controlled vocabulary corresponding Pure values](#configuration-of-controlled-vocabulary-corresponding-pure-values)
             - [Configuration of controlled vocabulary corresponding Pure values for STUDENT_THESIS export](#configuration-of-controlled-vocabulary-corresponding-pure-values-for-student_thesis-export)
             - [Configuration of controlled vocabulary corresponding Pure values for RESEARCH_OUTPUT export](#configuration-of-controlled-vocabulary-corresponding-pure-values-for-research_output-export)
+            - [Configuration of controlled vocabulary corresponding Pure values for PRESS_MEDIA export](#configuration-of-controlled-vocabulary-corresponding-pure-values-for-press_media-export)
         - [Complete Example](#complete-example)
         - [Default values](#default-values)
     - [Result Mail recipients](#result-mail-recipients)
@@ -48,7 +52,7 @@ Developed at [**Leuphana University Lüneburg**](https://www.leuphana.de/en) to 
 
 - Import **Persons, Organizations, Projects** from Pure into DSpace as entities.
 - Export **publications** from DSpace to Pure.
-    - Supports the Pure endpoints `student-theses` and `research-outputs`
+    - Supports the Pure endpoints `student-theses`, `research-outputs` and `pressmedia`
 - Configurable mapping of publication types, and export metadata.
 - Built as a standalone jar, which can be invoked using the **DSpace CLI** using the `dsrun` option.
 - Email reporting of sync results (successes and failures).
@@ -84,9 +88,33 @@ The import process fetches all Persons, Organizations, and Projects from Pure. I
 
 The export process iterates over all exportable (filter matches and not yet exported) publications in DSpace and:
 - determines the corresponding Pure export type
+- checks whether the publication already exists in Pure (see [Duplicate check](#duplicate-check))
 - maps the metadata appropriately
 - performs the export to Pure
 - updates the export status of the publication
+
+#### Duplicate check
+
+Before a publication is exported, Pure is searched for its title (`dc.title`) using the `/search` endpoint of the
+corresponding Pure export type. If one of the results is considered a duplicate, the publication is **not** exported.
+Instead, the Pure UUID of the existing object is stored in the publication (`local.Pure.uuid`) and the publication is
+reported as *already existed in Pure* in the [result mail](#export-result-email).
+
+Note: This also happens when the export is started with the `-c` (`--checkOnly`) option.
+
+A Pure object is considered a duplicate depending on the export type:
+
+- `STUDENT_THESIS`
+  - if the publication has a DOI and the Pure object has links: one of the links equals the DOI
+  - otherwise: the Pure title equals the publication title exactly
+- `PRESS_MEDIA`
+  - one of its media coverages has the publication's DOI as `url`, or
+  - one of its titles equals the publication title (case-insensitive, whitespace- and HTML-entity-normalized) **and**
+    one of its media coverages has the same date as the publication's coverage date. As press/media titles are often
+    generic (e.g. "Interview"), the date is part of the comparison. If there is no date on either side, the title
+    match alone is decisive.
+- `RESEARCH_OUTPUT`
+  - no duplicate check is performed
 
 #### STUDENT_THESIS: Exported metadata
 
@@ -132,6 +160,36 @@ The following publication data are exported:
    - `licenseType`: The license information is received from the **bitstream** metadata. (usage of a fallback default license is possible in case no metadata is found / available)
 
 Please refer to the section [Configuration of DSpace metadata fields considered for RESEARCH_OUTPUT export](#configuration-of-dspace-metadata-fields-considered-for-research_output-export) for detailed information on how to configure the metadata field mapping.
+
+#### PRESS_MEDIA: Exported metadata
+
+Publications are exported as Pure Press/Media objects (endpoint `pressmedia`). Currently, the export populates the
+mandatory Pure fields plus exactly one media coverage.
+
+The following publication data are exported:
+
+**Mandatory**
+- `Author` (using `isAuthorOfPublication` relation, exported as persons of the media coverage)
+  - only related `Person` entities with a Pure UUID are exported; relations to other entity types (e.g. `OrgUnit`) are
+    skipped with a warning, related persons without Pure UUID are skipped silently
+  - if no author remains, the [default](#default-values) author is used (unlike the other export types, the export
+    does not fail in this case)
+- `Type` (using metadata `dc.type`)
+- `Title` (using metadata mapping; one value per metadata language - `de` and `en` are supported, values with another
+  or without language are stored as German)
+- `Visibility` (always `FREE`, not configurable)
+- `ManagingOrganization` (using metadata mapping, potential fallback to [default](#default-values) value). Pure requires
+  it as the *placement* of the content.
+- `MediaCoverage`
+  - `coverageType` (configurable, `CONTRIBUTION` or `COVERAGE`)
+  - `date` (using metadata mapping; supported formats are `yyyy` - exported as January 1st - and `yyyy-MM-dd`)
+  - `title` (same value as the Press/Media title)
+  - `persons` (the authors, see above)
+
+**Optional**
+- `MediaCoverage.description` (using metadata mapping)
+
+Please refer to the section [Configuration of DSpace metadata fields considered for PRESS_MEDIA export](#configuration-of-dspace-metadata-fields-considered-for-press_media-export) for detailed information on how to configure the metadata field mapping.
 
 ## Prerequisites
 
@@ -383,7 +441,7 @@ dspace-pure-bridge.export.filter=collection:123456789/2;type:Dissertation, colle
 
 ### Type mapping
 
-Defines which publication types are exported to which Pure type (one of `STUDENT_THESIS`, `RESEARCH_OUTPUT`).
+Defines which publication types are exported to which Pure type (one of `STUDENT_THESIS`, `RESEARCH_OUTPUT`, `PRESS_MEDIA`).
 
 **Syntax:**
 ```
@@ -404,6 +462,15 @@ dspace-pure-bridge.export.exportTypeForType=Dissertation:STUDENT_THESIS, default
 **Explanation:**
 - Type `Dissertation` is mapped to pure type `STUDENT_THESIS`
 - All other publications are mapped to pure type `RESEARCH_OUTPUT`
+
+**Example (Leuphana setup including `PRESS_MEDIA`):**
+```
+dspace-pure-bridge.export.exportTypeForType=Dissertation:STUDENT_THESIS, Sound:PRESS_MEDIA, Audiovisual:PRESS_MEDIA, default:RESEARCH_OUTPUT
+```
+
+**Explanation:**
+- Types `Sound` and `Audiovisual` are mapped to pure type `PRESS_MEDIA`
+
 
 ### Metadata mapping
 
@@ -478,6 +545,39 @@ dspace-pure-bridge.export.metadata.researchOutput.managingOrganization=local.Aff
 dspace-pure-bridge.export.metadata.researchOutput.bitstreamLicense=local.BitstreamLicense
 ```
 
+##### Configuration of DSpace metadata fields considered for PRESS_MEDIA export
+
+**Syntax:**
+```
+dspace-pure-bridge.export.metadata.pressMedia.<name>=<value>
+```
+
+**Parameters:**
+- `name` – The Metadata name (one of `title`, `coverageDate`, `description`, `managingOrganization`, `coverageType`)
+- `value` – The DSpace metadata field holding the value to be exported to Pure. For `coverageType` the value is the
+  coverage type itself (one of `CONTRIBUTION`, `COVERAGE`).
+
+**Example:**
+```
+dspace-pure-bridge.export.metadata.pressMedia.coverageDate=dc.date.issued
+dspace-pure-bridge.export.metadata.pressMedia.coverageType=COVERAGE
+```
+
+**Explanation:**
+- Type `coverageDate` value for the pure export is retrieved from metadata field `dc.date.issued`
+- The media coverage is exported with coverage type `COVERAGE`
+
+**Defaults**
+
+If no configuration is made, the following defaults are used:
+```
+dspace-pure-bridge.export.metadata.pressMedia.title=dc.title
+dspace-pure-bridge.export.metadata.pressMedia.coverageDate=dc.date.issued
+dspace-pure-bridge.export.metadata.pressMedia.description=DataCite.Description.Abstract
+dspace-pure-bridge.export.metadata.pressMedia.managingOrganization=local.Affiliation
+dspace-pure-bridge.export.metadata.pressMedia.coverageType=CONTRIBUTION
+```
+
 #### Configuration of controlled vocabulary corresponding Pure values
 
 Controlled vocabulary values need to be mapped to the corresponding Pure values per export type
@@ -527,8 +627,31 @@ The DSpace category values are mapped to corresponding Pure language values:
 `Research` => `/dk/atira/pure/researchoutput/category/research`
 `Training` => `/dk/atira/pure/researchoutput/category/education`
 
+##### Configuration of controlled vocabulary corresponding Pure values for PRESS_MEDIA export
+
+**Syntax:**
+```
+dspace-pure-bridge.export.mapping.pressMedia.<controlledVocabulary>.<dspaceValue>=<pureValue>
+```
+
+**Parameters:**
+- `controlledVocabulary` – The name of the Controlled Vocabulary (one of `TYPE`, `CONTRIBUTOR_ROLE`)
+- `dspaceValue` – The value in DSpace (for `TYPE` the value of `dc.type`; for `CONTRIBUTOR_ROLE` only the key `Author`
+  is used)
+- `pureValue` - The corresponding Pure value
+
+**Example:**
+```
+dspace-pure-bridge.export.mapping.pressMedia.TYPE.Sound=/dk/atira/pure/clipping/clippingtypes/clipping/clipping
+dspace-pure-bridge.export.mapping.pressMedia.CONTRIBUTOR_ROLE.Author=/dk/atira/pure/clipping/roles/clipping/author
+```
+
+**Explanation:**
+- The DSpace type `Sound` is mapped to the Pure Press/Media type `/dk/atira/pure/clipping/clippingtypes/clipping/clipping`
+- The authors are exported with the Pure role `/dk/atira/pure/clipping/roles/clipping/author`
+
 ##### Complete Example
-The following example shows a working configuration for the mapping of controlled vocabulary values for the export of Pure Research Outputs and Pure Student Theses.
+The following example shows a working configuration for the mapping of controlled vocabulary values for the export of Pure Research Outputs, Pure Student Theses and Pure Press/Media.
 
 ```
 dspace-pure-bridge.export.mapping.researchOutput.LANGUAGE.deu=/dk/atira/pure/core/languages/de_DE
@@ -562,11 +685,14 @@ dspace-pure-bridge.export.mapping.studentThesis.TYPE.Dissertation=/dk/atira/pure
 dspace-pure-bridge.export.mapping.studentThesis.CONTRIBUTOR_ROLE.Author=/dk/atira/pure/studentthesis/roles/studentthesis/author
 dspace-pure-bridge.export.mapping.studentThesis.SUPERVISOR_ROLE.Supervisor=/dk/atira/pure/studentthesis/roles/internalexternal/studentthesis/supervisor
 dspace-pure-bridge.export.mapping.studentThesis.SUPERVISOR_ROLE.Reviewer=/dk/atira/pure/studentthesis/roles/internalexternal/studentthesis/reviewer
+dspace-pure-bridge.export.mapping.pressMedia.TYPE.Sound=/dk/atira/pure/clipping/clippingtypes/clipping/clipping
+dspace-pure-bridge.export.mapping.pressMedia.TYPE.Audiovisual=/dk/atira/pure/clipping/clippingtypes/clipping/clipping
+dspace-pure-bridge.export.mapping.pressMedia.CONTRIBUTOR_ROLE.Author=/dk/atira/pure/clipping/roles/clipping/author
 ```
 
 #### Default values
 
-Certain Pure API fields are mandatory, including `Author`, `ManagingOrganization`, and, for STUDENT_THESIS, `AwardingOrganization`.
+Certain Pure API fields are mandatory, including `Author`, `ManagingOrganization` (for all export types, including PRESS_MEDIA), and, for STUDENT_THESIS, `AwardingOrganization`.
 
 The default values for these fields can be configured. During export, these defaults are applied if the publication does not provide the corresponding values or if the author is not linked to a `PurePerson` entity.
 

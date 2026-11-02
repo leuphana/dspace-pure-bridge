@@ -78,6 +78,7 @@ The hand-written code is about 3,500 lines plus about 3,000 lines of tests. Ever
 - Code, comments, log messages, docs and commit messages are in **English**.
 - Follow the existing style: SLF4J parameterized logging (`log.info("… {}", x)`), Apache Commons `StringUtils`, Java 17 features (pattern matching `instanceof`, records are fine for new value types).
 - Log at `info` for per-item progress and at `error` for per-item failures (through `ExportStatus`). Never log the API key.
+- **Comments sparingly.** Code and names should explain themselves. Comment only critical points (non-obvious constraints, workarounds, thread-safety or ordering assumptions), and keep it to one short line. No comments that restate the code, no change history in comments, no lengthy Javadoc on trivial members.
 
 ### Compatibility
 - Target: DSpace 9.x (currently 9.2), Java 17, Pure API 5.31.x. Keep `provided` dependency versions aligned with the target DSpace release.

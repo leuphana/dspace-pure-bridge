@@ -31,6 +31,7 @@ public class DspacePureBridgeCLI {
     private static final Logger log = LoggerFactory.getLogger(DspacePureBridgeCLI.class);
     static final String PURE_BRIDGE_PURE_WS_ENDPOINT_BASE = "dspace-pure-bridge.pure.ws.endpoint.base";
     static final String PURE_BRIDGE_PURE_WS_APIKEY = "dspace-pure-bridge.pure.ws.apikey";
+    private static final int HELP_TEXT_WIDTH = 120;
 
     private final HandleService handleService = HandleServiceFactory.getInstance().getHandleService();
     private final ItemService itemService = ContentServiceFactory.getInstance().getItemService();
@@ -104,7 +105,10 @@ public class DspacePureBridgeCLI {
     void run() throws Exception {
         if (help) {
             HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("/dspace/bin/dspace dsrun de.leuphana.escience.dspacepurebridge.PureSyncCLI", PureSyncCLIConfiguration.getOptions());
+            // wide enough to keep the fully qualified class name on one line (copy & paste)
+            formatter.setWidth(HELP_TEXT_WIDTH);
+            formatter.printHelp("/dspace/bin/dspace dsrun " + DspacePureBridgeCLI.class.getName(),
+                    PureSyncCLIConfiguration.getOptions());
             return;
         }
         if (importData) {

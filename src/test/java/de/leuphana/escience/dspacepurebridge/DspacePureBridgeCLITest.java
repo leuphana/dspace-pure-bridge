@@ -8,6 +8,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.leuphana.escience.MockedEnvironmentTestMethod;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import org.apache.commons.cli.CommandLine;
 import org.dspace.authorize.factory.AuthorizeServiceFactory;
 import org.dspace.authorize.factory.AuthorizeServiceFactoryImpl;
@@ -225,6 +228,37 @@ class DspacePureBridgeCLITest {
             dspacePureBridgeCLI.run();
 
             assertEquals(apiKey, dspacePureBridgeCLI.getPureWsApiKey());
+        });
+    }
+
+    @Test
+    void runHelpShowsCurrentCliClassName() throws Exception {
+        executeTestInMockedEnvironment(() -> {
+            when(configurationService.hasProperty("event.dispatcher." + CLIScriptContextUtils.DISPATCHER_SET_NAME + ".class")).thenReturn(true);
+            when(configurationService.hasProperty("event.dispatcher." + CLIScriptContextUtils.DISPATCHER_SET_NAME + ".consumers")).thenReturn(true);
+            when(configurationService.getProperty(DspacePureBridgeCLI.PURE_BRIDGE_PURE_WS_ENDPOINT_BASE)).thenReturn(
+                "http://localhost:8080/pure");
+            when(configurationService.getProperty(DspacePureBridgeCLI.PURE_BRIDGE_PURE_WS_APIKEY)).thenReturn("xy1234");
+            // neither import nor export requested -> help is shown
+
+            DspacePureBridgeCLI dspacePureBridgeCLI = new DspacePureBridgeCLI();
+            dspacePureBridgeCLI.setup(commandLine);
+
+            PrintStream originalOut = System.out;
+            ByteArrayOutputStream capturedOut = new ByteArrayOutputStream();
+            try {
+                System.setOut(new PrintStream(capturedOut, true, StandardCharsets.UTF_8));
+                dspacePureBridgeCLI.run();
+            } finally {
+                System.setOut(originalOut);
+            }
+
+            // HelpFormatter wraps long lines, so normalize whitespace before comparing
+            String helpText = capturedOut.toString(StandardCharsets.UTF_8).replaceAll("\\s+", " ");
+            Assertions.assertTrue(helpText.contains("dsrun " + DspacePureBridgeCLI.class.getName()),
+                "help text should contain the CLI class name, was: " + helpText);
+            Assertions.assertFalse(helpText.contains("PureSyncCLI "),
+                "help text must not reference the outdated class name, was: " + helpText);
         });
     }
 

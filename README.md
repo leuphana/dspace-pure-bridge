@@ -2,7 +2,7 @@
 
 The `dspace-pure-bridge` is a command-line tool that **synchronizes data between DSpace and Elsevier Pure**.
 
-It was developed at [**Leuphana University Lüneburg**](https://www.leuphana.de/en) to keep publication metadata consistent, reduce manual curation, and make research outputs and student theses visible in the research portal.
+It was developed at [**Leuphana University Lüneburg**](https://www.leuphana.de/en) to keep publication metadata consistent, reduce manual curation, and make research outputs, student theses and press/media contributions visible in the research portal.
 
 ## Table of Contents
 
@@ -26,17 +26,17 @@ At Leuphana, each system is the authoritative source for one kind of data:
 | Data | System of record | Direction | CLI option |
 |---|---|---|---|
 | Persons, organizational units, projects | Pure | Pure → DSpace | `--import` |
-| Publications (student theses, research outputs) | DSpace | DSpace → Pure | `--export` |
+| Publications (student theses, research outputs, press/media) | DSpace | DSpace → Pure | `--export` |
 
 **Features**
 - Imports Pure **persons, organizational units and projects** as DSpace entities and links them to existing DSpace entities.
-- Exports DSpace **publications** to the Pure endpoints `student-theses` and `research-outputs`.
+- Exports DSpace **publications** to the Pure endpoints `student-theses`, `research-outputs` and `pressmedia`.
 - Configurable export filter, type mapping, metadata mapping and vocabulary mapping.
 - Idempotent export: no item is created twice in Pure.
 - Dry-run mode and a result e-mail for every export run.
 - Ships as a single JAR that runs inside DSpace via `dsrun`.
 
-**Tested with:** DSpace 9.x, Pure API 5.31.x, Java 17.
+**Tested with:** DSpace 9.x, Pure API 5.35.x, Java 17.
 
 Further reading: [project vision](VISION.md) · [architecture decisions](docs/adr/README.md)
 
@@ -113,8 +113,8 @@ Imported metadata: `local.Pure.uuid`, `local.Pure.id`, `local.Pure.lastModificat
 The export processes every publication that **matches the export filter** and **has no `local.Pure.uuid` yet**:
 
 1. **Select:** publications are found through the Discovery index, restricted by the [export filter](#53-export-filter-and-type-mapping).
-2. **Route:** the item's type determines the Pure export type (`STUDENT_THESIS` or `RESEARCH_OUTPUT`) via the [type mapping](#53-export-filter-and-type-mapping).
-3. **Duplicate check** (`STUDENT_THESIS` only): Pure is searched by title; a match by DOI or title counts as a duplicate. The item is then **not** exported, but linked to the existing Pure record.
+2. **Route:** the item's type determines the Pure export type (`STUDENT_THESIS`, `RESEARCH_OUTPUT` or `PRESS_MEDIA`) via the [type mapping](#53-export-filter-and-type-mapping).
+3. **Duplicate check** (`STUDENT_THESIS` and `PRESS_MEDIA`): Pure is searched for the item's `dc.title`. If a result counts as a duplicate (see below), the item is **not** exported; its `local.Pure.uuid` is set to the existing Pure record, and it is reported as *already existed in Pure*. **This also happens with `--checkOnly`.**
 4. **Map:** metadata and vocabularies are mapped to Pure (see 3.3). If a mandatory value is missing or cannot be mapped, the item fails and is reported.
 5. **Export** (skipped with `--checkOnly`).
 6. **Mark:** the Pure UUID is stored in the item's `local.Pure.uuid`, and the item is reindexed. Marked items are never exported again. To re-export an item, delete its `local.Pure.uuid`.
@@ -122,9 +122,19 @@ The export processes every publication that **matches the export filter** and **
 
 A failing item does not stop the run.
 
+**When a Pure record counts as a duplicate**
+
+| Export type | Duplicate if … |
+|---|---|
+| `STUDENT_THESIS` | the item has a DOI and one of the record's links equals it; otherwise the titles are equal (exact) |
+| `PRESS_MEDIA` | one of the record's media coverages has the item's DOI as `url`, **or** the titles are equal (case-insensitive, whitespace and HTML entities normalized) **and** one media coverage has the item's coverage date. Press/media titles are often generic (e.g. "Interview"), hence the date. If either side has no date, the title alone decides. |
+| `RESEARCH_OUTPUT` | no duplicate check |
+
 ### 3.3 Exported data
 
 **Source** names the [configurable metadata field](#54-metadata-fields) or the fixed source.
+
+**`STUDENT_THESIS` and `RESEARCH_OUTPUT`**
 
 | Pure field | Source | `STUDENT_THESIS` | `RESEARCH_OUTPUT` |
 |---|---|---|---|
@@ -144,10 +154,26 @@ A failing item does not stop the run.
 | Supervisors / reviewers | relationships `isAdvisorOfPublication` / `isRefereeOfPublication` | optional | – |
 | Electronic version | only if a DOI is found in `dc.identifier.uri`; see note ³ | – | optional |
 
-¹ **Authors** must be linked to a `PurePerson` (i.e. carry `local.Pure.uuid`):
+**`PRESS_MEDIA`** (Pure Press/Media with exactly one media coverage)
+
+| Pure field | Source | |
+|---|---|---|
+| Type | `dc.type` → vocabulary `TYPE` | mandatory |
+| Title | `title` (all values, one per language; see below) | mandatory |
+| Managing organization | `managingOrganization`, see note ² | mandatory |
+| Media coverage: type | `coverageType` (fixed value `CONTRIBUTION` or `COVERAGE`) | mandatory |
+| Media coverage: date | `coverageDate` (`yyyy`, exported as 1 January, or `yyyy-MM-dd`) | mandatory |
+| Media coverage: title | same as the title | mandatory |
+| Media coverage: persons | relationship `isAuthorOfPublication`, role vocabulary `CONTRIBUTOR_ROLE`, see note ¹ | mandatory |
+| Media coverage: description | `description` (all values, one per language) | optional |
+
+For `PRESS_MEDIA`, title and description values in `de` or `en` are stored under that language; values in any other or no language are stored as German.
+
+¹ **Authors** must be linked to a `PurePerson` (i.e. carry `local.Pure.uuid`). Relations to entities that are not of type `Person` (e.g. an `OrgUnit` as author) are skipped with a warning, for all export types.
 - `RESEARCH_OUTPUT`: every author must be linked, otherwise the item fails.
 - `STUDENT_THESIS` without supervisors/reviewers: same as above.
 - `STUDENT_THESIS` with supervisors/reviewers: unlinked authors are left out; if none remain, the [default author](#55-default-values) is used.
+- `PRESS_MEDIA`: unlinked authors are left out; if none remain, the default author is used.
 - Supervisors and reviewers without a `PurePerson` link are left out.
 
 ² **Organizations** are resolved by comparing the metadata value **exactly** with the `organization.legalName` of an imported Pure org unit. If there is no match, the [default organization](#55-default-values) is used.
@@ -211,7 +237,7 @@ Reference: [Metadata and bitstream format registries](https://wiki.lyrasis.org/d
 
 | Relationship | Used for |
 |---|---|
-| `isAuthorOfPublication` | authors (both export types) |
+| `isAuthorOfPublication` | authors (all export types) |
 | `isAdvisorOfPublication` | supervisors (`STUDENT_THESIS`) |
 | `isRefereeOfPublication` | reviewers (`STUDENT_THESIS`) |
 
@@ -334,32 +360,36 @@ dspace-pure-bridge.export.filter = collection:123456789/2;type:Dissertation, col
 ```
 → From `123456789/2`, only items of type `Dissertation` are exported; from `123456789/3`, all items are.
 
-**Type mapping syntax:** `<dspaceType>:<STUDENT_THESIS|RESEARCH_OUTPUT>`. The key `default` applies to all types without their own entry.
+**Type mapping syntax:** `<dspaceType>:<STUDENT_THESIS|RESEARCH_OUTPUT|PRESS_MEDIA>`. The key `default` applies to all types without their own entry.
 
 ```properties
-dspace-pure-bridge.export.exportTypeForType = Dissertation:STUDENT_THESIS, default:RESEARCH_OUTPUT
+dspace-pure-bridge.export.exportTypeForType = Dissertation:STUDENT_THESIS, Sound:PRESS_MEDIA, Audiovisual:PRESS_MEDIA, default:RESEARCH_OUTPUT
 ```
 
 ### 5.4 Metadata fields
 
-These properties define which DSpace metadata field supplies which Pure value (see [3.3](#33-exported-data)). Syntax: `dspace-pure-bridge.export.metadata.<exportType>.<name> = <schema.element[.qualifier]>`, with `<exportType>` being `studentThesis` or `researchOutput`.
+These properties define which DSpace metadata field supplies which Pure value (see [3.3](#33-exported-data)). Syntax: `dspace-pure-bridge.export.metadata.<exportType>.<name> = <schema.element[.qualifier]>`, with `<exportType>` being `studentThesis`, `researchOutput` or `pressMedia`.
 
-| Name | `studentThesis` default | `researchOutput` default |
-|---|---|---|
-| `title` | `dc.title` | `dc.title` |
-| `subTitle` | `DataCite.Title.Subtitle` | `DataCite.Title.Subtitle` |
-| `abstract` | `DataCite.Description.Abstract` | `DataCite.Description.Abstract` |
-| `language` | `DataCite.Language` | `DataCite.Language` |
-| `managingOrganization` | `local.Affiliation` | `local.Affiliation` |
-| `awardDate` | `dc.date.accepted` | – |
-| `awardingInstitution` | `dc.contributor.grantor` | – |
-| `category` | – | `local.CreationContext` |
-| `publicationYear` | – | `DataCite.PublicationYear` |
-| `bitstreamLicense` | – | `local.BitstreamLicense` (field on the **bitstream**) |
+| Name | `studentThesis` default | `researchOutput` default | `pressMedia` default |
+|---|---|---|---|
+| `title` | `dc.title` | `dc.title` | `dc.title` |
+| `subTitle` | `DataCite.Title.Subtitle` | `DataCite.Title.Subtitle` | – |
+| `abstract` | `DataCite.Description.Abstract` | `DataCite.Description.Abstract` | – |
+| `description` | – | – | `DataCite.Description.Abstract` |
+| `language` | `DataCite.Language` | `DataCite.Language` | – |
+| `managingOrganization` | `local.Affiliation` | `local.Affiliation` | `local.Affiliation` |
+| `awardDate` | `dc.date.accepted` | – | – |
+| `awardingInstitution` | `dc.contributor.grantor` | – | – |
+| `category` | – | `local.CreationContext` | – |
+| `publicationYear` | – | `DataCite.PublicationYear` | – |
+| `bitstreamLicense` | – | `local.BitstreamLicense` (field on the **bitstream**) | – |
+| `coverageDate` | – | – | `dc.date.issued` |
+| `coverageType` | – | – | `CONTRIBUTION` (**a value, not a field:** `CONTRIBUTION` or `COVERAGE`) |
 
 ```properties
 dspace-pure-bridge.export.metadata.studentThesis.language = dc.language
 dspace-pure-bridge.export.metadata.researchOutput.publicationYear = dc.date.issued
+dspace-pure-bridge.export.metadata.pressMedia.coverageType = COVERAGE
 ```
 
 ### 5.5 Default values
@@ -385,18 +415,18 @@ dspace-pure-bridge.export.mapping.<exportType>.<VOCABULARY>.<dspaceValue> = <pur
 
 `<dspaceValue>` is either a metadata value, a fixed key, or `default`.
 
-| Vocabulary | `studentThesis` | `researchOutput` | Keys (`<dspaceValue>`) |
-|---|---|---|---|
-| `TYPE` | ✓ | ✓ | values of `dc.type` |
-| `LANGUAGE` | ✓ | ✓ | values of the `language` field; `default` if empty |
-| `CATEGORY` | – | ✓ | values of the `category` field |
-| `PUBLISHED` | – | ✓ | `default` (required) |
-| `ACCESS_TYPE` | – | ✓ | `OPEN_ACCESS`, `EMBARGO`, `RESTRICTED`, `CLOSED` |
-| `LICENSE` | – | ✓ | values of the `bitstreamLicense` field; `default` if unmapped |
-| `ELECTRONIC_VERSION_TYPE` | – | ✓ | `default` (required) |
-| `CONTRIBUTOR_ROLE` | ✓ | – | `Author` (required) |
-| `SUPERVISOR_ROLE` | ✓ | – | `Supervisor`, `Reviewer` (required) |
-| `ROLE` | – | ✓ | `Author` (required) |
+| Vocabulary | `studentThesis` | `researchOutput` | `pressMedia` | Keys (`<dspaceValue>`) |
+|---|---|---|---|---|
+| `TYPE` | ✓ | ✓ | ✓ | values of `dc.type` |
+| `LANGUAGE` | ✓ | ✓ | – | values of the `language` field; `default` if empty |
+| `CATEGORY` | – | ✓ | – | values of the `category` field |
+| `PUBLISHED` | – | ✓ | – | `default` (required) |
+| `ACCESS_TYPE` | – | ✓ | – | `OPEN_ACCESS`, `EMBARGO`, `RESTRICTED`, `CLOSED` |
+| `LICENSE` | – | ✓ | – | values of the `bitstreamLicense` field; `default` if unmapped |
+| `ELECTRONIC_VERSION_TYPE` | – | ✓ | – | `default` (required) |
+| `CONTRIBUTOR_ROLE` | ✓ | – | ✓ | `Author` (required) |
+| `SUPERVISOR_ROLE` | ✓ | – | – | `Supervisor`, `Reviewer` (required) |
+| `ROLE` | – | ✓ | – | `Author` (required) |
 
 When an export starts, the bridge loads the allowed classifications from Pure. A mapped URI that Pure does not know makes the affected items fail with an error. Use `--checkOnly` to find such errors.
 
@@ -434,6 +464,9 @@ dspace-pure-bridge.export.mapping.studentThesis.TYPE.Dissertation=/dk/atira/pure
 dspace-pure-bridge.export.mapping.studentThesis.CONTRIBUTOR_ROLE.Author=/dk/atira/pure/studentthesis/roles/studentthesis/author
 dspace-pure-bridge.export.mapping.studentThesis.SUPERVISOR_ROLE.Supervisor=/dk/atira/pure/studentthesis/roles/internalexternal/studentthesis/supervisor
 dspace-pure-bridge.export.mapping.studentThesis.SUPERVISOR_ROLE.Reviewer=/dk/atira/pure/studentthesis/roles/internalexternal/studentthesis/reviewer
+dspace-pure-bridge.export.mapping.pressMedia.TYPE.Sound=/dk/atira/pure/clipping/clippingtypes/clipping/clipping
+dspace-pure-bridge.export.mapping.pressMedia.TYPE.Audiovisual=/dk/atira/pure/clipping/clippingtypes/clipping/clipping
+dspace-pure-bridge.export.mapping.pressMedia.CONTRIBUTOR_ROLE.Author=/dk/atira/pure/clipping/roles/clipping/author
 ```
 
 ### 5.7 Result e-mail recipients
@@ -480,7 +513,9 @@ Run `index-discovery` after every import (see [Quick Start](#2-quick-start)).
 ## 7. Known limitations
 
 - **Research outputs are created as book anthologies.** The Pure subtype is always `BookAnthology`, and contributor roles come from the classification `/research-outputs/allowed-book-anthology-contributor-roles`. This fits dissertations, the only research outputs exported so far. Other subtypes need a code change ([ADR-0012](docs/adr/0012-export-type-strategy-and-classification-mapping.md)).
-- **No duplicate check for research outputs.** Only student theses are checked against existing Pure records ([ADR-0007](docs/adr/0007-export-state-and-idempotency.md)).
+- **No duplicate check for research outputs.** Only student theses and press/media are checked against existing Pure records ([ADR-0007](docs/adr/0007-export-state-and-idempotency.md)).
+- **Dry run marks duplicates.** With `--checkOnly`, items found as duplicates in Pure still get `local.Pure.uuid`.
+- **Press/media with one media coverage only.** The DSpace item becomes one Press/Media record with exactly one media coverage; the coverage `url` is not set.
 - **License from bitstream metadata only.** A license stored in the item metadata is not used.
 - **Exact entity matching.** Persons, org units and projects are matched by exact attribute values. Spelling differences prevent a link, and unmatched entities are not reported ([ADR-0009](docs/adr/0009-entity-matching-by-attribute-hash.md)).
 - **Create only.** Publications are only created in Pure, never updated or deleted ([ADR-0002](docs/adr/0002-system-of-record-per-object-type.md)).

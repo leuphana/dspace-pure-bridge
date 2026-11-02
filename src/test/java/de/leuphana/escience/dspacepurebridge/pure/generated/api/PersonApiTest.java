@@ -38,6 +38,7 @@ import de.leuphana.escience.dspacepurebridge.pure.generated.model.PersonsQuery;
 import java.util.UUID;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.UploadedFile;
 import de.leuphana.escience.dspacepurebridge.pure.generated.model.WorkflowListResult;
+import de.leuphana.escience.dspacepurebridge.pure.generated.model.AllowedKeywordGroupConfigurationList;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -345,7 +346,7 @@ public class PersonApiTest {
      */
     @Test
     public void personGetAllowedKeywordGroupConfigurationsTest() throws ApiException {
-        KeywordGroupConfigurationRefList response = api.personGetAllowedKeywordGroupConfigurations();
+        AllowedKeywordGroupConfigurationList response = api.personGetAllowedKeywordGroupConfigurations();
         // TODO: test validations
     }
 

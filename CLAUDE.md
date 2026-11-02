@@ -4,7 +4,7 @@ Guidance for Claude Code (and human contributors) working on this repository.
 
 ## What this project is
 
-`dspace-pure-bridge` is a batch CLI that runs inside a DSpace 9.x installation (`./bin/dspace dsrun …DspacePureBridgeCLI`). It imports persons, org units and projects from Elsevier Pure (API 5.31.x) into DSpace, and exports publications from DSpace to Pure.
+`dspace-pure-bridge` is a batch CLI that runs inside a DSpace 9.x installation (`./bin/dspace dsrun …DspacePureBridgeCLI`). It imports persons, org units and projects from Elsevier Pure (API 5.35.x) into DSpace, and exports publications from DSpace to Pure.
 
 - Goals, scope and non-goals: [`VISION.md`](VISION.md)
 - Architecture decisions: [`docs/adr/`](docs/adr/README.md). **Read the relevant ADRs before changing behaviour.**
@@ -33,7 +33,8 @@ src/main/java/de/leuphana/escience/dspacepurebridge/
 ├── Constants                    local.Pure.* metadata field names
 ├── pure/imports/                Pure → DSpace (PureToDSpace, DSpacePureEntity)
 ├── pure/export/                 DSpace → Pure (DSpaceToPure orchestrator,
-│                                AbstractExport + StudentThesisExport / ResearchOutputExport,
+│                                AbstractExport + StudentThesisExport / ResearchOutputExport /
+│                                PressMediaExport,
 │                                *MappingType, *ClassificationRefFetcher, filter/)
 ├── pure/apiobjects/             hand-written DTOs for bulk reads (ADR-0006)
 ├── pure/generated/              GENERATED OpenAPI client, do not edit (ADR-0006)
@@ -42,7 +43,7 @@ src/main/java/de/leuphana/escience/dspacepurebridge/
 └── identifiers/                 primary identifier (DOI/URI) detection
 ```
 
-The hand-written code is about 3,500 lines plus about 3,000 lines of tests. Everything under `pure/generated` (main and test) is generated.
+The hand-written code is about 3,800 lines plus about 3,900 lines of tests. Everything under `pure/generated` (main and test) is generated.
 
 ## Ground rules for changes
 
@@ -81,7 +82,7 @@ The hand-written code is about 3,500 lines plus about 3,000 lines of tests. Ever
 - **Comments sparingly.** Code and names should explain themselves. Comment only critical points (non-obvious constraints, workarounds, thread-safety or ordering assumptions), and keep it to one short line. No comments that restate the code, no change history in comments, no lengthy Javadoc on trivial members.
 
 ### Compatibility
-- Target: DSpace 9.x (currently 9.2), Java 17, Pure API 5.31.x. Keep `provided` dependency versions aligned with the target DSpace release.
+- Target: DSpace 9.x (currently 9.2), Java 17, Pure API 5.35.x. Keep `provided` dependency versions aligned with the target DSpace release.
 - Do not add dependencies that clash with the DSpace classpath. Ask before adding any new dependency.
 
 ### Releases & git
@@ -92,6 +93,7 @@ The hand-written code is about 3,500 lines plus about 3,000 lines of tests. Ever
 
 - Research outputs are always created as `BookAnthology`, with book-anthology contributor roles. This is a limitation, not a design decision: more export types and target endpoints are expected (ADR-0012).
 - There is no duplicate check for `RESEARCH_OUTPUT` (ADR-0007).
+- `--checkOnly` is not side-effect free: duplicates found in Pure are marked with `local.Pure.uuid` (ADR-0007).
 - Entity matching by attribute hash is deliberate (ADR-0009), but brittle against spelling differences, and unmatched entities are not reported. Improve within that approach; do not switch to identifier-based matching without a new ADR.
 - The license comes only from bitstream metadata.
 - Exceptions rethrown inside worker tasks (`throw new RuntimeException(e)` in `PureToDSpace.syncObjects` / `DSpaceToPure.syncItemThread`) end up in the thread pool's default handler (stderr), not in the log or the result e-mail.

@@ -47,6 +47,7 @@ abstract class AbstractExport implements DSpaceExporter {
     static final String AUTHOR_RELATION = "isAuthorOfPublication";
     static final String ADVISOR_RELATION = "isAdvisorOfPublication";
     static final String REFEREE_RELATION = "isRefereeOfPublication";
+    static final String PERSON_ENTITY_TYPE = "Person";
     private static final Logger log = LoggerFactory.getLogger(AbstractExport.class);
     private final RestTemplate duplicateCheckRestTemplate;
 
@@ -76,6 +77,14 @@ abstract class AbstractExport implements DSpaceExporter {
                 Item person = dSpaceServicesContainer.getItemService().findByIdOrLegacyId(context,
                     personRelation.getValue());
                 if (person != null) {
+                    String entityType = dSpaceServicesContainer.getItemService()
+                        .getMetadataFirstValue(person, "dspace", "entity", "type", Item.ANY);
+                    if (!PERSON_ENTITY_TYPE.equals(entityType)) {
+                        log.warn("Item {}: skipping {} relation to {} entity {}, only {} entities are exported",
+                            publicationItem.getID(), personToItemRelation, entityType, person.getID(),
+                            PERSON_ENTITY_TYPE);
+                        continue;
+                    }
                     String personPureUUID =
                         dSpaceServicesContainer
                             .getItemService()
@@ -177,7 +186,7 @@ abstract class AbstractExport implements DSpaceExporter {
                 Constants.UUID_QUALIFIER,
                 Item.ANY);
         return new Person(null, UUID.fromString(authorUUID), null, null, null
-            , null, null, null, null, "Person");
+            , null, null, null, null, null, "Person");
     }
 
     void addTitles(Object exportObject, String publicationLanguage, List<MetadataValue> titleMetadataValues,
@@ -251,7 +260,7 @@ abstract class AbstractExport implements DSpaceExporter {
             InternalContributorAssociation contributorAssociation = new InternalContributorAssociation();
             contributorAssociation.setPerson(
                     new Person(null, defaultAuthorUUID, null, null, null
-                            , null, null, null, null, "Person")
+                            , null, null, null, null, null, "Person")
             );
             contributorAssociation.setName(
                     new Name().firstName(defaultAuthorFirstName).lastName(defaultAuthorLastName));
@@ -322,7 +331,7 @@ abstract class AbstractExport implements DSpaceExporter {
 
                 boolean doublet = false;
                 for (PureWSResultItem pureWSResultItem : pureWSResults.getItems()) {
-                    DuplicateCheckResult duplicateCheck = concreteDuplicateCheck(pureWSResultItem, doi, title);
+                    DuplicateCheckResult duplicateCheck = concreteDuplicateCheck(item, pureWSResultItem, doi, title);
                     if (DuplicateCheckResult.DOI_DUPLICATE.equals(duplicateCheck)) {
                         log.info("Doublet detected for item {} and doi {}", item.getHandle(), doi);
                         doublet = true;
@@ -340,6 +349,11 @@ abstract class AbstractExport implements DSpaceExporter {
             } while (itemsLeft);
         }
         return null;
+    }
+
+    DuplicateCheckResult concreteDuplicateCheck(Item item, PureWSResultItem pureWSResultItem, String doi,
+                                                String title) {
+        return concreteDuplicateCheck(pureWSResultItem, doi, title);
     }
 
     public void init() throws ApiException {

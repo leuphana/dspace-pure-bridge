@@ -282,6 +282,96 @@ class PureToDSpaceTest {
     }
 
     @Test
+    void syncPersonsCreateFailsIsLoggedAndSkipped() throws SQLException, AuthorizeException, SearchServiceException {
+        try (MockedStatic<CLIScriptContextUtils> mockedUtils = mockStatic(CLIScriptContextUtils.class)) {
+            mockedUtils.when(CLIScriptContextUtils::createReducedContext).thenReturn(context);
+
+            String firstName = "Karl";
+            String lastName = "Schmidt";
+            String endpointBase = "http://localhost:8080/pure/";
+            UUID uuid = UUID.randomUUID();
+            UUID dspaceRelatedItemUuid = UUID.randomUUID();
+
+            // a matching DSpace person exists, so a relationship would be created if processing continued
+            MetadataValue relatedItemLastnameMetadataValue = mock(MetadataValue.class);
+            when(relatedItemLastnameMetadataValue.getValue()).thenReturn(lastName);
+            MetadataValue relatedItemFirstnameMetadataValue = mock(MetadataValue.class);
+            when(relatedItemFirstnameMetadataValue.getValue()).thenReturn(firstName);
+            PureToDSpace.dspaceEntityCache.put(DSpacePureEntity.PERSON, Map.of(EntityUtils.generateEntityHash(
+                    List.of(relatedItemLastnameMetadataValue), List.of(relatedItemFirstnameMetadataValue)),
+                dspaceRelatedItemUuid));
+            lenient().when(itemService.find(context, dspaceRelatedItemUuid)).thenReturn(mock(Item.class));
+            lenient().when(relationshipTypeService.findByLeftwardOrRightwardTypeName(context, "isPurePersonOfPerson"))
+                .thenReturn(Collections.singletonList(mock(RelationshipType.class)));
+
+            when(classUnderTest.initRestTemplateBuilder()).thenReturn(restTemplateBuilder);
+            when(classUnderTest.getPureWsEndpointBase()).thenReturn(endpointBase);
+            doReturn(context).when(classUnderTest).createContext();
+
+            Collection collection = mock(Collection.class);
+            when(handleService.resolveToObject(any(), any())).thenReturn(collection);
+            Iterator<Item> iterator = mock(Iterator.class);
+            when(iterator.hasNext()).thenReturn(false);
+            when(itemService.findByCollection(context, collection)).thenReturn(iterator);
+
+            RestTemplate restTemplate = mock(RestTemplate.class);
+            when(restTemplateBuilder.build()).thenReturn(restTemplate);
+
+            ResponseEntity<? extends PureWSResults<? extends PureWSResultItem>> responseEntityPersons =
+                mock(ResponseEntity.class);
+            ResponseEntity<? extends PureWSResults<? extends PureWSResultItem>> responseEntityProjects =
+                mock(ResponseEntity.class);
+            ResponseEntity<? extends PureWSResults<? extends PureWSResultItem>> responseEntityOrgUnits =
+                mock(ResponseEntity.class);
+            DSpacePureEntity.PureWSPersonResults persons = mock(DSpacePureEntity.PureWSPersonResults.class);
+            DSpacePureEntity.PureWSOrganizationResults orgunits =
+                mock(DSpacePureEntity.PureWSOrganizationResults.class);
+            DSpacePureEntity.PureWSProjectResults projects = mock(DSpacePureEntity.PureWSProjectResults.class);
+
+            PureWSResultPersonItem person1 = mock(PureWSResultPersonItem.class, Mockito.RETURNS_DEEP_STUBS);
+            PersonName personName = mock(PersonName.class);
+            lenient().when(personName.getLastName()).thenReturn(lastName);
+            lenient().when(personName.getFirstName()).thenReturn(firstName);
+            lenient().when(person1.getName()).thenReturn(personName);
+            lenient().when(person1.getOrcid()).thenReturn("");
+            when(person1.getUuid()).thenReturn(uuid);
+            when(persons.getItems()).thenReturn(List.of(person1));
+            when(orgunits.getItems()).thenReturn(Collections.emptyList());
+            when(projects.getItems()).thenReturn(Collections.emptyList());
+
+            // creating the DSpace item fails
+            when(workspaceItemService.create(any(), any(), eq(false))).thenThrow(new SQLException("db down"));
+
+            when(responseEntityPersons.getBody()).thenAnswer(
+                (Answer<? extends PureWSResults<? extends PureWSResultItem>>) invocationOnMock -> persons);
+            when(responseEntityOrgUnits.getBody()).thenAnswer(
+                (Answer<? extends PureWSResults<? extends PureWSResultItem>>) invocationOnMock -> orgunits);
+            when(responseEntityProjects.getBody()).thenAnswer(
+                (Answer<? extends PureWSResults<? extends PureWSResultItem>>) invocationOnMock -> projects);
+            when(restTemplate.getForEntity(anyString(), any())).thenAnswer(
+                (Answer<ResponseEntity<? extends PureWSResults<? extends PureWSResultItem>>>) invocationOnMock -> {
+                    String url = invocationOnMock.getArgument(0);
+                    if (url.contains(DSpacePureEntity.PERSON.getEndpoint())) {
+                        return responseEntityPersons;
+                    } else if (url.contains(DSpacePureEntity.ORGANIZATION.getEndpoint())) {
+                        return responseEntityOrgUnits;
+                    } else if (url.contains(DSpacePureEntity.PROJECT.getEndpoint())) {
+                        return responseEntityProjects;
+                    }
+                    return null;
+                });
+
+            classUnderTest.syncObjects();
+
+            verify(context, times(1)).abort();
+            verify(itemService, never()).find(any(), isNull());
+            verify(relationshipService, never()).create(any(), any(), any(), any(), anyInt(), anyInt());
+            Assertions.assertFalse(PureToDSpace.pureEntityCache.get(DSpacePureEntity.PERSON).containsKey(uuid),
+                "failed item must not be cached so that a later run retries it");
+        }
+    }
+
+    @Test
     void syncPersonsNoRelateAlreadyDone() throws SQLException, AuthorizeException, SearchServiceException {
         try (MockedStatic<CLIScriptContextUtils> mockedUtils = mockStatic(CLIScriptContextUtils.class)) {
             mockedUtils.when(CLIScriptContextUtils::createReducedContext).thenReturn(context);

@@ -34,6 +34,8 @@ import java.util.concurrent.TimeUnit;
 public class DSpaceToPure {
 
     static final String SYNC_MAIL_RECIPIENTS = "dspace-pure-bridge.export.mail.recipients";
+    static final String EXPORT_FILTER_PROPERTY = "dspace-pure-bridge.export.filter";
+    static final String EXPORT_TYPE_FOR_TYPE_PROPERTY = "dspace-pure-bridge.export.exportTypeForType";
 
 
     public static final String DEFAULT_METADATA_VALUE = "default";
@@ -105,7 +107,7 @@ public class DSpaceToPure {
 
     void setupFilters() {
         String[] filterConfigurations =
-                dSpaceServicesContainer.getConfigurationService().getArrayProperty("dspace-pure-bridge.export.filter");
+                dSpaceServicesContainer.getConfigurationService().getArrayProperty(EXPORT_FILTER_PROPERTY);
         if (filterConfigurations != null) {
             for (String filterConfiguration : filterConfigurations) {
                 filterList.add(
@@ -116,7 +118,7 @@ public class DSpaceToPure {
 
     void setupTypeToExportTypeMap() {
         String[] exportTypeConfigurations =
-                dSpaceServicesContainer.getConfigurationService().getArrayProperty("dspace-pure-bridge.export.exportTypeForType");
+                dSpaceServicesContainer.getConfigurationService().getArrayProperty(EXPORT_TYPE_FOR_TYPE_PROPERTY);
         if (exportTypeConfigurations != null) {
             for (String filterConfiguration : exportTypeConfigurations) {
                 String[] parts = filterConfiguration.split(":");
@@ -200,7 +202,7 @@ public class DSpaceToPure {
 
     public void syncItems() {
         if (filterList.isEmpty()) {
-            log.error("No filters defined! Use property: 'leuphana.pure.export.filter'");
+            log.error("No filters defined! Use property: '{}'", EXPORT_FILTER_PROPERTY);
             return;
         }
 

@@ -224,7 +224,9 @@ public class PureToDSpace {
                                                         pureItemChanged.set(true);
                                                         return createdItem.getID();
                                                     } catch (Exception e) {
-                                                        return null;
+                                                        // throwing keeps the cache free of this entry,
+                                                        // so a later run retries the creation
+                                                        throw new ItemCreationException(e);
                                                     }
                                                 });
                                 resultItem = dSpaceServicesContainer.getItemService().find(finalContext, itemId);
@@ -304,6 +306,10 @@ public class PureToDSpace {
                                     dSpaceServicesContainer.getRelationshipService().update(context, persistedRelationship);
                                 }
                             }
+                        } catch (ItemCreationException e) {
+                            log.error("Could not create {} with pureId: {} - skipping it",
+                                    dSpacePureEntity.getDspacePureEntity(), pureWSResultItem.getUuid(), e.getCause());
+                            context.abort();
                         } catch (SQLException | AuthorizeException e) {
                             if (context != null) {
                                 context.abort();
@@ -341,5 +347,15 @@ public class PureToDSpace {
 
     String getPureWsEndpointBase() {
         return pureWsEndpointBase;
+    }
+
+    /**
+     * Signals that a DSpace item for a Pure object could not be created. Thrown out of
+     * {@code computeIfAbsent} so that no cache entry is stored for the failed object.
+     */
+    static class ItemCreationException extends RuntimeException {
+        ItemCreationException(Throwable cause) {
+            super(cause);
+        }
     }
 }

@@ -1,219 +1,176 @@
 # dspace-pure-bridge
 
-The `dspace-pure-bridge` is a command-line tool to automate **data synchronization between DSpace and Elsevier Pure**.
+The `dspace-pure-bridge` is a command-line tool that **synchronizes data between DSpace and Elsevier Pure**.
 
-Developed at [**Leuphana University Lüneburg**](https://www.leuphana.de/en) to ensure consistent publication metadata, reduce manual curation, and improve visibility of research outputs and student theses.
+It was developed at [**Leuphana University Lüneburg**](https://www.leuphana.de/en) to keep publication metadata consistent, reduce manual curation, and make research outputs and student theses visible in the research portal.
 
-# Table of Contents
-- [Features](#features)
-- [Concept](#concept)
-    - [Import of Person, Organization, and Project Data from Pure into DSpace](#import-of-person-organization-and-project-data-from-pure-into-dspace)
-    - [Export of Publications from DSpace to Pure](#export-of-publications-from-dspace-to-pure)
-        - [Duplicate check](#duplicate-check)
-        - [STUDENT_THESIS: Exported metadata](#student_thesis-exported-metadata)
-        - [RESEARCH_OUTPUT: Exported metadata](#research_output-exported-metadata)
-        - [PRESS_MEDIA: Exported metadata](#press_media-exported-metadata)
-- [Prerequisites](#prerequisites)
-    - [Installation of the dspace-pure-bridge](#installation-of-the-dspace-pure-bridge)
-    - [DSpace Configuration](#dspace-configuration)
-      - [Metadata](#metadata)
-      - [Entities](#entities)
-      - [Relations](#relations)
-      - [Admin EPerson](#admin-eperson)
-      - [Export result email](#export-result-email)
-- [DSpace-Pure-Bridge Configuration](#dspace-pure-bridge-configuration)
-    - [Pure API configuration](#pure-api-configuration)
-    - [Entity collections configuration](#entity-collections-configuration)
-    - [Export Filter configuration](#export-filter-configuration)
-    - [Type mapping](#type-mapping)
-    - [Metadata mapping](#metadata-mapping)
-        - [Configuration of DSpace metadata fields considered for export](#configuration-of-dspace-metadata-fields-considered-for-export)
-            - [Configuration of DSpace metadata fields considered for STUDENT_THESIS export](#configuration-of-dspace-metadata-fields-considered-for-student_thesis-export)
-            - [Configuration of DSpace metadata fields considered for RESEARCH_OUTPUT export](#configuration-of-dspace-metadata-fields-considered-for-research_output-export)
-            - [Configuration of DSpace metadata fields considered for PRESS_MEDIA export](#configuration-of-dspace-metadata-fields-considered-for-press_media-export)
-        - [Configuration of controlled vocabulary corresponding Pure values](#configuration-of-controlled-vocabulary-corresponding-pure-values)
-            - [Configuration of controlled vocabulary corresponding Pure values for STUDENT_THESIS export](#configuration-of-controlled-vocabulary-corresponding-pure-values-for-student_thesis-export)
-            - [Configuration of controlled vocabulary corresponding Pure values for RESEARCH_OUTPUT export](#configuration-of-controlled-vocabulary-corresponding-pure-values-for-research_output-export)
-            - [Configuration of controlled vocabulary corresponding Pure values for PRESS_MEDIA export](#configuration-of-controlled-vocabulary-corresponding-pure-values-for-press_media-export)
-        - [Complete Example](#complete-example)
-        - [Default values](#default-values)
-    - [Result Mail recipients](#result-mail-recipients)
-- [Usage](#usage)
-    - [Import from Pure to DSpace](#import-from-pure-to-dspace)
-    - [Export from DSpace to Pure](#export-from-dspace-to-pure)
-- [Known Issues](#known-issues)
-    - [ResearchOutput Export Type](#researchoutput-export-type)
-        - [Author export data](#author-export-data)
-        - [License export data](#license-export-data)
-- [Contributing](#contributing)
-- [License](#license)
+## Table of Contents
 
-## Features
+1. [Overview](#1-overview)
+2. [Quick Start](#2-quick-start)
+3. [How it works](#3-how-it-works)
+4. [DSpace setup](#4-dspace-setup)
+5. [Configuration reference](#5-configuration-reference)
+6. [Usage](#6-usage)
+7. [Known limitations](#7-known-limitations)
+8. [Development](#8-development)
+9. [Contributing](#9-contributing)
+10. [License](#10-license)
 
-- Import **Persons, Organizations, Projects** from Pure into DSpace as entities.
-- Export **publications** from DSpace to Pure.
-    - Supports the Pure endpoints `student-theses`, `research-outputs` and `pressmedia`
-- Configurable mapping of publication types, and export metadata.
-- Built as a standalone jar, which can be invoked using the **DSpace CLI** using the `dsrun` option.
-- Email reporting of sync results (successes and failures).
+---
 
-## Concept
+## 1. Overview
 
-At Leuphana University Lüneburg,
-- Pure is used as the authoritative system for persons, organizations, and projects.
-- DSpace is used as the authoritative system for full-text publications.
+At Leuphana, each system is the authoritative source for one kind of data:
 
-Accordingly:
-- Person, organization, and project data are imported from Pure into DSpace.
-- Publications are exported from DSpace to Pure.
+| Data | System of record | Direction | CLI option |
+|---|---|---|---|
+| Persons, organizational units, projects | Pure | Pure → DSpace | `--import` |
+| Publications (student theses, research outputs) | DSpace | DSpace → Pure | `--export` |
 
-For publication export, references to persons, organizations, and projects must include the corresponding Pure identifiers. Therefore, the import of person, organization, and project data is a prerequisite for any export.
+**Features**
+- Imports Pure **persons, organizational units and projects** as DSpace entities and links them to existing DSpace entities.
+- Exports DSpace **publications** to the Pure endpoints `student-theses` and `research-outputs`.
+- Configurable export filter, type mapping, metadata mapping and vocabulary mapping.
+- Idempotent export: no item is created twice in Pure.
+- Dry-run mode and a result e-mail for every export run.
+- Ships as a single JAR that runs inside DSpace via `dsrun`.
 
-### Import of Person, Organization, and Project Data from Pure into DSpace
+**Tested with:** DSpace 9.x, Pure API 5.31.x, Java 17.
 
-Imported records are stored in DSpace as dedicated entity types (`PurePerson`, `PureOrgUnit`, `PureProject`) and can be linked to corresponding DSpace entities (`Person`, `OrgUnit`, `Project`).
+Further reading: [project vision](VISION.md) · [architecture decisions](docs/adr/README.md)
 
-The use of dedicated entities for the record of the pure objects enables the use of different types of entry (i.e. a Person has in DSpace a different Name entry as it has in Pure).
+---
 
-Please refer to the section [DSpace Configuration](#dSpace-configuration) for detailed information on how to configure DSpace appropriately in advance of using the `dspace-pure-bridge`.
+## 2. Quick Start
 
-The import process fetches all Persons, Organizations, and Projects from Pure. It checks:
-- if the current object already exists in DSpace.
-  - If it does, it modifies metadata in case the modification timestamp of that object was changed
-  - It if doesn't, the object gets created as entity based on the object type (`PurePerson`, `PureOrgUnit` or `PureProject`)
-- if the PureEntity can be linked to a DSpace entity based on attribute comparison.
-  - If it can be related, the relation is made.
+1. **Prepare DSpace** (once): metadata fields, entity types, relationship types, collections, event consumers, mail template. See [4. DSpace setup](#4-dspace-setup).
+2. **Deploy the JAR:** copy `dspace-pure-bridge-<version>.jar` (from the [releases](../../releases) or `./mvnw package`) into the DSpace `lib` directory.
+   *Leuphana setup: in our containerised installation the JAR goes to `/dspace/lib`; the container entrypoint copies it.*
+3. **Set the environment variable** `ADMIN_EMAIL` to the e-mail address of a DSpace administrator account.
+4. **Configure the bridge** in `local.cfg`. A minimal configuration:
 
-### Export of Publications from DSpace to Pure
+   ```properties
+   # Pure API
+   dspace-pure-bridge.pure.ws.endpoint.base = https://pure.example.org/ws/api
+   dspace-pure-bridge.pure.ws.apikey = <api-key>
 
-The export process iterates over all exportable (filter matches and not yet exported) publications in DSpace and:
-- determines the corresponding Pure export type
-- checks whether the publication already exists in Pure (see [Duplicate check](#duplicate-check))
-- maps the metadata appropriately
-- performs the export to Pure
-- updates the export status of the publication
+   # reduced event consumer set (required)
+   event.dispatcher.dspacePureBridge.class = org.dspace.event.BasicDispatcher
+   event.dispatcher.dspacePureBridge.consumers = authority, versioning
 
-#### Duplicate check
+   # collections holding the imported Pure entities
+   dspace-pure-bridge.entities.purePerson.collection = 123456789/2
+   dspace-pure-bridge.entities.pureOrgUnit.collection = 123456789/3
+   dspace-pure-bridge.entities.pureProject.collection = 123456789/4
 
-Before a publication is exported, Pure is searched for its title (`dc.title`) using the `/search` endpoint of the
-corresponding Pure export type. If one of the results is considered a duplicate, the publication is **not** exported.
-Instead, the Pure UUID of the existing object is stored in the publication (`local.Pure.uuid`) and the publication is
-reported as *already existed in Pure* in the [result mail](#export-result-email).
+   # export: what, and as which Pure type
+   dspace-pure-bridge.export.filter = collection:123456789/10;type:Dissertation
+   dspace-pure-bridge.export.exportTypeForType = Dissertation:STUDENT_THESIS, default:RESEARCH_OUTPUT
 
-Note: This also happens when the export is started with the `-c` (`--checkOnly`) option.
+   # required fallbacks
+   dspace-pure-bridge.export.defaultOrganizationUUID = <pure-org-uuid>
+   dspace-pure-bridge.export.defaultAuthorUUID = <pure-person-uuid>
 
-A Pure object is considered a duplicate depending on the export type:
+   # vocabulary mapping: see section 5.6
+   ```
 
-- `STUDENT_THESIS`
-  - if the publication has a DOI and the Pure object has links: one of the links equals the DOI
-  - otherwise: the Pure title equals the publication title exactly
-- `PRESS_MEDIA`
-  - one of its media coverages has the publication's DOI as `url`, or
-  - one of its titles equals the publication title (case-insensitive, whitespace- and HTML-entity-normalized) **and**
-    one of its media coverages has the same date as the publication's coverage date. As press/media titles are often
-    generic (e.g. "Interview"), the date is part of the comparison. If there is no date on either side, the title
-    match alone is decisive.
-- `RESEARCH_OUTPUT`
-  - no duplicate check is performed
+5. **Run it in this order** (e.g. nightly via cron):
 
-#### STUDENT_THESIS: Exported metadata
+   ```bash
+   ./bin/dspace dsrun de.leuphana.escience.dspacepurebridge.DspacePureBridgeCLI -i     # 1. import from Pure
+   ./bin/dspace index-discovery                                                          # 2. update the search index
+   ./bin/dspace dsrun de.leuphana.escience.dspacepurebridge.DspacePureBridgeCLI -e -c  # 3a. dry run (optional)
+   ./bin/dspace dsrun de.leuphana.escience.dspacepurebridge.DspacePureBridgeCLI -e     # 3b. export to Pure
+   ```
 
-The following publication data are exported:
+   The index update in step 2 is **required**: the import does not update the Discovery index, while the export selects publications and organizations through it.
 
-**Mandatory**
-- `Author` (using `isAuthorOfPublication` relation with potential fallback to [default](#default-values) value)
-- `Type` (using metadata `dc.type`)
-- `Title` (using metadata mapping)
-- `Language` (using metadata mapping)
-- `AwardDate` (using metadata mapping)
-- `AwardingInstitution` (using metadata mapping, potential fallback to [default](#default-values) value)
-- `ManagingOrganization` (using metadata mapping, potential fallback to [default](#default-values) value)
+---
 
-**Optional**
-- `Subtitle` (using metadata mapping)
-- `Abstract` (using metadata mapping)
-- `Identifier` (using metadata `dc.identifier.uri`)
-- `Advisor` (using `isAdvisorOfPublication` relation
-- `Referee` (using `isRefereeOfPublication` relation)
+## 3. How it works
 
-Please refer to the section [Configuration of DSpace metadata fields considered for STUDENT_THESIS export](#configuration-of-dspace-metadata-fields-considered-for-student_thesis-export) for detailed information on how to configure the metadata field mapping.
+### 3.1 Import: Pure → DSpace
 
-#### RESEARCH_OUTPUT: Exported metadata
+Imported Pure objects are stored as **separate DSpace entities** of the types `PurePerson`, `PureOrgUnit` and `PureProject`, each in its own collection. Each one is linked to its DSpace counterpart (`Person`, `OrgUnit`, `Project`) through a relationship. This way, a person can have a different name in DSpace than in Pure ([ADR-0003](docs/adr/0003-pure-shadow-entities.md)).
 
-The following publication data are exported:
+For every Pure object the import:
+1. **creates** the Pure entity if it does not exist yet, or **updates** its metadata if the Pure modification date has changed (otherwise it is skipped);
+2. **links** it to a DSpace entity whose attributes match:
 
-**Mandatory**
-- `Author` (using `isAuthorOfPublication` relation with potential fallback to [default](#default-values) value)
-- `Type` (using metadata `dc.type`)
-- `Category` (using metadata mapping)
-- `Title` (using metadata mapping)
-- `Language` (using metadata mapping)
-- `PublicationYear` (using metadata mapping, potential fallback to [default](#default-values) value)
-- `ManagingOrganization` (using metadata mapping, potential fallback to [default](#default-values) value)
+   | Entity | Matching attributes (exact) |
+   |---|---|
+   | Person | family name + given name + ORCID |
+   | OrgUnit | legal name (`organization.legalName`) |
+   | Project | title (`dc.title`) |
 
-**Optional**
-- `Subtitle` (using metadata mapping)
-- `Abstract` (using metadata mapping)
-- `Identifier` (using metadata `dc.identifier.uri`)
-- `ElectronicVersion` (only if a doi identifier is found in the publication metadata - this field consists of multiple information received from the **bitstream** metadata)
-   - `accessType`:  The access type is calculated based on the access policy of the bitstream (resulting in `OPEN_ACCESS`, `EMBARGO`, `RESTRICTED` or `CLOSED`;
-   - `licenseType`: The license information is received from the **bitstream** metadata. (usage of a fallback default license is possible in case no metadata is found / available)
+   Entities without a match stay unlinked and are not reported ([ADR-0009](docs/adr/0009-entity-matching-by-attribute-hash.md)).
 
-Please refer to the section [Configuration of DSpace metadata fields considered for RESEARCH_OUTPUT export](#configuration-of-dspace-metadata-fields-considered-for-research_output-export) for detailed information on how to configure the metadata field mapping.
+Imported metadata: `local.Pure.uuid`, `local.Pure.id`, `local.Pure.lastModificationDate`, `local.Pure.visibility`, and, depending on the type, `person.givenName`, `person.familyName`, `person.identifier.orcid`, `organization.legalName` or `dc.title`.
 
-#### PRESS_MEDIA: Exported metadata
+### 3.2 Export: DSpace → Pure
 
-Publications are exported as Pure Press/Media objects (endpoint `pressmedia`). Currently, the export populates the
-mandatory Pure fields plus exactly one media coverage.
+The export processes every publication that **matches the export filter** and **has no `local.Pure.uuid` yet**:
 
-The following publication data are exported:
+1. **Select:** publications are found through the Discovery index, restricted by the [export filter](#53-export-filter-and-type-mapping).
+2. **Route:** the item's type determines the Pure export type (`STUDENT_THESIS` or `RESEARCH_OUTPUT`) via the [type mapping](#53-export-filter-and-type-mapping).
+3. **Duplicate check** (`STUDENT_THESIS` only): Pure is searched by title; a match by DOI or title counts as a duplicate. The item is then **not** exported, but linked to the existing Pure record.
+4. **Map:** metadata and vocabularies are mapped to Pure (see 3.3). If a mandatory value is missing or cannot be mapped, the item fails and is reported.
+5. **Export** (skipped with `--checkOnly`).
+6. **Mark:** the Pure UUID is stored in the item's `local.Pure.uuid`, and the item is reindexed. Marked items are never exported again. To re-export an item, delete its `local.Pure.uuid`.
+7. **Report:** at the end of the run, a [result e-mail](#45-result-e-mail-template) lists successful, duplicate and failed items.
 
-**Mandatory**
-- `Author` (using `isAuthorOfPublication` relation, exported as persons of the media coverage)
-  - only related `Person` entities with a Pure UUID are exported; relations to other entity types (e.g. `OrgUnit`) are
-    skipped with a warning, related persons without Pure UUID are skipped silently
-  - if no author remains, the [default](#default-values) author is used (unlike the other export types, the export
-    does not fail in this case)
-- `Type` (using metadata `dc.type`)
-- `Title` (using metadata mapping; one value per metadata language - `de` and `en` are supported, values with another
-  or without language are stored as German)
-- `Visibility` (always `FREE`, not configurable)
-- `ManagingOrganization` (using metadata mapping, potential fallback to [default](#default-values) value). Pure requires
-  it as the *placement* of the content.
-- `MediaCoverage`
-  - `coverageType` (configurable, `CONTRIBUTION` or `COVERAGE`)
-  - `date` (using metadata mapping; supported formats are `yyyy` - exported as January 1st - and `yyyy-MM-dd`)
-  - `title` (same value as the Press/Media title)
-  - `persons` (the authors, see above)
+A failing item does not stop the run.
 
-**Optional**
-- `MediaCoverage.description` (using metadata mapping)
+### 3.3 Exported data
 
-Please refer to the section [Configuration of DSpace metadata fields considered for PRESS_MEDIA export](#configuration-of-dspace-metadata-fields-considered-for-press_media-export) for detailed information on how to configure the metadata field mapping.
+**Source** names the [configurable metadata field](#54-metadata-fields) or the fixed source.
 
-## Prerequisites
+| Pure field | Source | `STUDENT_THESIS` | `RESEARCH_OUTPUT` |
+|---|---|---|---|
+| Type | `dc.type` → vocabulary `TYPE` | mandatory | mandatory |
+| Title | `title` (1st value; a 2nd value in another language becomes the translated title) | mandatory | mandatory |
+| Language | `language` → vocabulary `LANGUAGE` (`default` if empty) | mandatory | mandatory |
+| Authors | relationship `isAuthorOfPublication`, see note ¹ | mandatory | mandatory |
+| Managing organization | `managingOrganization`, see note ² | mandatory | mandatory |
+| Award date | `awardDate` (`yyyy` or a full date) | mandatory | – |
+| Awarding institution | `awardingInstitution`, see note ² | mandatory | – |
+| Category | `category` → vocabulary `CATEGORY` | – | mandatory |
+| Publication year | `publicationYear`, no fallback | – | mandatory |
+| Publication status | vocabulary `PUBLISHED.default` | – | mandatory |
+| Subtitle | `subTitle` (value in the publication language; others become translations) | optional | optional |
+| Abstract | `abstract` (all values, one per language) | optional | optional |
+| Links | all `dc.identifier.uri` values | optional | – |
+| Supervisors / reviewers | relationships `isAdvisorOfPublication` / `isRefereeOfPublication` | optional | – |
+| Electronic version | only if a DOI is found in `dc.identifier.uri`; see note ³ | – | optional |
 
-The `dspace-pure-bridge` was developed and tested using the following software versions:
+¹ **Authors** must be linked to a `PurePerson` (i.e. carry `local.Pure.uuid`):
+- `RESEARCH_OUTPUT`: every author must be linked, otherwise the item fails.
+- `STUDENT_THESIS` without supervisors/reviewers: same as above.
+- `STUDENT_THESIS` with supervisors/reviewers: unlinked authors are left out; if none remain, the [default author](#55-default-values) is used.
+- Supervisors and reviewers without a `PurePerson` link are left out.
 
-- Dspace running using version 9.x
-- Pure running with API version 5.31.x
+² **Organizations** are resolved by comparing the metadata value **exactly** with the `organization.legalName` of an imported Pure org unit. If there is no match, the [default organization](#55-default-values) is used.
 
-### Installation of the dspace-pure-bridge
+³ **Electronic version** (`RESEARCH_OUTPUT`): access type and license are taken from the primary bitstream of the `ORIGINAL` bundle (or from its bitstreams; an embargoed one wins).
+- Access type, derived from the bitstream's READ policies: `OPEN_ACCESS` (anonymous), `EMBARGO` (start date in the future) or `RESTRICTED` (other non-admin group) → vocabulary `ACCESS_TYPE`.
+  **If no access type can be determined (e.g. no bitstream), the item fails, even without a DOI.**
+- License: bitstream metadata field `bitstreamLicense` → vocabulary `LICENSE` (`default` if unmapped).
+- Version type: vocabulary `ELECTRONIC_VERSION_TYPE.default`.
 
-The standalone JAR generated by the build process must be copied to the directory containing the DSpace runtime libraries.
+Translated titles, subtitles and abstracts are only exported for **German and English** metadata values (language codes `de`, `en`).
 
-The exact location and deployment procedure depend on the type of DSpace installation (e.g. containerised environment, classic installation) and the underlying operating system. Adjust the placement accordingly.
+All exported records get the Pure visibility `FREE`.
 
-Example (Leuphana setup):
-In our containerised DSpace installation, the JAR is located in /dspace/lib. The copy operation is executed as part of the container entrypoint script.
+---
 
-### DSpace Configuration
+## 4. DSpace setup
 
-Dspace must be configured in advance in order to be able to import and export data from Pure using the dspace-pure-bridge.
+DSpace must be configured before the first run. See the [DSpace 9 documentation](https://wiki.lyrasis.org/display/DSDOC9x) for details on each topic.
 
-#### Metadata
+### 4.1 Metadata fields
 
-The following metadata field musts be configured in DSpace: `local.Pure.id`, `local.Pure.uuid`, `local.Pure.lastModificationDate`, `local.Pure.visibility`. This can be done using the DSpace UI or by providing a dspace types XML file containing these fields:
+The schema `local` must contain these fields (via the admin UI or a registry XML file):
 
 ```xml
     <dc-type>
@@ -242,28 +199,23 @@ The following metadata field musts be configured in DSpace: `local.Pure.id`, `lo
     </dc-type>
 ```
 
-Please refer to the [DSpace documentation](https://wiki.lyrasis.org/display/DSDOC9x/Configuration+Reference#ConfigurationReference-TheMetadataFormatandBitstreamFormatRegistries) for more information.
+Reference: [Metadata and bitstream format registries](https://wiki.lyrasis.org/display/DSDOC9x/Configuration+Reference#ConfigurationReference-TheMetadataFormatandBitstreamFormatRegistries)
 
-#### Entities
+### 4.2 Entities and relationships
 
-DSpace must be configured to use entities, and the following relations must be using when relating `Person` and `Publication` entities:
+[Configurable entities](https://wiki.lyrasis.org/display/DSDOC9x/Configurable+Entities) must be enabled, with:
 
-- **Author Relation:**: `isAuthorOfPublication`
-- **Advisor Relation:** `isAdvisorOfPublication` (used by STUDENT_THESIS)
-- **Referee Relation:** `isRefereeOfPublication` (used by STUDENT_THESIS)
+**Entity types** `PurePerson`, `PureOrgUnit`, `PureProject` (each with its own collection, see [5.2](#52-entity-collections)).
 
-In order to be able to import persons, organizations, and projects from Pure, the corresponding entities and entity collections must be configured in the DSpace configurations and the relationships between these entities and the existing DSpace entities must be defined.
-Please refer to the [DSpace documentation](https://wiki.lyrasis.org/display/DSDOC9x/Configurable+Entities) for more information.
+**Relationships between publications and persons** (used by the export):
 
-#### Relations
+| Relationship | Used for |
+|---|---|
+| `isAuthorOfPublication` | authors (both export types) |
+| `isAdvisorOfPublication` | supervisors (`STUDENT_THESIS`) |
+| `isRefereeOfPublication` | reviewers (`STUDENT_THESIS`) |
 
-The following entities and relations must be present:
-
- - `PurePerson`: related to `Person` via `isPurePersonOfPerson` relation
- - `PureOrgUnit`: related to `OrgUnit` via `isPureOrgUnitOfOrgUnit` relation
- - `PureProject`: related to `Project` via `isPureProjectOfProject` relation
-
-Example snippet for the relevant relation enties inside the `relationship-types.xml` file:
+**Relationships between DSpace and Pure entities** (used by the import), in `relationship-types.xml`:
 
 ```xml
     <type>
@@ -307,20 +259,28 @@ Example snippet for the relevant relation enties inside the `relationship-types.
     </type>
 ```
 
-#### Admin EPerson
+### 4.3 Event consumers
 
-To create a DSpace context object, an `EPerson` is required. The `dspace-pure-bridge` uses the environment variable `ADMIN_EMAIL`, which must be set to the email address of a valid DSpace `EPerson`.
+Every item change triggers DSpace events. The bridge uses its own, reduced consumer set named `dspacePureBridge`, because many default consumers are irrelevant here and slow down the import considerably. In particular, leave out the `discovery` consumer and run `index-discovery` after the import instead.
 
-**Example**
+```properties
+event.dispatcher.dspacePureBridge.class = org.dspace.event.BasicDispatcher
+event.dispatcher.dspacePureBridge.consumers = authority, versioning
 ```
+
+The bridge refuses to start if these properties are missing. Reference: [Event system configuration](https://wiki.lyrasis.org/display/DSDOC9x/Configuration+Reference#ConfigurationReference-EventSystemConfiguration)
+
+### 4.4 Admin EPerson
+
+The bridge acts as the DSpace user whose e-mail address is given in the environment variable `ADMIN_EMAIL`. The account must exist. The bridge disables authorization checks while it runs.
+
+```bash
 ADMIN_EMAIL=dspace@example.org
 ```
 
-#### Export result email
+### 4.5 Result e-mail template
 
-Export mails are sent using a mail template named `pure_sync_status` This template must be located inside the `config/emails` folder of the DSpace instance
-
-The following Template can be used for this purpose:
+The export result is sent with the e-mail template `pure_sync_status`, located in `config/emails/` of the DSpace installation:
 
 ```
 #set($subject = "DSpace -> Pure item synchronisation result")
@@ -334,326 +294,115 @@ ${params[0]}
 ${params[1]}
 ```
 
-Example (Leuphana setup):
-In our containerised DSpace installation, the template file is located in /dspace/config/emails. The copy operation is executed as part of the container entrypoint script.
+Item links in the e-mail are built from the DSpace property `dspace.ui.url`. Reference: [Wording of e-mail messages](https://wiki.lyrasis.org/display/DSDOC9x/Configuration+Reference#ConfigurationReference-WordingofE-mailMessages)
 
-Please refer to the [DSpace documentation](https://wiki.lyrasis.org/display/DSDOC9x/Configuration+Reference#ConfigurationReference-WordingofE-mailMessages) for more information about DSpace email messages.
+*Leuphana setup: the template is copied to `/dspace/config/emails` by the container entrypoint.*
 
-## DSpace-Pure-Bridge Configuration
+---
 
-Settings are provided using system properties, analogue to other DSpace config properties.
+## 5. Configuration reference
 
-### Event Consumer configuration
+All settings are DSpace properties (e.g. in `local.cfg`) with the prefix `dspace-pure-bridge.`. Lists are comma-separated.
 
-Creating or modifying DSpace Items triggers events that are processed by the event consumers defined in the current context.
-It is recommended to use a reduced set of event consumers instead of the default list. Many of the default consumers are not relevant for the dspace-pure-bridge use case, and some may significantly slow down the import process from Pure.
-In particular, the `discovery` consumer should be excluded, as discovery indexing should be performed separately after the import (see usage).
+### 5.1 Pure API
 
-The dspace-pure-bridge therefore uses a reduced context consumer set which must be named `dspacePureBridge`
+| Property | Required | Default | Description |
+|---|---|---|---|
+| `dspace-pure-bridge.pure.ws.endpoint.base` | yes | – | Base URL of the Pure API, e.g. `https://pure.example.org/ws/api` |
+| `dspace-pure-bridge.pure.ws.apikey` | yes | – | Pure API key |
+| `dspace-pure-bridge.pure.ws.pagesize` | no | `100` | Page size for Pure requests during the import |
 
-**Example**
+### 5.2 Entity collections
+
+| Property | Required | Description |
+|---|---|---|
+| `dspace-pure-bridge.entities.purePerson.collection` | yes (import) | Handle of the collection for `PurePerson` entities |
+| `dspace-pure-bridge.entities.pureOrgUnit.collection` | yes (import) | Handle of the collection for `PureOrgUnit` entities |
+| `dspace-pure-bridge.entities.pureProject.collection` | yes (import) | Handle of the collection for `PureProject` entities |
+
+### 5.3 Export filter and type mapping
+
+| Property | Required | Description |
+|---|---|---|
+| `dspace-pure-bridge.export.filter` | yes (export) | Which publications are exported |
+| `dspace-pure-bridge.export.exportTypeForType` | yes (export) | Which Pure export type a DSpace type is exported as |
+
+**Export filter syntax:** `collection:<handle>[;type:<type1>,<type2>,…]`, several entries separated by commas.
+
+```properties
+dspace-pure-bridge.export.filter = collection:123456789/2;type:Dissertation, collection:123456789/3
 ```
-event.dispatcher.dspacePureBridge.class=org.dspace.event.BasicDispatcher
-event.dispatcher.dspacePureBridge.consumers=authority, versioning
-```
+→ From `123456789/2`, only items of type `Dissertation` are exported; from `123456789/3`, all items are.
 
-**Explanation:**
-The `authority` and `versioning` consumers are notified by events created by the `dspace-pure-bridge`,
+**Type mapping syntax:** `<dspaceType>:<STUDENT_THESIS|RESEARCH_OUTPUT>`. The key `default` applies to all types without their own entry.
 
-Please refer to the [DSpace documentation](https://wiki.lyrasis.org/display/DSDOC9x/Configuration+Reference#ConfigurationReference-EventSystemConfiguration) for more information about the event system.
-
-### Pure API configuration
-
-The Pure API connection is configured using the following properties:
-
-**Syntax**
-```
-dspace-pure-bridge.pure.ws.endpoint.base=<pure_api_endpoint>
-dspace-pure-bridge.pure.ws.apikey=<pure_api_key>
-dspace-pure-bridge.pure.ws.pagesize=<pure_ws_pagesize>
-```
-
-**Parameters:**
-- `pure_api_endpoint` – Base URL of the Pure API endpoint
-- `pure_api_key` – API key used for authentication with the Pure API
-- `pure_ws_pagesize` – Page size for Pure API GET requests during import; defines the number of items returned per page (default: 100)
-
-**Example:**
-```
-dspace-pure-bridge.pure.ws.endpoint.base=https://pure.example.org/ws/api
-dspace-pure-bridge.pure.ws.apikey=f26a048d-3ed0-48c4-9668-ba2cbc06bca4
+```properties
+dspace-pure-bridge.export.exportTypeForType = Dissertation:STUDENT_THESIS, default:RESEARCH_OUTPUT
 ```
 
-**Explanation:**
-- The base URL of the Pure API is set to https://pure.example.org/ws/api
-- The API key f26a048d-3ed0-48c4-9668-ba2cbc06bca4 is used for authentication
-- The page size is not configured, so the default value 100 is applied
+### 5.4 Metadata fields
 
-### Entity collections configuration
+These properties define which DSpace metadata field supplies which Pure value (see [3.3](#33-exported-data)). Syntax: `dspace-pure-bridge.export.metadata.<exportType>.<name> = <schema.element[.qualifier]>`, with `<exportType>` being `studentThesis` or `researchOutput`.
 
-The collection handles of the existing entity collections (for PurePerson, PureOrgUnit and PureProject) must be configured in the following properties:
+| Name | `studentThesis` default | `researchOutput` default |
+|---|---|---|
+| `title` | `dc.title` | `dc.title` |
+| `subTitle` | `DataCite.Title.Subtitle` | `DataCite.Title.Subtitle` |
+| `abstract` | `DataCite.Description.Abstract` | `DataCite.Description.Abstract` |
+| `language` | `DataCite.Language` | `DataCite.Language` |
+| `managingOrganization` | `local.Affiliation` | `local.Affiliation` |
+| `awardDate` | `dc.date.accepted` | – |
+| `awardingInstitution` | `dc.contributor.grantor` | – |
+| `category` | – | `local.CreationContext` |
+| `publicationYear` | – | `DataCite.PublicationYear` |
+| `bitstreamLicense` | – | `local.BitstreamLicense` (field on the **bitstream**) |
 
-**Syntax:**
-```
-dspace-pure-bridge.entities.<entityType>.collection=<collection_handle>
-```
-
-**Parameters:**
-- `entityType` – The entityType that the configured collection holds (one of `purePerson`, `pureOrgUnit`, `pureProject`)
-- `collection_handle` – The collection handle
-
-
-**Example:**
-```
-dspace-pure-bridge.entities.purePerson.collection=300000000/2
-dspace-pure-bridge.entities.pureOrgUnit.collection=300000000/3
+```properties
+dspace-pure-bridge.export.metadata.studentThesis.language = dc.language
+dspace-pure-bridge.export.metadata.researchOutput.publicationYear = dc.date.issued
 ```
 
-**Explanation:**
-- The collection `300000000/2` is used to hold the `PurePerson` entities.
-- The collection `300000000/3` is used to hold the `PureOrgUnit` entities.
+### 5.5 Default values
 
-### Export Filter configuration
+Pure requires authors and organizations. The defaults are used when a publication cannot provide them (see notes ¹ and ² in [3.3](#33-exported-data)).
 
-Defines which publications are exported from DSpace to Pure. Each entry specifies a collection and, optionally, a set of publication types that are eligible for export.
+| Property | Required | Description |
+|---|---|---|
+| `dspace-pure-bridge.export.defaultOrganizationUUID` | **yes** (export) | Pure UUID of the fallback organization (managing organization and awarding institution) |
+| `dspace-pure-bridge.export.defaultAuthorUUID` | **yes** (export) | Pure UUID of the fallback author |
+| `dspace-pure-bridge.export.defaultAuthorFirstName` | no | Given name of the fallback author |
+| `dspace-pure-bridge.export.defaultAuthorLastName` | no | Family name of the fallback author |
 
-**Syntax:**
-```
-dspace-pure-bridge.export.filter=collection:<handle>[;type:<type1>,<type2>,...][, collection:<handle>[;type:...], ...]
-```
+The export does not start without the two UUIDs.
 
-**Parameters:**
-- `collection:<handle>` – The DSpace handle of the collection to be considered for export.
-- `type:<type1>,<type2>,...` *(optional)* – A comma-separated list of publication types within the collection to export.
+### 5.6 Vocabulary mapping
 
-**Behavior:**
-- If one or more publication types are specified, only those types are exported from the given collection.
-- If no publication types are specified, all publications from the collection are exported.
-
-**Example:**
-```
-dspace-pure-bridge.export.filter=collection:123456789/2;type:Dissertation, collection:123456789/3
-```
-
-**Explanation:**
-- From collection `123456789/2`, only publications of type `Dissertation` are exported.
-- From collection `123456789/3`, all publications are exported.
-
-### Type mapping
-
-Defines which publication types are exported to which Pure type (one of `STUDENT_THESIS`, `RESEARCH_OUTPUT`, `PRESS_MEDIA`).
-
-**Syntax:**
-```
-dspace-pure-bridge.export.exportTypeForType=<dspaceType>:<pureType>
-```
-
-**Parameters:**
-- `dspaceType` – The DSpace type of the publication to be considered for export.
-- `pureType` – The pure type that the publication should be transformed to during export.
-
-Using dspaceType with value `default` specifies the default export type for all publications that do not have a specific mapping.
-
-**Example:**
-```
-dspace-pure-bridge.export.exportTypeForType=Dissertation:STUDENT_THESIS, default:RESEARCH_OUTPUT
-```
-
-**Explanation:**
-- Type `Dissertation` is mapped to pure type `STUDENT_THESIS`
-- All other publications are mapped to pure type `RESEARCH_OUTPUT`
-
-**Example (Leuphana setup including `PRESS_MEDIA`):**
-```
-dspace-pure-bridge.export.exportTypeForType=Dissertation:STUDENT_THESIS, Sound:PRESS_MEDIA, Audiovisual:PRESS_MEDIA, default:RESEARCH_OUTPUT
-```
-
-**Explanation:**
-- Types `Sound` and `Audiovisual` are mapped to pure type `PRESS_MEDIA`
-
-
-### Metadata mapping
-
-#### Configuration of DSpace metadata fields considered for export
-The metadata fields that are considered for export are configured for each pure export type:
-
-##### Configuration of DSpace metadata fields considered for STUDENT_THESIS export
-**Syntax:**
-```
-dspace-pure-bridge.export.metadata.studentThesis.<name>=<metadata_field>
-```
-
-**Parameters:**
-- `name` – The Metadata name (one of `language`, `awardDate`, `title`, `subTitle`, `abstract`, `managingOrganization`, `awardingInstitution`)
-- `metadata_field` – The DSpace metadata field holding the value to be exported to Pure.
-
- **Example:**
-```
-dspace-pure-bridge.export.metadata.studentThesis.language=dc.language
-dspace-pure-bridge.export.metadata.studentThesis.awardDate=dc.date.accepted
-```
-
-**Explanation:**
-- Type `language` value for the pure export is retrieved from metadata field `dc.language`
-- Type `awardDate` value for the pure export is retrieved from metadata field `dc.date.accepted`
-
-**Defaults**
-
-If no configuration is made, the following defaults are used:
-```
-dspace-pure-bridge.export.metadata.studentThesis.language=DataCite.Language
-dspace-pure-bridge.export.metadata.studentThesis.awardDate=dc.date.accepted
-dspace-pure-bridge.export.metadata.studentThesis.title=dc.title
-dspace-pure-bridge.export.metadata.studentThesis.subTitle=DataCite.Title.Subtitle
-dspace-pure-bridge.export.metadata.studentThesis.abstract=DataCite.Description.Abstract
-dspace-pure-bridge.export.metadata.studentThesis.managingOrganization=local.Affiliation
-dspace-pure-bridge.export.metadata.studentThesis.awardingInstitution=dc.contributor.grantor
-```
-
-##### Configuration of DSpace metadata fields considered for RESEARCH_OUTPUT export
-
-**Syntax:**
-```
-dspace-pure-bridge.export.mapping.researchOutput.<name>=<metadata_field>
-```
-
-**Parameters:**
-- `name` – The Metadata name (one of `category`, `language`, `publicationYear`, `title`, `subTitle`, `abstract`, `managingOrganization`)
-- `metadata_field` – The DSpace metadata field holding the value to be exported to Pure.
-
-**Example:**
-```
-dspace-pure-bridge.export.metadata.researchOutput.language=dc.language
-dspace-pure-bridge.export.metadata.researchOutput.publicationYear=DataCite.PublicationYear
-```
-
-**Explanation:**
-- Type `language` value for the pure export is retrieved from metadata field `dc.language`
-- Type `publicationYear` value for the pure export is retrieved from metadata field `DataCite.PublicationYear`
-
-**Defaults**
-
-If no configuration is made, the following defaults are used:
-```
-dspace-pure-bridge.export.metadata.researchOutput.category=local.CreationContext
-dspace-pure-bridge.export.metadata.researchOutput.language=DataCite.Language
-dspace-pure-bridge.export.metadata.researchOutput.publicationYear=DataCite.PublicationYear
-dspace-pure-bridge.export.metadata.researchOutput.title=dc.title
-dspace-pure-bridge.export.metadata.researchOutput.subTitle=DataCite.Title.Subtitle
-dspace-pure-bridge.export.metadata.researchOutput.abstract=DataCite.Description.Abstract
-dspace-pure-bridge.export.metadata.researchOutput.managingOrganization=local.Affiliation
-dspace-pure-bridge.export.metadata.researchOutput.bitstreamLicense=local.BitstreamLicense
-```
-
-##### Configuration of DSpace metadata fields considered for PRESS_MEDIA export
-
-**Syntax:**
-```
-dspace-pure-bridge.export.metadata.pressMedia.<name>=<value>
-```
-
-**Parameters:**
-- `name` – The Metadata name (one of `title`, `coverageDate`, `description`, `managingOrganization`, `coverageType`)
-- `value` – The DSpace metadata field holding the value to be exported to Pure. For `coverageType` the value is the
-  coverage type itself (one of `CONTRIBUTION`, `COVERAGE`).
-
-**Example:**
-```
-dspace-pure-bridge.export.metadata.pressMedia.coverageDate=dc.date.issued
-dspace-pure-bridge.export.metadata.pressMedia.coverageType=COVERAGE
-```
-
-**Explanation:**
-- Type `coverageDate` value for the pure export is retrieved from metadata field `dc.date.issued`
-- The media coverage is exported with coverage type `COVERAGE`
-
-**Defaults**
-
-If no configuration is made, the following defaults are used:
-```
-dspace-pure-bridge.export.metadata.pressMedia.title=dc.title
-dspace-pure-bridge.export.metadata.pressMedia.coverageDate=dc.date.issued
-dspace-pure-bridge.export.metadata.pressMedia.description=DataCite.Description.Abstract
-dspace-pure-bridge.export.metadata.pressMedia.managingOrganization=local.Affiliation
-dspace-pure-bridge.export.metadata.pressMedia.coverageType=CONTRIBUTION
-```
-
-#### Configuration of controlled vocabulary corresponding Pure values
-
-Controlled vocabulary values need to be mapped to the corresponding Pure values per export type
-
-
-##### Configuration of controlled vocabulary corresponding Pure values for STUDENT_THESIS export
-
-**Syntax:**
-```
-dspace-pure-bridge.export.mapping.studentThesis.<controlledVocabulary>.<dspaceValue>=<pureValue>
-```
-
-**Parameters:**
-- `controlledVocabulary` – The name of the Controlled Vocabulary (one of `TYPE`, `LANGUAGE`, `CONTRIBUTOR_ROLE`, `SUPERVISOR_ROLE`)
-- `dspaceValue` – The value in DSpace
-- `pureValue` - The corresponding Pure value
-
-**Example:**
-```
-dspace-pure-bridge.export.mapping.studentThesis.TYPE.Dissertation=/dk/atira/pure/studentthesis/studentthesistypes/studentthesis/doctoral_thesis
-```
-
-**Explanation:**
-The DSpace type `Dissertation` is mapped to corresponding Pure type value `/dk/atira/pure/studentthesis/studentthesistypes/studentthesis/doctoral_thesis`
-
-##### Configuration of controlled vocabulary corresponding Pure values for RESEARCH_OUTPUT export
-
-**Syntax:**
-```
-dspace-pure-bridge.export.mapping.researchOutput.<controlledVocabulary>.<dspaceValue>=<pureValue>
-```
-
-**Parameters:**
-- `controlledVocabulary` – The name of the Controlled Vocabulary (one of `TYPE`, `CATEGORY`, `PUBLISHED`, `LANGUAGE`, `ACCESS_TYPE`, `ROLE`, `ELECTRONIC_VERSION_TYPE`, `LICENSE`)
-- `dspaceValue` – The value in DSpace
-- `pureValue` - The corresponding Pure value
-
-**Example:**
-```
-dspace-pure-bridge.export.mapping.researchOutput.CATEGORY.Research=/dk/atira/pure/researchoutput/category/research
-dspace-pure-bridge.export.mapping.researchOutput.CATEGORY.Teaching=/dk/atira/pure/researchoutput/category/education
-```
-
-**Explanation:**
-The DSpace category values are mapped to corresponding Pure language values:
-
-`Research` => `/dk/atira/pure/researchoutput/category/research`
-`Training` => `/dk/atira/pure/researchoutput/category/education`
-
-##### Configuration of controlled vocabulary corresponding Pure values for PRESS_MEDIA export
-
-**Syntax:**
-```
-dspace-pure-bridge.export.mapping.pressMedia.<controlledVocabulary>.<dspaceValue>=<pureValue>
-```
-
-**Parameters:**
-- `controlledVocabulary` – The name of the Controlled Vocabulary (one of `TYPE`, `CONTRIBUTOR_ROLE`)
-- `dspaceValue` – The value in DSpace (for `TYPE` the value of `dc.type`; for `CONTRIBUTOR_ROLE` only the key `Author`
-  is used)
-- `pureValue` - The corresponding Pure value
-
-**Example:**
-```
-dspace-pure-bridge.export.mapping.pressMedia.TYPE.Sound=/dk/atira/pure/clipping/clippingtypes/clipping/clipping
-dspace-pure-bridge.export.mapping.pressMedia.CONTRIBUTOR_ROLE.Author=/dk/atira/pure/clipping/roles/clipping/author
-```
-
-**Explanation:**
-- The DSpace type `Sound` is mapped to the Pure Press/Media type `/dk/atira/pure/clipping/clippingtypes/clipping/clipping`
-- The authors are exported with the Pure role `/dk/atira/pure/clipping/roles/clipping/author`
-
-##### Complete Example
-The following example shows a working configuration for the mapping of controlled vocabulary values for the export of Pure Research Outputs, Pure Student Theses and Pure Press/Media.
+Pure expects classification URIs that exist in the Pure instance. These properties map DSpace values to them:
 
 ```
+dspace-pure-bridge.export.mapping.<exportType>.<VOCABULARY>.<dspaceValue> = <pureClassificationUri>
+```
+
+`<dspaceValue>` is either a metadata value, a fixed key, or `default`.
+
+| Vocabulary | `studentThesis` | `researchOutput` | Keys (`<dspaceValue>`) |
+|---|---|---|---|
+| `TYPE` | ✓ | ✓ | values of `dc.type` |
+| `LANGUAGE` | ✓ | ✓ | values of the `language` field; `default` if empty |
+| `CATEGORY` | – | ✓ | values of the `category` field |
+| `PUBLISHED` | – | ✓ | `default` (required) |
+| `ACCESS_TYPE` | – | ✓ | `OPEN_ACCESS`, `EMBARGO`, `RESTRICTED`, `CLOSED` |
+| `LICENSE` | – | ✓ | values of the `bitstreamLicense` field; `default` if unmapped |
+| `ELECTRONIC_VERSION_TYPE` | – | ✓ | `default` (required) |
+| `CONTRIBUTOR_ROLE` | ✓ | – | `Author` (required) |
+| `SUPERVISOR_ROLE` | ✓ | – | `Supervisor`, `Reviewer` (required) |
+| `ROLE` | – | ✓ | `Author` (required) |
+
+When an export starts, the bridge loads the allowed classifications from Pure. A mapped URI that Pure does not know makes the affected items fail with an error. Use `--checkOnly` to find such errors.
+
+**Complete example** (Leuphana):
+
+```properties
 dspace-pure-bridge.export.mapping.researchOutput.LANGUAGE.deu=/dk/atira/pure/core/languages/de_DE
 dspace-pure-bridge.export.mapping.researchOutput.LANGUAGE.eng=/dk/atira/pure/core/languages/en_GB
 dspace-pure-bridge.export.mapping.researchOutput.LANGUAGE.default=/dk/atira/pure/core/languages/und
@@ -690,102 +439,83 @@ dspace-pure-bridge.export.mapping.pressMedia.TYPE.Audiovisual=/dk/atira/pure/cli
 dspace-pure-bridge.export.mapping.pressMedia.CONTRIBUTOR_ROLE.Author=/dk/atira/pure/clipping/roles/clipping/author
 ```
 
-#### Default values
+### 5.7 Result e-mail recipients
 
-Certain Pure API fields are mandatory, including `Author`, `ManagingOrganization` (for all export types, including PRESS_MEDIA), and, for STUDENT_THESIS, `AwardingOrganization`.
+| Property | Required | Description |
+|---|---|---|
+| `dspace-pure-bridge.export.mail.recipients` | no | Recipients of the result e-mail. Without it, no e-mail is sent. |
 
-The default values for these fields can be configured. During export, these defaults are applied if the publication does not provide the corresponding values or if the author is not linked to a `PurePerson` entity.
-
-**Example:**
-```
-dspace-pure-bridge.export.defaultOrganizationUUID=c4f241db-fe8e-4710-8640-b33496383c54
-dspace-pure-bridge.export.defaultAuthorUUID=97f6f255-4fef-4eb3-abf3-a4a79821e926
-dspace-pure-bridge.export.defaultAuthorFirstName=John
-dspace-pure-bridge.export.defaultAuthorLastName=Doe
+```properties
+dspace-pure-bridge.export.mail.recipients = dspace-pure-bridge@example.org, someone@example.org
 ```
 
-### Result Mail recipients
+---
 
-The list of email addresses of the recipients of the result mail can be configured.
-
-**Syntax:**
-```
-dspace-pure-bridge.export.mail.recipients=<recipients>
-```
-
-**Parameters:**
-- `recipients` – recipients of the result mail (multiple values are separated by a comma)
-
-**Example:**
-```
-dspace-pure-bridge.export.mail.recipients=dspace-pure-bridge@example.org, someone@example.org
-```
-
-## Usage
-
-The list of available options can be displayed by running the following command:
+## 6. Usage
 
 ```bash
-./bin/dspace dsrun de.leuphana.escience.dspacepurebridge.DspacePureBridgeCLI -h
+./bin/dspace dsrun de.leuphana.escience.dspacepurebridge.DspacePureBridgeCLI <options>
 ```
 
-### Import from Pure to DSpace
+| Option | Description |
+|---|---|
+| `-i`, `--import` | Import persons, org units and projects from Pure |
+| `-e`, `--export` | Export publications to Pure |
+| `-c`, `--checkOnly` | With `-e`: build and validate the export, but send nothing to Pure |
+| `-l`, `--exportLimit <n>` | With `-e`: stop after about `n` successful exports (parallel processing may exceed the limit slightly) |
+| `-x`, `--exportHandle <handle>` | With `-e`: export only the item with this handle |
+| `-h`, `--help` | Show the options (also shown when neither `-i` nor `-e` is given) |
 
-To import data from Pure to DSpace, run the following command:
+Run `index-discovery` after every import (see [Quick Start](#2-quick-start)).
+
+**Examples**
 
 ```bash
-./bin/dspace dsrun de.leuphana.escience.dspacepurebridge.DspacePureBridgeCLI -i
+# check whether a single item could be exported
+./bin/dspace dsrun de.leuphana.escience.dspacepurebridge.DspacePureBridgeCLI -e -c -x 123456789/42
+
+# export at most 10 items
+./bin/dspace dsrun de.leuphana.escience.dspacepurebridge.DspacePureBridgeCLI -e -l 10
 ```
 
-Update Index after import:
+---
+
+## 7. Known limitations
+
+- **Research outputs are created as book anthologies.** The Pure subtype is always `BookAnthology`, and contributor roles come from the classification `/research-outputs/allowed-book-anthology-contributor-roles`. This fits dissertations, the only research outputs exported so far. Other subtypes need a code change ([ADR-0012](docs/adr/0012-export-type-strategy-and-classification-mapping.md)).
+- **No duplicate check for research outputs.** Only student theses are checked against existing Pure records ([ADR-0007](docs/adr/0007-export-state-and-idempotency.md)).
+- **License from bitstream metadata only.** A license stored in the item metadata is not used.
+- **Exact entity matching.** Persons, org units and projects are matched by exact attribute values. Spelling differences prevent a link, and unmatched entities are not reported ([ADR-0009](docs/adr/0009-entity-matching-by-attribute-hash.md)).
+- **Create only.** Publications are only created in Pure, never updated or deleted ([ADR-0002](docs/adr/0002-system-of-record-per-object-type.md)).
+
+---
+
+## 8. Development
 
 ```bash
-./bin/dspace index-discovery
+./mvnw clean verify          # build and run all tests
+./mvnw -DskipTests package   # build the JAR (target/dspace-pure-bridge-<version>.jar)
 ```
 
+- Java 17; `dspace-api` is a `provided` dependency. All other dependencies are bundled into the JAR.
+- The Pure API client under `src/main/java/.../pure/generated` is generated with OpenAPI Generator. Do not edit it by hand.
+- Architecture decisions: [`docs/adr/`](docs/adr/README.md). Contributor and AI-assistant guidelines: [`CLAUDE.md`](CLAUDE.md).
+- Releases are created with the Maven release plugin (`release.sh`). Tags trigger a GitHub release with the JAR attached.
 
-### Export from DSpace to Pure
+---
 
-To export data from DSpace to Pure, run the following command:
-
-```bash
-./bin/dspace dsrun de.leuphana.escience.dspacepurebridge.DspacePureBridgeCLI -e
-```
-
-The export process can be configured further using the following options:
-```
- -c,--checkOnly           verify only, no export
- -l,--exportLimit <arg>   stop after specified number of successful exports
- -x,--exportHandle <arg>  export a specific item by handle
-```
-
-## Known Issues
-
-### ResearchOutput Export Type
-
-#### Author export data
-Currently, author export data is generated using the Pure classification endpoint `/research-outputs/allowed-book-anthology-contributor-roles`
-
-This is because, in our Pure instance, dissertations are at the moment stored as Book Anthology when represented as ResearchOutput. To date, only dissertations have been exported via the research-outputs endpoint.
-
-If other classification endpoints need to be used, the source code must be modified accordingly.
-
-#### License export data
-
-License information is currently retrieved from the bitstream metadata.
-If license information is stored in the publication metadata instead, the source code must be adapted to make the license source configurable.
-
-## Contributing
+## 9. Contributing
 
 Contributions are welcome and appreciated!
 
-If you find a bug, have a question, or want to suggest an improvement, please feel free to open an issue.
+If you find a bug, have a question, or want to suggest an improvement, please open an issue.
 
-If you would like to contribute code, documentation, or tests, you are welcome to submit a pull request. Please ensure your changes are well documented and, if applicable, covered by tests.
+If you would like to contribute code, documentation or tests, please submit a pull request. Please make sure your changes are documented and, where applicable, covered by tests. See [8. Development](#8-development) for build instructions and guidelines.
 
-## License
+---
+
+## 10. License
 
 This project is licensed under the BSD 3-Clause License.
 
-Commercial use is permitted, provided that the copyright notice and license
-text are retained in accordance with the license terms.
+Commercial use is permitted, provided that the copyright notice and license text are retained in accordance with the license terms.

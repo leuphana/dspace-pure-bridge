@@ -42,7 +42,7 @@ With the bridge:
 
 **In scope**
 - Import of Pure persons, organizational units and projects as DSpace entities, including relations to existing DSpace entities.
-- Export of DSpace publications to Pure as `student-theses` or `research-outputs`.
+- Export of DSpace publications to Pure as `student-theses`, `research-outputs` or `pressmedia`.
 - Configurable filtering, type mapping, metadata mapping and vocabulary mapping.
 - Result reporting via e-mail.
 
@@ -57,8 +57,8 @@ With the bridge:
 
 The following directions follow from the current limitations. They are candidates, not commitments:
 
-- **More export types and target endpoints:** research-output subtypes other than dissertations (currently hard-wired to `BookAnthology`), and further Pure endpoints beyond `student-theses` and `research-outputs`.
-- **Duplicate check for research outputs:** today the check only exists for student theses.
+- **More export types and target endpoints:** research-output subtypes other than dissertations (currently hard-wired to `BookAnthology`), and further Pure endpoints beyond `student-theses`, `research-outputs` and `pressmedia`.
+- **Duplicate check for research outputs:** today the check only exists for student theses and press/media.
 - **Configurable license source:** item metadata in addition to bitstream metadata.
 - **More robust entity matching:** keep attribute-based matching (ADR-0009), but normalize the attributes and report entities that could not be matched.
 - **Better operability:** a structured run summary (counts, durations), a clear exit code and an import report.
